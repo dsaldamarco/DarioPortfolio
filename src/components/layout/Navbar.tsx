@@ -16,7 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
 
       const sections = ['about', 'projects', 'experience', 'education', 'skills'];
       const scrollPos = window.scrollY + 220;
@@ -49,9 +49,13 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
   return (
     <header className="navbar-wrapper">
       <div className={`navbar-dock glass-dock ${scrolled ? 'scrolled' : ''}`}>
-        {/* Brand with Avatar Icon */}
+        {/* Brand with Animated Avatar Icon */}
         <a href="#about" onClick={(e) => { e.preventDefault(); handleNavClick('about'); }} className="nav-brand">
-          <img src="/dario-icon.png" alt="Dario Saldamarco" className="brand-avatar-img" />
+          <img 
+            src="/dario-icon.png" 
+            alt="Dario Saldamarco" 
+            className={`brand-avatar-img ${scrolled ? 'visible' : ''}`} 
+          />
           <span className="brand-name">Dario Saldamarco</span>
         </a>
 
@@ -183,20 +187,36 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
         .nav-brand {
           display: flex;
           align-items: center;
-          gap: 0.65rem;
+          gap: 0px;
           font-weight: 600;
           font-size: 0.95rem;
           color: var(--text-primary);
           white-space: nowrap;
+          transition: gap 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .nav-brand:has(.brand-avatar-img.visible) {
+          gap: 0.75rem;
         }
 
         .brand-avatar-img {
-          width: 24px;
-          height: 24px;
+          width: 0;
+          height: 32px;
+          opacity: 0;
+          transform: scale(0);
           border-radius: 50%;
           object-fit: cover;
           flex-shrink: 0;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                      opacity 0.4s ease,
+                      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .brand-avatar-img.visible {
+          width: 32px;
+          opacity: 1;
+          transform: scale(1);
         }
 
         .brand-name {
