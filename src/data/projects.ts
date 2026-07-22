@@ -26,9 +26,9 @@ export const PROFILE = {
   role: 'UX/UI Designer',
   links: {
     email: 'dario.saldamarco@gmail.com',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    dribbble: 'https://dribbble.com',
+    github: 'https://github.com/dsaldamarco',
+    linkedin: 'https://www.linkedin.com/in/dario-saldamarco/',
+    dribbble: 'https://dribbble.com/dardarius',
   },
 };
 
