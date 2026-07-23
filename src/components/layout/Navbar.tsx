@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
         {/* Brand with Animated Avatar Icon */}
         <a href="#about" onClick={(e) => { e.preventDefault(); handleNavClick('about'); }} className="nav-brand">
           <img 
-            src="/dario-icon.png" 
+            src="/favicon.png" 
             alt="Dario Saldamarco" 
             className={`brand-avatar-img ${scrolled ? 'visible' : ''}`} 
           />

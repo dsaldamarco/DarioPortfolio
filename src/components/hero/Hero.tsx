@@ -28,7 +28,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick, onContactClick }) =>
         {/* Avatar Presentation Card */}
         <div className="hero-profile-header">
           <div className={`hero-avatar-frame ${scrolled ? 'hidden' : ''}`}>
-            <img src="/dario-icon.png" alt="Dario Saldamarco" className="hero-avatar-img" />
+            <img src="/favicon.png" alt="Dario Saldamarco" className="hero-avatar-img" />
             <span className="hero-avatar-status"></span>
           </div>
           
