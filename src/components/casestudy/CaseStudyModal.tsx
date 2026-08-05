@@ -93,6 +93,14 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
             {/* Dedicated Page Links / CTAs */}
             {project.id === 'you-can-only' && (
               <div className="appstore-links-row">
+                <a 
+                  href="https://apps.apple.com/it/app/youcanonly/id6755528500" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="appstore-badge-link"
+                >
+                  <img src="/AppStore-Badge.svg" alt="Download on the App Store" className="appstore-badge-img" />
+                </a>
                 <a href="/you-can-only/support" className="appstore-link-btn">
                   <HelpCircle size={14} />
                   <span>Support Page</span>
@@ -333,6 +341,21 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
           gap: 0.75rem;
           margin-top: 0.75rem;
           flex-wrap: wrap;
+        }
+
+        .appstore-badge-link {
+          display: inline-block;
+          transition: transform var(--transition-fast);
+        }
+
+        .appstore-badge-link:hover {
+          transform: translateY(-2px);
+        }
+
+        .appstore-badge-img {
+          height: 38px;
+          display: block;
+          border-radius: 6px;
         }
 
         .appstore-link-btn {

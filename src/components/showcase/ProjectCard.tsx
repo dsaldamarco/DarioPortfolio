@@ -73,13 +73,40 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelect }) =
           ))}
         </div>
 
-        <button className="case-study-btn">
-          <span>{t.work.readStory}</span>
-          <ArrowUpRight size={15} />
-        </button>
+        {project.id === 'you-can-only' ? (
+          <a 
+            href="https://apps.apple.com/it/app/youcanonly/id6755528500" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="appstore-badge-card-link"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img src="/AppStore-Badge.svg" alt="Download on the App Store" className="appstore-badge-card-img" />
+          </a>
+        ) : (
+          <button className="case-study-btn">
+            <span>{t.work.readStory}</span>
+            <ArrowUpRight size={15} />
+          </button>
+        )}
       </div>
 
       <style>{`
+        .appstore-badge-card-link {
+          display: inline-block;
+          transition: transform var(--transition-fast);
+        }
+
+        .appstore-badge-card-link:hover {
+          transform: scale(1.04);
+        }
+
+        .appstore-badge-card-img {
+          height: 35px;
+          display: block;
+          border-radius: 6px;
+        }
+
         .project-card {
           padding: 2.25rem;
           display: flex;
