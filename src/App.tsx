@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
+import Lenis from 'lenis';
 import './styles/globals.css';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/hero/Hero';
 import { ProjectGrid } from './components/showcase/ProjectGrid';
-import { Experience } from './components/experience/Experience';
-import { Education } from './components/education/Education';
+import { TimelineLedger } from './components/timeline/TimelineLedger';
 import { Skills } from './components/skills/Skills';
 import { Footer } from './components/layout/Footer';
 import { CaseStudyModal } from './components/casestudy/CaseStudyModal';
@@ -21,6 +21,81 @@ function PortfolioAppContent() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [cursorType, setCursorType] = useState<'default' | 'pointer' | 'project'>('default');
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
+      smoothWheel: true,
+    });
+
+    (window as any).lenis = lenis;
+
+    const raf = (time: number) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      (window as any).lenis = null;
+    };
+  }, []);
+
+  // Stop/Start Lenis scroll when modal is opened/closed
+  useEffect(() => {
+    const lenis = (window as any).lenis;
+    if (lenis) {
+      if (selectedProject) {
+        lenis.stop();
+      } else {
+        lenis.start();
+      }
+    }
+  }, [selectedProject]);
+
+  // Custom Cursor Mouse Tracker
+  useEffect(() => {
+    const updateMouse = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target) return;
+
+      if (
+        target.closest('.project-card-v2') || 
+        target.closest('.screenshot-card') || 
+        target.closest('.preview-media-frame')
+      ) {
+        setCursorType('project');
+      } else if (
+        target.closest('a') || 
+        target.closest('button') || 
+        target.classList.contains('lang-btn') ||
+        target.closest('.icon-button') ||
+        target.closest('.ledger-row')
+      ) {
+        setCursorType('pointer');
+      } else {
+        setCursorType('default');
+      }
+    };
+
+    window.addEventListener('mousemove', updateMouse);
+    window.addEventListener('mouseover', handleMouseOver);
+
+    return () => {
+      window.removeEventListener('mousemove', updateMouse);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -77,6 +152,17 @@ function PortfolioAppContent() {
 
   return (
     <div className="app-shell">
+      {/* Custom Cursor */}
+      <div 
+        className={`custom-cursor ${cursorType}`}
+        style={{
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`
+        }}
+      >
+        {cursorType === 'project' && <span className="cursor-label">VIEW</span>}
+      </div>
+
       {/* Ambient Background Mesh */}
       <div className="ambient-bg">
         <div className="ambient-glow-1"></div>
@@ -101,9 +187,7 @@ function PortfolioAppContent() {
           onSelectProject={(project) => setSelectedProject(project)} 
         />
 
-        <Experience />
-
-        <Education />
+        <TimelineLedger />
 
         <Skills />
       </main>

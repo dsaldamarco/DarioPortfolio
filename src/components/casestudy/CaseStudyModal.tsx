@@ -59,7 +59,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ project, onClose
         </div>
 
         {/* Modal Scroll Body */}
-        <div className="modal-body">
+        <div className="modal-body" data-lenis-prevent>
           {/* Identity Hero Stack */}
           <div className="case-hero">
             <span className="case-subtitle-top" style={{ color: project.accentColor }}>

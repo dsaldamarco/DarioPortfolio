@@ -36,7 +36,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ accentColor, folderPat
           width: 100%;
           border-radius: var(--radius-md);
           overflow: hidden;
-          background: rgba(12, 12, 16, 0.4);
+          background: transparent;
           position: relative;
           display: flex;
           align-items: center;

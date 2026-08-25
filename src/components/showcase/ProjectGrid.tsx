@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PROJECTS } from '../../data/projects';
 import { ProjectCard } from './ProjectCard';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -18,145 +19,177 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ onSelectProject }) => 
   });
 
   return (
-    <section id="projects" className="projects-section">
+    <section id="projects" className="projects-section-v2">
       <div className="container">
-        {/* Section Header: Single rounded rectangle badge, no repeating title */}
-        <div className="section-header">
-          <div className="badge-editorial">
+        {/* Header Block */}
+        <motion.div 
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
+          className="section-header-v2"
+        >
+          <div className="badge-editorial-v2 grid-badge">
             <span>{t.work.title}</span>
           </div>
-          <p className="section-desc">{t.work.subtitle}</p>
+          <p className="section-desc-v2">
+            {t.work.subtitle}
+          </p>
 
-          {/* Filter Bar */}
-          <div className="filter-bar">
+          {/* Filter Pill Tabs */}
+          <div className="filter-bar-v2">
             <button 
-              className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
+              className={`filter-tab-v2 ${filter === 'all' ? 'active' : ''}`}
               onClick={() => setFilter('all')}
             >
               <span>{t.work.all}</span>
             </button>
             <button 
-              className={`filter-tab ${filter === 'uxui' ? 'active' : ''}`}
+              className={`filter-tab-v2 ${filter === 'uxui' ? 'active' : ''}`}
               onClick={() => setFilter('uxui')}
             >
               <span>UX/UI & Product</span>
             </button>
             <button 
-              className={`filter-tab ${filter === 'ios' ? 'active' : ''}`}
+              className={`filter-tab-v2 ${filter === 'ios' ? 'active' : ''}`}
               onClick={() => setFilter('ios')}
             >
               <span>iOS & Swift</span>
             </button>
             <button 
-              className={`filter-tab ${filter === 'game' ? 'active' : ''}`}
+              className={`filter-tab-v2 ${filter === 'game' ? 'active' : ''}`}
               onClick={() => setFilter('game')}
             >
               <span>Game Design</span>
             </button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid */}
-        <div className="project-grid">
-          {filteredProjects.map((project) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
-              onSelect={onSelectProject} 
-            />
-          ))}
-        </div>
+        {/* 2-Columns Grid Layout */}
+        <motion.div 
+          layout
+          className="projects-grid-v2"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
+                className="grid-item-col"
+              >
+                <ProjectCard 
+                  project={project} 
+                  onSelect={onSelectProject}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       <style>{`
-        .projects-section {
-          padding: var(--section-padding);
+        .projects-section-v2 {
+          padding: 8rem 2rem;
           width: 100%;
           box-sizing: border-box;
+          background: var(--bg-primary);
+          position: relative;
+          z-index: 2;
         }
 
-        .section-header {
+        .section-header-v2 {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
           text-align: left;
-          margin-bottom: 3.5rem;
+          margin-bottom: 4rem;
           width: 100%;
         }
 
-        .section-desc {
+        .section-desc-v2 {
           text-align: left;
-          max-width: 720px;
-          margin-top: 1rem;
-          margin-bottom: 2.25rem;
+          max-width: 780px;
+          margin-top: 1.25rem;
+          margin-bottom: 2.5rem;
           font-size: 1.125rem;
           color: var(--text-secondary);
+          line-height: 1.65;
         }
 
-        .filter-bar {
+        /* Filter pill system */
+        .filter-bar-v2 {
           display: flex;
           align-items: center;
-          align-self: flex-start;
           gap: 0.5rem;
-          padding: 0.35rem;
-          background: rgba(255, 255, 255, 0.03);
+          padding: 0.3rem;
+          background: rgba(255, 255, 255, 0.02);
           border: 1px solid var(--border-subtle);
           border-radius: var(--radius-full);
           max-width: 100%;
+          overflow-x: auto;
         }
 
-        .filter-tab {
-          padding: 0.5rem 1.25rem;
+        .filter-tab-v2 {
+          padding: 0.55rem 1.35rem;
           border-radius: var(--radius-full);
-          font-size: 0.875rem;
-          font-weight: 500;
+          font-size: 0.8125rem;
+          font-weight: 600;
           color: var(--text-secondary);
-          transition: all var(--transition-fast);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           white-space: nowrap;
+          border: 1px solid transparent;
         }
 
-        .filter-tab:hover {
+        .filter-tab-v2:hover {
           color: var(--text-primary);
         }
 
-        .filter-tab.active {
-          background: var(--bg-card-hover);
+        .filter-tab-v2.active {
+          background: rgba(255, 255, 255, 0.06);
           color: var(--text-primary);
-          box-shadow: var(--shadow-sm);
-          border: 1px solid var(--border-medium);
+          border-color: var(--border-medium);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .project-grid {
+        /* 2 Column Responsive Grid */
+        .projects-grid-v2 {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+          grid-template-columns: repeat(2, 1fr);
           gap: 2.5rem;
           width: 100%;
         }
 
+        .grid-item-col {
+          height: 100%;
+        }
+
+        @media (max-width: 900px) {
+          .projects-grid-v2 {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+        }
+
         @media (max-width: 768px) {
-          .section-header {
+          .projects-section-v2 {
+            padding: var(--section-padding);
+          }
+          .section-header-v2 {
             align-items: center;
             text-align: center;
             margin-bottom: 2.5rem;
           }
-          .section-desc {
+          .section-desc-v2 {
             text-align: center;
-            margin-top: 0.85rem;
           }
-          .filter-bar {
+          .filter-bar-v2 {
             align-self: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            border-radius: var(--radius-lg);
             width: 100%;
-          }
-          .filter-tab {
-            font-size: 0.8rem;
-            padding: 0.4rem 0.85rem;
-          }
-          .project-grid {
-            grid-template-columns: 1fr;
-            gap: 1.75rem;
+            justify-content: flex-start;
           }
         }
       `}</style>

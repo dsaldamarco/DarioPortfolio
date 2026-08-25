@@ -18,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      const sections = ['about', 'projects', 'experience', 'education', 'skills'];
+      const sections = ['about', 'projects', 'chronology', 'skills'];
       const scrollPos = window.scrollY + 220;
 
       for (const section of sections) {
@@ -67,11 +67,8 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
           <a href="#projects" onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }} className={`nav-link ${activeSection === 'projects' ? 'active' : ''}`}>
             {t.nav.work}
           </a>
-          <a href="#experience" onClick={(e) => { e.preventDefault(); handleNavClick('experience'); }} className={`nav-link ${activeSection === 'experience' ? 'active' : ''}`}>
-            {t.nav.experience}
-          </a>
-          <a href="#education" onClick={(e) => { e.preventDefault(); handleNavClick('education'); }} className={`nav-link ${activeSection === 'education' ? 'active' : ''}`}>
-            {t.nav.education}
+          <a href="#chronology" onClick={(e) => { e.preventDefault(); handleNavClick('chronology'); }} className={`nav-link ${activeSection === 'chronology' ? 'active' : ''}`}>
+            {language === 'it' ? 'Cronologia' : 'Chronology'}
           </a>
           <a href="#skills" onClick={(e) => { e.preventDefault(); handleNavClick('skills'); }} className={`nav-link ${activeSection === 'skills' ? 'active' : ''}`}>
             {t.nav.skills}
@@ -133,11 +130,8 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
           <a href="#projects" onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }} className="mobile-link">
             {t.nav.work}
           </a>
-          <a href="#experience" onClick={(e) => { e.preventDefault(); handleNavClick('experience'); }} className="mobile-link">
-            {t.nav.experience}
-          </a>
-          <a href="#education" onClick={(e) => { e.preventDefault(); handleNavClick('education'); }} className="mobile-link">
-            {t.nav.education}
+          <a href="#chronology" onClick={(e) => { e.preventDefault(); handleNavClick('chronology'); }} className="mobile-link">
+            {language === 'it' ? 'Cronologia' : 'Chronology'}
           </a>
           <a href="#skills" onClick={(e) => { e.preventDefault(); handleNavClick('skills'); }} className="mobile-link">
             {t.nav.skills}
@@ -257,7 +251,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
           gap: 0.2rem;
           padding: 0.25rem 0.6rem;
           border-radius: var(--radius-full);
-          background: rgba(255, 255, 255, 0.04);
+          background: var(--bg-card);
           border: 1px solid var(--border-subtle);
           font-size: 0.75rem;
           font-weight: 600;
@@ -296,7 +290,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
 
         .icon-button:hover {
           color: var(--text-primary);
-          background: rgba(255, 255, 255, 0.08);
+          background: var(--border-subtle);
         }
 
         .cta-button-sm {

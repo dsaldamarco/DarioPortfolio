@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import React from 'react';
+import { BookOpen } from 'lucide-react';
 import { type Project } from '../../data/projects';
-import { useLanguage } from '../../i18n/LanguageContext';
 import { DeviceFrame } from './DeviceFrame';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 interface ProjectCardProps {
   project: Project;
@@ -10,296 +10,329 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onSelect }) => {
-  const { language, t } = useLanguage();
-  const [iconError, setIconError] = useState(false);
+  const { t, language } = useLanguage();
+  const isIt = language === 'it';
+  
+  const subtitle = isIt ? project.subtitle.it : project.subtitle.en;
+  const description = isIt ? project.description.it : project.description.en;
 
-  const description = language === 'it' ? project.description.it : project.description.en;
-  const subtitle = language === 'it' ? project.subtitle.it : project.subtitle.en;
+  const handleModalClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelect(project);
+  };
 
   return (
-    <div className="project-card glass-panel" onClick={() => onSelect(project)}>
-      {/* Identity Header Stack */}
-      <div className="card-identity-header">
-        {!iconError ? (
+    <div className="project-card-v2" onClick={handleModalClick}>
+      {/* Top Device Visual Container */}
+      <div className="card-visual-frame">
+        <DeviceFrame 
+          projectId={project.id}
+          accentColor={project.accentColor}
+          folderPath={project.folderPath}
+          images={project.images}
+          title={project.title}
+        />
+        
+        {/* Overlay Year Label */}
+        <div className="card-year-badge monospace">{project.year}</div>
+      </div>
+
+      {/* Description Info Content */}
+      <div className="card-info-pane">
+        {/* Meta Header */}
+        <div className="info-meta-row monospace">
+          <span className="meta-category" style={{ color: project.accentColor }}>
+            [{project.category.toUpperCase()}]
+          </span>
+          <span className="meta-bullet">•</span>
+          <span className="meta-roles">{project.role.join(', ')}</span>
+        </div>
+
+        {/* Title Block with AppIcon */}
+        <div className="info-title-row">
           <img 
             src={project.appIcon} 
-            alt={`${project.title} App Icon`} 
-            className="app-identity-icon"
-            onError={() => setIconError(true)}
+            alt={`${project.title} icon`} 
+            className="info-app-icon"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
           />
-        ) : (
-          <div className="app-identity-fallback" style={{ background: project.accentColor }}>
-            <Sparkles size={26} color="#ffffff" />
-          </div>
-        )}
-
-        <div className="title-stack">
-          <div className="title-row">
-            <h3 className="card-title">{project.title}</h3>
-            <span className="card-year">{project.year}</span>
-          </div>
-
-          <span className="card-subtitle" style={{ color: project.accentColor }}>
-            {subtitle}
-          </span>
-
-          <div className="card-roles-row">
-            {project.role.map((r, idx) => (
-              <span key={idx} className="role-pill-badge">{r}</span>
-            ))}
+          <div className="title-stack">
+            <h3 className="info-title serif-text">{project.title}</h3>
+            <p className="info-subtitle">{subtitle}</p>
           </div>
         </div>
-      </div>
 
-      {/* Description */}
-      <p className="card-description">{description}</p>
+        {/* Short Summary Description */}
+        <p className="info-description">{description}</p>
 
-      {/* Uncropped Media Showcase */}
-      <div className="card-preview">
-        <DeviceFrame 
-          projectId={project.id} 
-          accentColor={project.accentColor} 
-          folderPath={project.folderPath}
-          title={project.title}
-          images={project.images}
-        />
-      </div>
-
-      {/* Footer */}
-      <div className="card-footer">
-        <div className="focus-pills">
-          {project.focus.slice(0, 3).map((item, idx) => (
-            <span key={idx} className="focus-pill">{item}</span>
+        {/* Focus Area Tags */}
+        <div className="info-tags-grid">
+          {project.focus.slice(0, 3).map((tag, tagIdx) => (
+            <span key={tagIdx} className="info-tag monospace">
+              {tag}
+            </span>
           ))}
         </div>
 
-        {project.id === 'you-can-only' ? (
-          <a 
-            href="https://apps.apple.com/it/app/youcanonly/id6755528500" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="appstore-badge-card-link"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img src="/AppStore-Badge.svg" alt="Download on the App Store" className="appstore-badge-card-img" />
-          </a>
-        ) : (
-          <button className="case-study-btn">
-            <span>{t.work.readStory}</span>
-            <ArrowUpRight size={15} />
-          </button>
-        )}
+        {/* Call to Actions Footer */}
+        <div className="info-footer">
+          {project.id === 'you-can-only' ? (
+            <div className="appstore-badge-group">
+              <a 
+                href="https://apps.apple.com/it/app/youcanonly/id6755528500" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="appstore-link"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img 
+                  src="/AppStore-Badge.svg" 
+                  alt="Download on the App Store" 
+                  className="appstore-badge-img" 
+                />
+              </a>
+              <button onClick={handleModalClick} className="btn-card-primary" style={{ '--accent-color': project.accentColor } as React.CSSProperties}>
+                <BookOpen size={14} />
+                <span>{t.work.readStory}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="badge-cta-group">
+              <button onClick={handleModalClick} className="btn-card-primary" style={{ '--accent-color': project.accentColor } as React.CSSProperties}>
+                <BookOpen size={14} />
+                <span>{t.work.readStory}</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <style>{`
-        .appstore-badge-card-link {
-          display: inline-block;
-          transition: transform var(--transition-fast);
-        }
-
-        .appstore-badge-card-link:hover {
-          transform: scale(1.04);
-        }
-
-        .appstore-badge-card-img {
-          height: 35px;
-          display: block;
-          border-radius: 6px;
-        }
-
-        .project-card {
-          padding: 2.25rem;
+        .project-card-v2 {
           display: flex;
           flex-direction: column;
-          gap: 1.35rem;
+          background: var(--bg-card);
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
           cursor: pointer;
-          position: relative;
-          text-align: left;
+          height: 100%;
+        }
+
+        .project-card-v2:hover {
+          background: var(--bg-card-hover);
+          border-color: var(--border-medium);
+          transform: translateY(-4px);
+        }
+
+        .card-visual-frame {
           width: 100%;
-          box-sizing: border-box;
-          border: none;
-          transition: transform var(--transition-normal), background var(--transition-normal), box-shadow var(--transition-normal);
-        }
-
-        .project-card:hover {
-          transform: translateY(-6px);
-          box-shadow: var(--shadow-lg);
-        }
-
-        .card-identity-header {
-          display: flex;
-          align-items: flex-start;
-          gap: 1.25rem;
-          text-align: left;
-        }
-
-        .app-identity-icon {
-          width: 64px;
-          height: 64px;
-          border-radius: 16px;
-          object-fit: cover;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-          border: none;
-          flex-shrink: 0;
-          display: block;
-        }
-
-        .app-identity-fallback {
-          width: 64px;
-          height: 64px;
-          border-radius: 16px;
+          position: relative;
+          background: var(--bg-primary);
+          border-bottom: 1px solid var(--border-subtle);
+          padding: 1.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-          border: none;
+        }
+
+        .card-year-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: rgba(5, 5, 7, 0.85);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+          padding: 0.25rem 0.6rem;
+          font-size: 0.75rem;
+          border-radius: 4px;
+          z-index: 5;
+        }
+
+        [data-theme="light"] .card-year-badge {
+          background: #050507;
+          color: #ffffff;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .card-info-pane {
+          padding: 2.25rem 2rem;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          text-align: left;
+        }
+
+        .info-meta-row {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          margin-bottom: 1rem;
+          flex-wrap: wrap;
+        }
+
+        .meta-category {
+          font-weight: 700;
+        }
+
+        .info-title-row {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.25rem;
+        }
+
+        .info-app-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 10px;
+          object-fit: cover;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
           flex-shrink: 0;
+          border: 1px solid var(--border-subtle);
         }
 
         .title-stack {
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
-          text-align: left;
-          gap: 0.25rem;
-          width: 100%;
         }
 
-        .title-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-        }
-
-        .card-title {
-          font-size: 1.95rem;
-          font-weight: 700;
-          line-height: 1.1;
-          letter-spacing: -0.03em;
-          text-align: left;
-        }
-
-        .card-year {
-          color: var(--text-tertiary);
-          font-weight: 500;
-          font-size: 0.85rem;
-        }
-
-        .card-subtitle {
-          font-size: 0.95rem;
+        .info-title {
+          font-size: 1.5rem;
           font-weight: 600;
+          line-height: 1.2;
+          color: var(--text-primary);
           letter-spacing: -0.01em;
-          text-align: left;
         }
 
-        .card-roles-row {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.4rem;
-          margin-top: 0.25rem;
-        }
-
-        .role-pill-badge {
-          font-size: 0.75rem;
-          font-weight: 600;
+        .info-subtitle {
+          font-size: 0.875rem;
           color: var(--text-secondary);
-          background: rgba(255, 255, 255, 0.05);
-          padding: 0.2rem 0.6rem;
-          border-radius: var(--radius-sm);
-          border: none;
         }
 
-        .card-description {
-          font-size: 1rem;
+        .info-description {
+          font-size: 0.95rem;
           color: var(--text-secondary);
           line-height: 1.6;
-          text-align: left;
+          margin-bottom: 1.75rem;
+          flex-grow: 1;
         }
 
-        .card-preview {
-          margin-top: 0.25rem;
-          width: 100%;
+        .info-tags-grid {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 2rem;
+          flex-wrap: wrap;
         }
 
-        .card-footer {
+        .info-tag {
+          font-size: 0.725rem;
+          color: var(--text-secondary);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid var(--border-subtle);
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
+        }
+
+        .info-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 1rem;
-          padding-top: 1rem;
+          border-top: 1px solid var(--border-subtle);
+          padding-top: 1.5rem;
           margin-top: auto;
+          width: 100%;
         }
 
-        .focus-pills {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.4rem;
-        }
-
-        .focus-pill {
-          font-size: 0.75rem;
-          color: var(--text-tertiary);
-          font-weight: 500;
-        }
-
-        .case-study-btn {
-          display: flex;
+        .appstore-badge-group {
+          display: grid;
+          grid-template-columns: 1fr 1.2fr;
           align-items: center;
-          gap: 0.35rem;
-          font-size: 0.85rem;
+          width: 100%;
+          gap: 0.75rem;
+        }
+
+        .appstore-badge-group .btn-card-primary {
+          padding: 0.6rem 0.75rem;
+          font-size: 0.8125rem;
+        }
+
+        .appstore-link {
+          display: block;
+          transition: transform 0.25s ease;
+        }
+
+        .appstore-link:hover {
+          transform: scale(1.03);
+        }
+
+        .appstore-badge-img {
+          height: 38px;
+          display: block;
+        }
+
+        .badge-cta-group {
+          display: flex;
+          width: 100%;
+        }
+
+        .btn-card-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.5rem;
+          border-radius: 4px;
+          font-size: 0.875rem;
           font-weight: 600;
+          background: var(--text-primary);
+          color: var(--text-inverse);
+          transition: all 0.3s ease;
+          width: 100%;
+          justify-content: center;
+        }
+
+        .btn-card-primary:hover {
+          background: var(--accent-color, var(--accent-primary));
+          color: #ffffff;
+        }
+
+        .btn-card-text {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-family: var(--font-mono);
+          font-size: 0.775rem;
+          font-weight: 700;
+          color: var(--text-secondary);
+          transition: color 0.3s ease;
+        }
+
+        .btn-card-text:hover {
           color: var(--text-primary);
-          white-space: nowrap;
-          transition: color var(--transition-fast);
         }
 
-        .project-card:hover .case-study-btn {
-          color: var(--accent-primary);
-        }
-
-        @media (max-width: 768px) {
-          .project-card {
+        @media (max-width: 480px) {
+          .card-visual-frame {
+            padding: 1rem;
+          }
+          .card-info-pane {
             padding: 1.5rem 1.25rem;
-            align-items: center;
-            text-align: center;
           }
-          .card-identity-header {
+          .appstore-badge-group {
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 0.85rem;
+            align-items: flex-start;
+            gap: 1rem;
           }
-          .title-stack {
-            align-items: center;
-            text-align: center;
-          }
-          .title-row {
-            justify-content: center;
-            gap: 0.5rem;
-          }
-          .card-title {
-            font-size: 1.65rem;
-            text-align: center;
-          }
-          .card-subtitle {
-            text-align: center;
-          }
-          .card-roles-row {
-            justify-content: center;
-          }
-          .card-description {
-            text-align: center;
-            font-size: 0.95rem;
-          }
-          .card-footer {
-            flex-direction: column;
-            gap: 0.85rem;
-            align-items: center;
-            text-align: center;
-          }
-          .focus-pills {
-            justify-content: center;
+          .btn-card-text {
+            width: 100%;
+            justify-content: flex-start;
+            padding: 0.5rem 0;
           }
         }
       `}</style>

@@ -1,16 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   ArrowLeft, User, Building2, Award, Target, 
   BookOpen, Users, Compass, Cpu, Layers, Sparkles, CheckCircle2, 
-  Layers3, HeartHandshake, Globe
+  Layers3, HeartHandshake, Globe, Sun, Moon
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export const OrbyCaseStudy: React.FC = () => {
   const { language, setLanguage } = useLanguage();
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const active = document.documentElement.getAttribute('data-theme');
+    return (active === 'light' || active === 'dark') ? active : 'dark';
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [cursorType, setCursorType] = useState<'default' | 'pointer'>('default');
+
+  useEffect(() => {
+    const updateMouse = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target) return;
+
+      if (
+        target.closest('a') || 
+        target.closest('button') || 
+        target.classList.contains('lang-btn') ||
+        target.closest('.icon-button')
+      ) {
+        setCursorType('pointer');
+      } else {
+        setCursorType('default');
+      }
+    };
+
+    window.addEventListener('mousemove', updateMouse);
+    window.addEventListener('mouseover', handleMouseOver);
+
+    return () => {
+      window.removeEventListener('mousemove', updateMouse);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
   }, []);
 
   const handleBack = () => {
@@ -21,6 +62,15 @@ export const OrbyCaseStudy: React.FC = () => {
 
   return (
     <div className="orby-cs-shell">
+      {/* Custom Cursor */}
+      <div 
+        className={`custom-cursor ${cursorType}`}
+        style={{
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`
+        }}
+      />
+
       {/* Ambient Glows */}
       <div className="ambient-bg">
         <div className="ambient-glow-1"></div>
@@ -53,6 +103,16 @@ export const OrbyCaseStudy: React.FC = () => {
                 EN
               </button>
             </div>
+
+            {/* Theme Toggle */}
+            <button 
+              onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')} 
+              className="icon-button" 
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
 
             <span className="cs-nav-tag">Product Design Case Study</span>
           </div>
@@ -777,7 +837,7 @@ export const OrbyCaseStudy: React.FC = () => {
           gap: 0.2rem;
           padding: 0.25rem 0.6rem;
           border-radius: var(--radius-full);
-          background: rgba(255, 255, 255, 0.04);
+          background: var(--bg-card);
           border: 1px solid var(--border-subtle);
           font-size: 0.75rem;
           font-weight: 600;
@@ -786,6 +846,25 @@ export const OrbyCaseStudy: React.FC = () => {
         .lang-globe-icon {
           color: var(--text-tertiary);
           margin-right: 0.1rem;
+        }
+
+        .icon-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          color: var(--text-secondary);
+          transition: all var(--transition-fast);
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+
+        .icon-button:hover {
+          color: var(--text-primary);
+          background: var(--border-subtle);
         }
 
         .lang-btn {

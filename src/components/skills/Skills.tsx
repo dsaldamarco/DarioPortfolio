@@ -1,27 +1,62 @@
 import React from 'react';
 import { Wrench, Layout, Smartphone, Cpu } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { SKILL_CATEGORIES } from '../../data/projects';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 export const Skills: React.FC = () => {
   const { t } = useLanguage();
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1] as const, // easeOutExpo
+      },
+    },
+  };
+
   return (
     <section id="skills" className="skills-section">
       <div className="container">
-        {/* Section Header: Single rounded rectangle badge, no repeating title */}
-        <div className="section-header">
-          <div className="badge-editorial">
+        {/* Section Header */}
+        <motion.div 
+          initial={{ y: 25, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
+          className="section-header"
+        >
+          <div className="badge-editorial skills-badge">
             <Wrench size={13} />
             <span>{t.skills.title}</span>
           </div>
           <p className="section-desc">{t.skills.subtitle}</p>
-        </div>
+        </motion.div>
 
         {/* Skill Category Cards */}
-        <div className="skills-grid">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="skills-grid"
+        >
           {/* UX/UI Category */}
-          <div className="skill-category-card glass-panel">
+          <motion.div variants={cardVariants} className="skill-category-card-premium">
             <div className="category-header">
               <div className="icon-wrapper">
                 <Layout size={20} />
@@ -33,10 +68,10 @@ export const Skills: React.FC = () => {
                 <span key={idx} className="skill-chip">{skill}</span>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Product Category */}
-          <div className="skill-category-card glass-panel">
+          <motion.div variants={cardVariants} className="skill-category-card-premium">
             <div className="category-header">
               <div className="icon-wrapper">
                 <Smartphone size={20} />
@@ -48,10 +83,10 @@ export const Skills: React.FC = () => {
                 <span key={idx} className="skill-chip">{skill}</span>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Tools Category */}
-          <div className="skill-category-card glass-panel">
+          <motion.div variants={cardVariants} className="skill-category-card-premium">
             <div className="category-header">
               <div className="icon-wrapper">
                 <Cpu size={20} />
@@ -63,8 +98,8 @@ export const Skills: React.FC = () => {
                 <span key={idx} className="skill-chip accent">{skill}</span>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       <style>{`
@@ -101,13 +136,22 @@ export const Skills: React.FC = () => {
           width: 100%;
         }
 
-        .skill-category-card {
+        .skill-category-card-premium {
           padding: 2.25rem;
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
           width: 100%;
           box-sizing: border-box;
+          background: var(--bg-card);
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius-sm);
+          transition: border-color var(--transition-normal), background var(--transition-normal);
+        }
+
+        .skill-category-card-premium:hover {
+          border-color: var(--border-medium);
+          background: var(--bg-card-hover);
         }
 
         .category-header {
@@ -123,7 +167,7 @@ export const Skills: React.FC = () => {
           width: 42px;
           height: 42px;
           border-radius: var(--radius-sm);
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--bg-card);
           border: 1px solid var(--border-subtle);
           color: var(--accent-primary);
         }
@@ -144,7 +188,7 @@ export const Skills: React.FC = () => {
           border-radius: var(--radius-full);
           font-size: 0.85rem;
           font-weight: 500;
-          background: rgba(255, 255, 255, 0.03);
+          background: var(--bg-card);
           border: 1px solid var(--border-subtle);
           color: var(--text-secondary);
           transition: all var(--transition-fast);
@@ -175,7 +219,7 @@ export const Skills: React.FC = () => {
           .skills-grid {
             grid-template-columns: 1fr;
           }
-          .skill-category-card {
+          .skill-category-card-premium {
             padding: 1.5rem 1.25rem;
             align-items: center;
             text-align: center;
