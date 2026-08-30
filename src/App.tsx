@@ -6,6 +6,7 @@ import { Hero } from './components/hero/Hero';
 import { ProjectGrid } from './components/showcase/ProjectGrid';
 import { TimelineLedger } from './components/timeline/TimelineLedger';
 import { Skills } from './components/skills/Skills';
+import { RhythmGame } from './components/game/RhythmGame';
 import { Footer } from './components/layout/Footer';
 import { CaseStudyModal } from './components/casestudy/CaseStudyModal';
 import { Toast } from './components/ui/Toast';
@@ -190,6 +191,8 @@ function PortfolioAppContent() {
         <TimelineLedger />
 
         <Skills />
+
+        <RhythmGame />
       </main>
 
       {/* Contact & Footer */}

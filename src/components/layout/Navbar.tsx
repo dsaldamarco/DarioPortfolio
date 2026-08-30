@@ -18,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      const sections = ['about', 'projects', 'chronology', 'skills'];
+      const sections = ['about', 'projects', 'chronology', 'skills', 'game'];
       const scrollPos = window.scrollY + 220;
 
       for (const section of sections) {
@@ -72,6 +72,9 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
           </a>
           <a href="#skills" onClick={(e) => { e.preventDefault(); handleNavClick('skills'); }} className={`nav-link ${activeSection === 'skills' ? 'active' : ''}`}>
             {t.nav.skills}
+          </a>
+          <a href="#game" onClick={(e) => { e.preventDefault(); handleNavClick('game'); }} className={`nav-link ${activeSection === 'game' ? 'active' : ''}`}>
+            GAME
           </a>
         </nav>
 
@@ -135,6 +138,9 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, onContactCli
           </a>
           <a href="#skills" onClick={(e) => { e.preventDefault(); handleNavClick('skills'); }} className="mobile-link">
             {t.nav.skills}
+          </a>
+          <a href="#game" onClick={(e) => { e.preventDefault(); handleNavClick('game'); }} className="mobile-link">
+            GAME
           </a>
           <button onClick={() => { setMobileMenuOpen(false); onContactClick(); }} className="mobile-cta-btn">
             {t.nav.contact}
