@@ -1,0 +1,87 @@
+.contact {
+  margin-top: var(--section-gap);
+  background: var(--night);
+  color: var(--night-ink);
+  padding-block: clamp(72px, 9vw, 152px) 28px;
+}
+.contact ::selection { background: var(--night-ink); color: var(--night); }
+.contact :focus-visible { outline-color: var(--night-ink); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  gap: clamp(40px, 5vw, 96px);
+  align-items: end;
+}
+
+.contact-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.contact-main .lead { max-width: 40ch; color: var(--night-muted); }
+
+.contact-email {
+  font-size: clamp(1.4rem, 0.6rem + 3.4vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.14em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  overflow-wrap: anywhere;
+  transition: text-decoration-color 200ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contact-email:hover { text-decoration-color: currentColor; }
+}
+
+.contact-copy { min-width: 12ch; }
+
+.contact-else h3 {
+  font-weight: 500;
+  color: var(--night-muted);
+  margin-bottom: 12px;
+}
+.contact-else ul {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.contact-else a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--step-lead);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  padding-block: 4px;
+}
+.contact-else a svg { transition: transform 200ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .contact-else a:hover svg { transform: translate(3px, -3px); }
+}
+
+.contact-imprint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: clamp(72px, 8vw, 128px);
+  color: var(--night-muted);
+}
+.contact-imprint a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--night-ink);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; align-items: start; }
+}

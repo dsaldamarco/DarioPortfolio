@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-28T23:30:00+01:00",
+  "title": "Design System: Dario Saldamarco Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Rose Grey"
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface Step"
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field"
+      },
+      "field-deep": {
+        "role": "neutral",
+        "displayName": "Field Deep"
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Brown-black Ink"
+      },
+      "night": {
+        "role": "primary",
+        "displayName": "Night Close"
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Green Accent"
+      },
+      "screen": {
+        "role": "neutral",
+        "displayName": "Device Screen"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page and case study titles, two lines max."
+      },
+      "head": {
+        "displayName": "Head",
+        "purpose": "Section titles and evidence figures."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Summaries and row titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All running text in full ink."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Meta, labels, captions; floor 14px."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Entrances, presses, hovers."
+      },
+      {
+        "name": "ease-launch",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Icon-to-header view transition, 420ms."
+      },
+      {
+        "name": "reveal",
+        "value": "700ms, 24px rise, 70ms stagger",
+        "purpose": "Section entrances, once, content visible without JS."
+      },
+      {
+        "name": "crossfade",
+        "value": "1600ms fade, 5600ms hold",
+        "purpose": "Featured stage screens; paused off-screen and under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "560px"
+      },
+      {
+        "name": "case-stack",
+        "value": "600px"
+      },
+      {
+        "name": "tablet",
+        "value": "900px"
+      },
+      {
+        "name": "nav-collapse",
+        "value": "960px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The primary action: dark ink pill, green on hover.",
+      "html": "<a class=\"ds-btn\" href=\"#work\">Guarda i progetti</a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;min-height:48px;padding:12px 24px;border-radius:999px;background:#26211e;color:#efeae8;font:500 18px/1.1 'Hanken Grotesk',sans-serif;text-decoration:none;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 200ms ease}.ds-btn:hover{background:#0f7d45;color:#fff}.ds-btn:active{transform:scale(.97)}"
+    },
+    {
+      "name": "Language Switch",
+      "kind": "nav",
+      "refersTo": "button-quiet",
+      "description": "IT/EN pill toggle with aria-pressed.",
+      "html": "<div class=\"ds-lang\"><button aria-pressed=\"true\">IT</button><button aria-pressed=\"false\">EN</button></div>",
+      "css": ".ds-lang{display:inline-flex;padding:4px;border-radius:999px;background:#e1dad7}.ds-lang button{min-width:40px;min-height:36px;border:0;border-radius:999px;background:none;color:#564d49;font:500 15px 'Hanken Grotesk',sans-serif}.ds-lang button[aria-pressed=true]{background:#2b2622;color:#ebe5e3}"
+    },
+    {
+      "name": "App Icon",
+      "kind": "custom",
+      "description": "Signature home-screen icon with label; launches its case study.",
+      "html": "<a class=\"ds-app\" href=\"#\"><span class=\"ds-icon\"></span><span>Orby's Adventure</span></a>",
+      "css": ".ds-app{display:flex;flex-direction:column;align-items:center;gap:10px;color:#2b2622;font:500 18px 'Hanken Grotesk',sans-serif;text-decoration:none}.ds-icon{width:96px;aspect-ratio:1;border-radius:22.5%;background:#ddd4d0;transition:transform 220ms cubic-bezier(.23,1,.32,1)}.ds-app:hover .ds-icon{transform:translateY(-6px)}.ds-app:active .ds-icon{transform:scale(.92)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Home Screen",
+    "overview": "The portfolio is Dario's own home screen: real app icons on a rose-grey ground, each opening its case study like an app launch. Tone-step fields, one grotesk at weight 400 for display, real screens and field photos, green used only on interaction.",
+    "keyCharacteristics": [
+      "Real app icons as the hero",
+      "Whole colour fields per chapter",
+      "One typeface, scale does the hierarchy",
+      "No lines, shadows or gradients"
+    ],
+    "rules": [
+      {
+        "name": "The Tone-Step Rule",
+        "body": "Chapters change by a step in field tone, never by drawing a line.",
+        "section": "colors"
+      },
+      {
+        "name": "Green Is Rare",
+        "body": "The accent appears on interaction and one footer button only.",
+        "section": "colors"
+      },
+      {
+        "name": "Scale Does the Work",
+        "body": "Hierarchy by size and weight, never accents, uppercase tracking or monospace.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Use real screens and photographs",
+      "Keep headlines to two lines",
+      "Respect reduced motion"
+    ],
+    "donts": [
+      "No eyebrows, numbering, mono labels, hairlines, gradients, glass or resting shadows",
+      "No second typeface"
+    ]
+  }
+}

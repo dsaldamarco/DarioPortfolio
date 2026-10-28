@@ -132,7 +132,7 @@ export const YCOSupport: React.FC = () => {
 
       <style>{`
         .yco-page-shell {
-          min-height: 100vh;
+          min-height: 100svh;
           background: var(--bg-primary);
           color: var(--text-primary);
           display: flex;
@@ -145,8 +145,6 @@ export const YCOSupport: React.FC = () => {
           top: 0;
           z-index: 50;
           background: var(--bg-glass-heavy);
-          backdrop-filter: var(--glass-blur);
-          -webkit-backdrop-filter: var(--glass-blur);
           padding: 1.25rem 0;
         }
 

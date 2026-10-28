@@ -1,29 +1,53 @@
-export interface CaseStudyData {
-  overview: { it: string; en: string };
-  problem: { it: string; en: string };
-  solution: { it: string; en: string };
-  focusAreas: string[];
+export type Lang = 'it' | 'en';
+export type L = Record<Lang, string>;
+
+export interface Shot {
+  src: string;
+  alt: L;
+  kind: 'phone' | 'tablet' | 'photo';
+  w: number;
+  h: number;
+  caption?: L;
+}
+
+export interface Note {
+  title: L;
+  body: L;
+}
+
+export interface Fact {
+  label: L;
+  value: L;
 }
 
 export interface Project {
   id: string;
   title: string;
-  subtitle: { it: string; en: string };
-  category: 'uxui' | 'game' | 'ios';
-  role: string[];
-  description: { it: string; en: string };
-  focus: string[];
-  accentColor: string;
   year: string;
-  folderPath: string;
-  appIcon: string;
-  images: string[];
-  caseStudy: CaseStudyData;
+  kind: L;
+  summary: L;
+  icon: string;
+  /** Icons exported with transparent padding are scaled up to fill the squircle */
+  iconInset?: boolean;
+  facts: Fact[];
+  context?: L;
+  problem: L;
+  evidence?: { figure: string; label: L }[];
+  role: L[];
+  process?: Note[];
+  decisions: Note[];
+  beforeAfter?: { before: Shot; after: Shot; note: L };
+  outcome?: L;
+  learnings?: Note[];
+  gallery: Shot[];
+  research?: { intro: L; photos: Shot[] };
+  links?: { appStore?: string; support?: string; privacy?: string };
 }
 
 export const PROFILE = {
   name: 'Dario Saldamarco',
   role: 'UX/UI Designer',
+  city: 'Napoli',
   links: {
     email: 'dario.saldamarco@gmail.com',
     github: 'https://github.com/dsaldamarco',
@@ -32,291 +56,430 @@ export const PROFILE = {
   },
 };
 
+const l = (it: string, en: string): L => ({ it, en });
+
+const tablet = (src: string, alt: L, caption?: L): Shot => ({ src, alt, kind: 'tablet', w: 1600, h: 1199, caption });
+const phone = (src: string, alt: L, w = 1200, h = 2420): Shot => ({ src, alt, kind: 'phone', w, h });
+const photo = (src: string, alt: L, caption?: L): Shot => ({ src, alt, kind: 'photo', w: 1600, h: 1066, caption });
+
 export const PROJECTS: Project[] = [
-  {
-    id: 'you-can-only',
-    title: 'You Can Only',
-    subtitle: {
-      it: 'Endless Hardcore Arcade Game',
-      en: 'Endless Hardcore Arcade Game',
-    },
-    category: 'game',
-    role: ['Game Designer', 'UX/UI Designer', 'Developer'],
-    description: {
-      it: 'You Can Only è un arcade ad alto ritmo basato su una regola semplice: ogni sfida ti dà una sola azione possibile. Tocca, scorri, tieni premuto, adattati e supera i tuoi limiti.',
-      en: 'You Can Only is a fast-paced arcade game built around one simple rule: every challenge gives you only one possible action. Tap, swipe, hold, adapt, and push your limits.',
-    },
-    focus: ['Game Design', 'One-Touch Mechanics', 'Fast Arcade Loop', 'Tactile UX', 'Indie Development'],
-    accentColor: '#f05123',
-    year: '2026',
-    folderPath: '/projects/you-can-only/',
-    appIcon: '/projects/you-can-only/appicon-youcanonly.png',
-    images: [
-      '/projects/you-can-only/1yco.png',
-      '/projects/you-can-only/2yco.png',
-      '/projects/you-can-only/3yco.png',
-      '/projects/you-can-only/4yco.png',
-      '/projects/you-can-only/5yco.png',
-      '/projects/you-can-only/6yco.png',
-      '/projects/you-can-only/7yco.png',
-    ],
-    caseStudy: {
-      overview: {
-        it: 'You Can Only è un arcade game minimalista basato su una semplice regola: ogni sfida permette al giocatore di compiere una sola azione. Tap, swipe, hold e altre interazioni diventano strumenti per superare livelli sempre più imprevedibili, mettendo alla prova riflessi, precisione e capacità di adattamento. Il progetto nasce dall\'esplorazione di un concetto semplice ma difficile da padroneggiare: creare un\'esperienza immediata da comprendere, ma abbastanza profonda da incentivare il miglioramento continuo. Ho curato l\'intero processo, dalla definizione del gameplay loop alla progettazione UX/UI, fino allo sviluppo dell\'applicazione nativa iOS con Swift e SpriteKit.',
-        en: 'You Can Only is a minimalist arcade game built around one simple rule: every challenge allows the player to perform only one action. Tap, swipe, hold, and other interactions become tools to master increasingly unpredictable levels, testing reflexes, precision, and adaptability. The project explores a simple yet challenging concept: creating an experience that is instantly intuitive to understand, yet deep enough to encourage continuous self-improvement. I led the entire end-to-end process, from gameplay loop definition to UX/UI design and native iOS development using Swift and SpriteKit.',
-      },
-      problem: {
-        it: 'Creare un\'esperienza di gioco che fosse immediata da capire, abbastanza difficile da mantenere alta la motivazione e capace di trasformare il fallimento in un elemento positivo nel gameplay.',
-        en: 'Designing a game experience that is instantly intuitive, challenging enough to sustain long-term engagement, and capable of transforming failure into a positive mechanic.',
-      },
-      solution: {
-        it: 'Ho progettato un gameplay loop basato su tre principi: Learn → Fail → Improve. Ogni partita introduce una nuova sfida, il fallimento fornisce un feedback immediato e ogni tentativo permette al giocatore di migliorare le proprie abilità.',
-        en: 'Designed a core gameplay loop grounded in three principles: Learn → Fail → Improve. Every run introduces a new challenge, failure delivers instant feedback, and each attempt empowers players to hone their skills.',
-      },
-      focusAreas: ['Game Design', 'UX/UI Design', 'Developer', 'Arcade Mechanics'],
-    },
-  },
   {
     id: 'orbys-adventure',
     title: "Orby's Adventure",
-    subtitle: {
-      it: 'Educational iPad Game',
-      en: 'Educational iPad Game',
-    },
-    category: 'uxui',
-    role: ['UX/UI Designer', 'Game Designer'],
-    description: {
-      it: 'Applicazione educativa per iPadOS progettata in collaborazione con The Akanksha Foundation (India) per supportare oltre 14.000 studenti nell’apprendimento della matematica attraverso un’esperienza ludica e spaziale.',
-      en: 'Educational iPadOS application designed in collaboration with The Akanksha Foundation (India) to support 14,000+ students learning mathematics through a spatial, playful experience.',
-    },
-    focus: ['UX Research', 'Game Design', 'Educational Design', 'User Testing', 'Accessibility'],
-    accentColor: '#10b981',
     year: '2026',
-    folderPath: '/projects/orby/',
-    appIcon: '/projects/orby/appicon-orby.png',
-    images: [
-      '/projects/orby/1orby.png',
-      '/projects/orby/2orby.png',
-      '/projects/orby/3orby.png',
-      '/projects/orby/4orby.png',
-      '/projects/orby/5orby.png',
-      '/projects/orby/6orby.png',
-      '/projects/orby/7orby.png',
-      '/projects/orby/8orby.png',
-      '/projects/orby/9orby.png',
-      '/projects/orby/10orby.png',
+    kind: l('Gioco educativo per iPad', 'Educational iPad game'),
+    summary: l(
+      'Un gioco per iPad che aiuta gli studenti di 6ª classe delle scuole Akanksha, in India, a esercitarsi su frazioni, rapporti e operazioni.',
+      'An iPad game that helps Grade 6 students in Akanksha schools, India, practise fractions, ratios and basic operations.'
+    ),
+    icon: '/img/orby/icon.png',
+    facts: [
+      { label: l('Cliente', 'Client'), value: l('The Akanksha Foundation, India', 'The Akanksha Foundation, India') },
+      { label: l('Il mio ruolo', 'My role'), value: l('UX/UI designer e game designer', 'UX/UI designer and game designer') },
+      { label: l('Team', 'Team'), value: l('7 persone, sprint Scrum di due settimane', '7 people, two-week Scrum sprints') },
+      { label: l('Contesto', 'Setting'), value: l('Apple Developer Academy, PIER Program', 'Apple Developer Academy, PIER Program') },
+      { label: l('Piattaforma', 'Platform'), value: l('iPadOS', 'iPadOS') },
+      { label: l('Strumenti', 'Tools'), value: l('Figma, Jira, TestFlight', 'Figma, Jira, TestFlight') },
     ],
-    caseStudy: {
-      overview: {
-        it: 'Orby’s Adventure è un gioco educativo per iPad sviluppato all’interno del programma Apple Developer Academy PIER in collaborazione con The Akanksha Foundation. Il progetto nasce per affrontare il critico calo di rendimento in matematica degli studenti di 6ª classe nelle scuole in India. Attraverso l’analisi di dataset scolastici di 3 scuole e la ricerca utenti sul campo nelle classi di Pune, abbiamo progettato un’esperienza interattiva focalizzata sul consolidamento di concetti di ragionamento spaziale, frazioni e operazioni base.',
-        en: 'Orby’s Adventure is an educational iPad game developed within the Apple Developer Academy PIER Program in direct collaboration with The Akanksha Foundation. Designed to address the critical Grade 6 math learning drop-off in Indian community schools, the product combines quantitative analysis of school performance datasets with on-site field user research in Pune classrooms. The experience transforms abstract spatial geometry, fractions, and basic operations into intuitive, gesture-first mini-games.',
+    context: l(
+      'Akanksha gestisce 27 scuole a Mumbai, Pune e Nagpur, con oltre 14.000 studenti di famiglie a basso reddito. Ci ha chiesto uno strumento per far esercitare gli studenti fuori dalle ore di lezione.',
+      'Akanksha runs 27 schools in Mumbai, Pune and Nagpur, serving over 14,000 students from low-income families. They asked for a tool students could practise with outside class time.'
+    ),
+    problem: l(
+      'Abbiamo analizzato i risultati di tre scuole, dalla 3ª all’8ª classe. Il calo arriva in 6ª, quando la matematica passa dal calcolo ai problemi scritti in inglese, che per molti studenti non è la prima lingua.',
+      'We analysed results from three schools, Grades 3 to 8. The drop comes in Grade 6, when maths moves from calculation to word problems written in English, which many students do not speak at home.'
+    ),
+    evidence: [
+      { figure: '32,3%', label: l('superano le prove su rapporti e proporzioni', 'pass rate on ratio and proportion') },
+      { figure: '38,2%', label: l('superano le prove su frazioni e geometria', 'pass rate on fractions and geometry') },
+      { figure: '58,4%', label: l('superano le prove sulle operazioni base', 'pass rate on basic operations') },
+    ],
+    role: [
+      l('Ho progettato UX/UI, identità visiva e meccaniche di gioco.', 'Designed the UX/UI, visual identity and game mechanics.'),
+      l('Ho analizzato con il team i dati delle tre scuole per scegliere dove intervenire.', 'Analysed the three schools’ data with the team to choose where to intervene.'),
+      l('Ho condotto test di usabilità, osservazioni in classe e sessioni di co-design a Pune, con studenti e insegnanti.', 'Ran usability tests, classroom observation and co-design sessions in Pune with students and teachers.'),
+      l('Ho portato i flussi da wireframe a prototipi ad alta fedeltà in Figma e li ho iterati con gli sviluppatori nelle build TestFlight 1.1 e 1.2.', 'Took the flows from wireframes to high-fidelity Figma prototypes and iterated them with developers through TestFlight builds 1.1 and 1.2.'),
+    ],
+    process: [
+      { title: l('Dati', 'Data'), body: l('Risultati delle classi 3–8 in tre scuole: il punto debole è la 6ª.', 'Grade 3–8 results from three schools point to Grade 6.') },
+      { title: l('Problema', 'Problem'), body: l('Rapporti, proporzioni e frazioni, più la barriera della lingua.', 'Ratios, proportions and fractions, plus the language barrier.') },
+      { title: l('Idee e flussi', 'Ideas and flows'), body: l('Minigiochi basati sui gesti, dentro una storia unica.', 'Gesture-based mini-games inside one story.') },
+      { title: l('Prototipo', 'Prototype'), body: l('Wireframe interattivi per iPad e primi playtest.', 'Interactive iPad wireframes and first playtests.') },
+      { title: l('Test a Pune', 'Testing in Pune'), body: l('Sessioni in classe con studenti e insegnanti.', 'Classroom sessions with students and teachers.') },
+      { title: l('Iterazione', 'Iteration'), body: l('Build 1.1 e 1.2: onboarding, aiuti e rifiniture.', 'Builds 1.1 and 1.2: onboarding, hints and polish.') },
+    ],
+    decisions: [
+      {
+        title: l('Istruzioni mostrate, non scritte', 'Instructions shown, not written'),
+        body: l(
+          'In classe gli studenti passavano più tempo a decifrare le istruzioni che a risolvere i conti. Abbiamo sostituito il testo con animazioni che mostrano il gesto da fare.',
+          'In class, students spent more time decoding the instructions than doing the maths. We replaced the text with animations that show the gesture to make.'
+        ),
       },
-      problem: {
-        it: 'L’analisi dei dati accademici ha evidenziato un forte calo di rendimento in 6ª classe (tasso di superamento medio 32.3%), causato dall’improvviso passaggio dall’aritmetica meccanica al ragionamento contestuale con testi in inglese.',
-        en: 'Academic performance data revealed a steep drop-off at Grade 6 (32.3% average pass rate), driven by the sudden transition from rote arithmetic to contextual word problems in English.',
+      {
+        title: l('Aiuti a gradini invece di giusto o sbagliato', 'Step-by-step hints instead of right or wrong'),
+        body: l(
+          'Gli insegnanti chiedevano spiegazioni, non verdetti. L’Oracolo dà indizi visivi progressivi e lascia allo studente l’ultimo passo.',
+          'Teachers asked for explanations, not verdicts. The Oracle gives progressive visual hints and leaves the last step to the student.'
+        ),
       },
-      solution: {
-        it: 'Interfaccia gesture-first priva di barriere di testo, onboarding visivo animato, suggerimenti progressivi e 5 moduli di consolidamento pratico guidato.',
-        en: 'A gesture-first visual interface eliminating text barriers, animated visual onboarding, scaffolded hint systems, and 5 practice reinforcement modules.',
+      {
+        title: l('Un concetto per livello', 'One concept per level'),
+        body: l(
+          'Mescolare più argomenti confondeva. Il gioco è diviso in cinque moduli (rapporti, proporzioni, operazioni, frazioni, problemi) con difficoltà crescente.',
+          'Mixing topics confused students. The game is split into five modules (ratio, proportion, operations, fractions, word problems) with rising difficulty.'
+        ),
       },
-      focusAreas: ['UX Research', 'Pune Field Testing', 'Game Design', 'Educational Design', 'Scaffolded Hints', 'Accessibility'],
+      {
+        title: l('Il gesto è il ragionamento', 'The gesture is the reasoning'),
+        body: l(
+          'Ogni meccanica riproduce il ragionamento matematico: per capire 3/4 si trascina il fiore con tre petali colorati su quattro nel vaso giusto.',
+          'Every mechanic mirrors the maths: to understand 3/4 you drag the flower with three of four petals coloured into the right pot.'
+        ),
+      },
+    ],
+    beforeAfter: {
+      before: photo('/img/orby/testing1.jpg', l('Uno studente gioca al minigioco delle frazioni su iPad durante un test a Pune, mentre un membro del team cronometra la sessione', 'A student plays the fractions mini-game on an iPad during a test in Pune while a team member times the session')),
+      after: tablet('/img/orby/5orby.jpg', l('Il minigioco delle frazioni nella versione illustrata: fiori con petali colorati da abbinare ai vasi 5/6, 2/3 e 3/4, e il pulsante per chiedere aiuto all’Oracolo', 'The illustrated fractions mini-game: flowers with coloured petals to match to pots labelled 5/6, 2/3 and 3/4, with a button to ask the Oracle for help')),
+      note: l(
+        'A sinistra, il prototipo durante un test in classe: le istruzioni sono una frase in inglese in cima allo schermo. A destra, la versione illustrata dello stesso minigioco, quasi senza testo e con l’aiuto dell’Oracolo.',
+        'Left, the prototype in a classroom test: the instructions are an English sentence at the top of the screen. Right, the illustrated version of the same mini-game, almost without text and with the Oracle’s help.'
+      ),
+    },
+    outcome: l(
+      'Un gioco funzionante, testato in classe a Pune con studenti e insegnanti e affinato in due build TestFlight. Le revisioni ogni due settimane con i responsabili educativi di Akanksha hanno tenuto insieme rigore didattico e fattibilità in SwiftUI e SpriteKit.',
+      'A working game, tested in Pune classrooms with students and teachers and refined over two TestFlight builds. Fortnightly reviews with Akanksha’s education leads kept teaching rigour and feasibility in SwiftUI and SpriteKit together.'
+    ),
+    learnings: [
+      {
+        title: l('I dati dicono dove, il campo dice perché', 'Data says where, the field says why'),
+        body: l('I grafici ci hanno indicato la 6ª classe; solo stare in aula ci ha mostrato che il problema era la lettura.', 'The charts pointed at Grade 6; only being in the classroom showed us the problem was reading.'),
+      },
+      {
+        title: l('Con i bambini, mostrare batte spiegare', 'With children, showing beats telling'),
+        body: l('Un segnale visivo non verbale funziona meglio di qualsiasi istruzione scritta.', 'A non-verbal visual cue works better than any written instruction.'),
+      },
+      {
+        title: l('Sbagliare deve far andare avanti', 'Mistakes should move you forward'),
+        body: l('Un’interfaccia educativa costruisce fiducia guidando, non punendo l’errore.', 'An educational interface builds confidence by guiding, not by punishing the mistake.'),
+      },
+    ],
+    gallery: [
+      tablet('/img/orby/1orby.jpg', l('Schermata iniziale di Orby’s Adventure con il personaggio su un sentiero sospeso', 'Orby’s Adventure start screen with the character on a floating path')),
+      tablet('/img/orby/2orby.jpg', l('La mappa del gioco: un percorso a caselle tra cascate e una fortezza, con il dado da tirare', 'The game map: a path of tiles past waterfalls and a fortress, with a dice to roll')),
+      tablet('/img/orby/3orby.jpg', l('Schermata di selezione dei minigiochi', 'Mini-game selection screen')),
+      tablet('/img/orby/4orby.jpg', l('Componenti dell’interfaccia e sistema visivo del gioco', 'Interface components and visual system of the game')),
+      tablet('/img/orby/6orby.jpg', l('Minigioco sulle operazioni base', 'Basic operations mini-game')),
+      tablet('/img/orby/7orby.jpg', l('Schermata di gioco', 'Gameplay screen')),
+      tablet('/img/orby/8orby.jpg', l('Schermata di gioco', 'Gameplay screen')),
+      tablet('/img/orby/9orby.jpg', l('Fine sezione: elemento Acqua completato, il prossimo è il Fuoco', 'Section finished: Water element complete, Fire is next')),
+      tablet('/img/orby/10orby.jpg', l('Certificato finale di padronanza dei quattro elementi', 'Final certificate for mastering the four elements')),
+    ],
+    research: {
+      intro: l(
+        'Siamo andati a Pune per test di usabilità, osservazioni in classe, interviste agli insegnanti e attività di co-design nelle scuole Akanksha.',
+        'We went to Pune for usability tests, classroom observation, teacher interviews and co-design activities in Akanksha schools.'
+      ),
+      photos: [
+        photo('/img/orby/testing2.jpg', l('Workshop di co-design e storytelling a Pune', 'Co-design and storytelling workshop in Pune'), l('Co-design e storytelling', 'Co-design and storytelling')),
+        photo('/img/orby/testing3.jpg', l('Allineamento con i docenti a Pune', 'Alignment with teachers in Pune'), l('Allineamento con i docenti', 'Aligning with teachers')),
+        photo('/img/orby/testing4.jpg', l('Osservazione delle interazioni con i gesti su iPad', 'Observing gesture interactions on iPad'), l('Osservare i gesti', 'Observing gestures')),
+        photo('/img/orby/testing5.jpg', l('Test con i docenti', 'Testing with teachers'), l('Test con i docenti', 'Testing with teachers')),
+        photo('/img/orby/testing6.jpg', l('Sessione di feedback a Pune', 'Feedback session in Pune'), l('Sessione di feedback', 'Feedback session')),
+      ],
+    },
+  },
+  {
+    id: 'you-can-only',
+    title: 'You Can Only',
+    year: '2026',
+    kind: l('Gioco arcade per iPhone', 'Arcade game for iPhone'),
+    summary: l(
+      'Un arcade in cui ogni sfida ti concede una sola azione: toccare, scorrere o tenere premuto. Ho curato tutto, dal gameplay allo sviluppo in Swift, ed è sull’App Store.',
+      'An arcade game where every challenge allows a single action: tap, swipe or hold. I did all of it, from gameplay to Swift development, and it is on the App Store.'
+    ),
+    icon: '/img/you-can-only/icon.png',
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('Game design, UX/UI e sviluppo iOS', 'Game design, UX/UI and iOS development') },
+      { label: l('Piattaforma', 'Platform'), value: l('iPhone', 'iPhone') },
+      { label: l('Strumenti', 'Tools'), value: l('Swift, SpriteKit, Xcode', 'Swift, SpriteKit, Xcode') },
+      { label: l('Stato', 'Status'), value: l('Pubblicato sull’App Store', 'Live on the App Store') },
+    ],
+    problem: l(
+      'Volevo un gioco che si capisse in un secondo, restasse abbastanza difficile da far venire voglia di riprovare e trasformasse il fallimento in parte del divertimento.',
+      'I wanted a game you understand in a second, that stays hard enough to make you try again, and that turns failing into part of the fun.'
+    ),
+    role: [
+      l('Ho definito la regola, il ciclo di gioco e la curva di difficoltà.', 'Defined the rule, the game loop and the difficulty curve.'),
+      l('Ho progettato interfaccia, feedback e tipografia.', 'Designed the interface, feedback and typography.'),
+      l('Ho sviluppato l’app nativa in Swift e SpriteKit.', 'Built the native app in Swift and SpriteKit.'),
+      l('L’ho pubblicata sull’App Store, con pagine di supporto e privacy.', 'Shipped it to the App Store, with support and privacy pages.'),
+    ],
+    decisions: [
+      {
+        title: l('La regola è il tutorial', 'The rule is the tutorial'),
+        body: l(
+          'Non c’è un tutorial: ogni sfida scrive a schermo il verbo che ti è concesso (“you can only hide”). Leggi una parola e sai cosa fare.',
+          'There is no tutorial: each challenge writes the one verb you are allowed on screen (“you can only hide”). You read one word and know what to do.'
+        ),
+      },
+      {
+        title: l('Impara, sbaglia, migliora', 'Learn, fail, improve'),
+        body: l(
+          'Ogni partita introduce una sfida nuova, l’errore dà un feedback immediato e si riparte subito: il fallimento diventa il modo di imparare.',
+          'Every run introduces a new challenge, a mistake gives instant feedback and you restart straight away: failing becomes how you learn.'
+        ),
+      },
+    ],
+    outcome: l('Il gioco è disponibile sull’App Store per iPhone.', 'The game is available on the App Store for iPhone.'),
+    gallery: [1, 2, 3, 4, 5, 6, 7].map((n) =>
+      phone(`/img/you-can-only/${n}yco.jpg`, l(`You Can Only, schermata ${n} di 7`, `You Can Only, screen ${n} of 7`), 647, 1400)
+    ),
+    links: {
+      appStore: 'https://apps.apple.com/it/app/youcanonly/id6755528500',
+      support: '/you-can-only/support',
+      privacy: '/you-can-only/privacy',
     },
   },
   {
     id: 'melting-pot',
     title: 'Melting Pot',
-    subtitle: {
-      it: 'Cooperative iPhone Party Game',
-      en: 'Cooperative iPhone Party Game',
-    },
-    category: 'game',
-    role: ['Game Designer', 'UX/UI Designer'],
-    description: {
-      it: 'Melting Pot è un gioco cooperativo a ritmo serrato per iPhone. Raduna i tuoi amici, mescola ingredienti bizzarri e prepara pozioni selvagge in una cucina magica finita nel caos.',
-      en: 'Melting Pot is a fast-paced cooperative shouting game for iPhone. Gather your friends, mix bizarre ingredients, and brew wild potions in a magical kitchen gone mad.',
-    },
-    focus: ['Party Game UX', 'Cooperative Interaction', 'Social Play', 'Motion UI', 'Audio Feedback'],
-    accentColor: '#f59e0b',
     year: '2025',
-    folderPath: '/projects/melting-pot/',
-    appIcon: '/projects/melting-pot/appicon-meltingpot.png',
-    images: [
-      '/projects/melting-pot/1mp.png',
-      '/projects/melting-pot/2mp.png',
-      '/projects/melting-pot/3mp.png',
+    kind: l('Party game cooperativo per iPhone', 'Co-op party game for iPhone'),
+    summary: l(
+      'Un party game cooperativo da giocare in gruppo intorno a un solo iPhone: si mescolano ingredienti assurdi e si preparano pozioni in una cucina magica nel caos.',
+      'A co-op party game played as a group around one iPhone: you mix absurd ingredients and brew potions in a magical kitchen gone wild.'
+    ),
+    icon: '/img/melting-pot/icon.png',
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('Game designer e UX/UI designer', 'Game designer and UX/UI designer') },
+      { label: l('Piattaforma', 'Platform'), value: l('iPhone', 'iPhone') },
     ],
-    caseStudy: {
-      overview: {
-        it: 'Un party game studiato per la condivisione dal vivo intorno allo stesso schermo dello smartphone.',
-        en: 'A party game designed for physical social interaction around a shared iPhone screen.',
+    problem: l(
+      'Far collaborare un gruppo da subito, durante una festa, senza dover spiegare lunghe regole.',
+      'Get a group cooperating straight away, at a party, without explaining long rules.'
+    ),
+    role: [
+      l('Ho progettato le meccaniche cooperative e l’interfaccia di gioco.', 'Designed the co-op mechanics and the game interface.'),
+    ],
+    decisions: [
+      {
+        title: l('Leggibile da tutto il gruppo', 'Readable by the whole group'),
+        body: l(
+          'Grafica ad alto contrasto e animazioni vivaci, pensate per uno schermo guardato da più persone insieme.',
+          'High-contrast graphics and lively animation, made for one screen watched by several people at once.'
+        ),
       },
-      problem: {
-        it: 'Facilitare l’interazione di gruppo immediata e l’intuitività delle regole durante le feste.',
-        en: 'Enabling immediate group cooperation without requiring lengthy rule tutorials.',
+      {
+        title: l('Voce e tocco insieme', 'Voice and touch together'),
+        body: l('Comandi vocali e tattili sincronizzati, così il gioco passa anche per la conversazione.', 'Synchronised voice and touch controls, so the game also runs through conversation.'),
       },
-      solution: {
-        it: 'Grafica ad alto contrasto, animazioni visive dinamiche e comandi vocali/tattili sincronizzati.',
-        en: 'High-contrast energetic UI, playful animations, and voice/touch sync mechanics.',
-      },
-      focusAreas: ['Cooperative UX', 'Game Design', 'Party Ergonomics'],
-    },
+    ],
+    gallery: [1, 2, 3].map((n) => phone(`/img/melting-pot/${n}mp.png`, l(`Melting Pot, schermata ${n} di 3`, `Melting Pot, screen ${n} of 3`), 597, 1200)),
   },
   {
     id: 'synk',
     title: 'Synk',
-    subtitle: {
-      it: 'Creative Interaction App',
-      en: 'Creative Interaction App',
-    },
-    category: 'ios',
-    role: ['UX/UI Designer', 'iOS Developer'],
-    description: {
-      it: 'Synk è un’esperienza interattiva ludica che esplora la sinestesia, la connessione tra i sensi. Realizzata per lo Swift Student Challenge di Apple.',
-      en: 'Synk is a playful interactive experience exploring synesthesia, the connection between senses. Built for Apple’s Swift Student Challenge.',
-    },
-    focus: ['Interaction Design', 'Synesthesia', 'Swift Student Challenge', 'Gesture Controls', 'Audio-Visual Sync'],
-    accentColor: '#8b5cf6',
     year: '2025',
-    folderPath: '/projects/synk/',
-    appIcon: '/projects/synk/appicon-synk.png',
-    images: [
-      '/projects/synk/1synk.png',
-      '/projects/synk/2synk.png',
-      '/projects/synk/3synk.png',
+    kind: l('Esperienza interattiva per iPhone', 'Interactive iPhone experience'),
+    summary: l(
+      'Un’esperienza interattiva sulla sinestesia, il legame tra i sensi, realizzata per lo Swift Student Challenge di Apple.',
+      'An interactive experience about synesthesia, the link between senses, built for Apple’s Swift Student Challenge.'
+    ),
+    icon: '/img/synk/icon.png',
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('UX/UI designer e sviluppatore iOS', 'UX/UI designer and iOS developer') },
+      { label: l('Contesto', 'Setting'), value: l('Swift Student Challenge', 'Swift Student Challenge') },
+      { label: l('Strumenti', 'Tools'), value: l('SwiftUI', 'SwiftUI') },
     ],
-    caseStudy: {
-      overview: {
-        it: 'Un’esplorazione sperimentale di come suono, colore e gesture tattili su iOS possano fondersi in un’unica sensazione percettiva.',
-        en: 'An experimental exploration of how sound, color, and touch gestures on iOS merge into a unified sensory perception.',
+    problem: l(
+      'Far percepire la sinestesia con suono, colore e tocco senza un’interfaccia caotica o che sovraccarichi i sensi.',
+      'Convey synesthesia through sound, colour and touch without an interface that feels chaotic or overwhelming.'
+    ),
+    role: [l('Ho progettato e sviluppato l’esperienza in SwiftUI.', 'Designed and built the experience in SwiftUI.')],
+    decisions: [
+      {
+        title: l('Poco a schermo, molto al tatto', 'Little on screen, a lot under the finger'),
+        body: l(
+          'Interfaccia minimale, con risposte aptiche sincronizzate e colori che reagiscono al gesto delle dita.',
+          'A minimal interface, with synchronised haptics and colours that react to the finger’s gesture.'
+        ),
       },
-      problem: {
-        it: 'Creare un’interfaccia che esprima la sinestesia senza risultare caotica o confusa per l’utente.',
-        en: 'Designing a multisensory UI that captures synesthesia without creating visual or auditory overwhelm.',
-      },
-      solution: {
-        it: 'Design minimale con risposte aptiche sincronizzate e sintesi visiva reattiva ai gesti delle dita.',
-        en: 'Minimalist fluid UI with synchronized haptics and touch-reactive color synthesis.',
-      },
-      focusAreas: ['Interaction Design', 'Sensory UI', 'SwiftUI', 'Haptic Engineering'],
-    },
+    ],
+    gallery: [1, 2, 3].map((n) => phone(`/img/synk/${n}synk.png`, l(`Synk, schermata ${n} di 3`, `Synk, screen ${n} of 3`), 580, 1200)),
   },
   {
     id: 'sortie',
     title: 'Sortie',
-    subtitle: {
-      it: 'Sleep Coaching iOS App',
-      en: 'Sleep Coaching iOS App',
-    },
-    category: 'uxui',
-    role: ['Product Designer'],
-    description: {
-      it: 'Sortie è un’applicazione di sleep coaching progettata sulla terapia di restrizione del sonno basata su evidenze scientifiche. L’esperienza unisce tracciamento della salute, guida personalizzata e integrazione nell’ecosistema Apple.',
-      en: 'Sortie is a sleep coaching application designed around science-based sleep restriction therapy. The experience combines health tracking, personalized guidance and Apple ecosystem integration.',
-    },
-    focus: ['Health Experience', 'Apple Ecosystem', 'WatchOS Integration', 'Circadian Design', 'Behavioral Coaching'],
-    accentColor: '#6366f1',
     year: '2025',
-    folderPath: '/projects/sortie/',
-    appIcon: '/projects/sortie/appicon-sortie.png',
-    images: [
-      '/projects/sortie/1sortie.png',
-      '/projects/sortie/2sortie.png',
-      '/projects/sortie/3sortie.png',
+    kind: l('App di sleep coaching per iPhone', 'Sleep coaching app for iPhone'),
+    summary: l(
+      'Un’app di sleep coaching basata sulla terapia di restrizione del sonno, con tracciamento della salute, consigli personalizzati e integrazione con Apple Watch.',
+      'A sleep coaching app built on sleep restriction therapy, with health tracking, personal guidance and Apple Watch integration.'
+    ),
+    icon: '/img/sortie/icon.png',
+    iconInset: true,
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('Product designer', 'Product designer') },
+      { label: l('Piattaforma', 'Platform'), value: l('iPhone e Apple Watch', 'iPhone and Apple Watch') },
     ],
-    caseStudy: {
-      overview: {
-        it: 'Un’applicazione pensata per accompagnare l’utente verso ritmi del sonno più sani senza l’ansia da notifiche o grafici complessi.',
-        en: 'Designed to support healthy sleep rhythms through calm night-first interfaces and seamless watchOS integration.',
+    problem: l(
+      'Molte app per il sonno riempiono di grafici e notifiche luminose proprio prima di dormire.',
+      'Many sleep apps fill the screen with charts and bright notifications right before bed.'
+    ),
+    role: [l('Ho progettato l’esperienza su iPhone e Apple Watch.', 'Designed the experience across iPhone and Apple Watch.')],
+    decisions: [
+      {
+        title: l('Un’interfaccia per la notte', 'An interface for the night'),
+        body: l('Fondo scuro e una palette calma, per non accendere lo schermo in faccia prima di dormire.', 'A dark ground and a calm palette, so the screen does not glare at you before sleep.'),
       },
-      problem: {
-        it: 'Molte app per il sonno sovraccaricano l’utente di dati e notifiche luminose prima di coricarsi.',
-        en: 'Most sleep trackers bombard users with complex charts and bright screens right before bedtime.',
+      {
+        title: l('Una occhiata dal polso', 'A glance from the wrist'),
+        body: l('Complicazioni sintetiche su Apple Watch e consigli graduali, invece di grafici da studiare.', 'Concise Apple Watch complications and gradual advice, instead of charts to study.'),
       },
-      solution: {
-        it: 'Palette notturna rilassante, complicazioni sintetiche su Apple Watch e consigli comportamentali graduali.',
-        en: 'Ambient dark interface, glanceable Apple Watch complications, and evidence-based behavioral coaching.',
-      },
-      focusAreas: ['Product Design', 'Health UX', 'Apple Watch HIG', 'Dark Ergonomics'],
-    },
+    ],
+    gallery: [1, 2, 3].map((n) => phone(`/img/sortie/${n}sortie.png`, l(`Sortie, schermata ${n} di 3`, `Sortie, screen ${n} of 3`), 594, 1200)),
   },
   {
     id: 'bookmarked',
     title: 'Bookmarked',
-    subtitle: {
-      it: 'Native iOS Reading Platform',
-      en: 'Native iOS Reading Platform',
-    },
-    category: 'uxui',
-    role: ['Product Designer', 'iOS Developer'],
-    description: {
-      it: 'Bookmarked è una piattaforma sociale per lettori ispirata a Letterboxd. Gli utenti possono scoprire, recensire e condividere esperienze letterarie attraverso un’interfaccia nativa iOS elegante e completa funzionalità offline.',
-      en: 'Bookmarked is a social reading platform inspired by Letterboxd. Users can discover, review and share literary experiences through a polished native iOS experience with full offline functionality.',
-    },
-    focus: ['Social Reading Platform', 'iOS Native Architecture', 'Editorial Typography', 'Offline-First UI'],
-    accentColor: '#14b8a6',
     year: '2025',
-    folderPath: '/projects/bookmarked/',
-    appIcon: '/projects/bookmarked/appicon-bookmarked.png',
-    images: [
-      '/projects/bookmarked/1book.png',
-      '/projects/bookmarked/2book.png',
-      '/projects/bookmarked/3book.png',
+    kind: l('Social di lettura per iPhone', 'Social reading app for iPhone'),
+    summary: l(
+      'Una piattaforma sociale per lettori ispirata a Letterboxd: si scoprono, recensiscono e condividono libri in un’app nativa iOS che funziona anche offline.',
+      'A social platform for readers inspired by Letterboxd: discover, review and share books in a native iOS app that also works offline.'
+    ),
+    icon: '/img/bookmarked/icon.png',
+    iconInset: true,
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('Product designer e sviluppatore iOS', 'Product designer and iOS developer') },
+      { label: l('Piattaforma', 'Platform'), value: l('iPhone', 'iPhone') },
     ],
-    caseStudy: {
-      overview: {
-        it: 'Una community visiva per amanti della lettura con schede libro editoriali e recensioni social.',
-        en: 'A visual community for book lovers featuring editorial book covers and social review feeds.',
+    problem: l(
+      'Le app per tenere traccia delle letture sono spesso datate, lente e poco curate nella tipografia.',
+      'Reading-tracker apps are often dated, slow and careless with typography.'
+    ),
+    role: [l('Ho progettato il prodotto e contribuito allo sviluppo iOS.', 'Designed the product and contributed to the iOS build.')],
+    decisions: [
+      {
+        title: l('Il libro al centro', 'The book at the centre'),
+        body: l('Schede libro editoriali, con copertina e tipografia in primo piano, dentro i pattern nativi di iOS.', 'Editorial book pages with the cover and type up front, inside native iOS patterns.'),
       },
-      problem: {
-        it: 'Le app tradizionali di lettura sono spesso datate, poco incentrate sulla tipografia e macchinose.',
-        en: 'Existing reading tracking apps are visually dated, slow, and lack typography elegance.',
+      {
+        title: l('Offline prima di tutto', 'Offline first'),
+        body: l('Sincronizzazione locale immediata, perché si legge anche dove non c’è rete.', 'Instant local sync, because people read where there is no signal.'),
       },
-      solution: {
-        it: 'Design editoriale con tipografia pulita, layout dinamico a griglia e sincronizzazione offline immediata.',
-        en: 'Editorial typography, responsive card layouts, and offline-first performance.',
-      },
-      focusAreas: ['Product Design', 'iOS Design', 'Editorial Layout', 'Offline Architecture'],
-    },
+    ],
+    gallery: [1, 2, 3].map((n) => phone(`/img/bookmarked/${n}book.png`, l(`Bookmarked, schermata ${n} di 3`, `Bookmarked, screen ${n} of 3`), 594, 1200)),
   },
 ];
 
-export const SKILL_CATEGORIES = {
-  uxui: [
-    'User Research',
-    'User Personas',
-    'Customer Journey',
-    'User Flow',
-    'Wireframing',
-    'Interactive Prototyping',
-    'High Fidelity Design',
-    'Usability Testing',
-    'Heuristic Evaluation',
-    'Design Systems',
-  ],
-  product: [
-    'Mobile App Design',
-    'iOS Design',
-    'Apple Human Interface Guidelines',
-    'Game UX',
-    'Educational Design',
-    'Interaction Design',
-    'Agile / Scrum Workflow',
-  ],
-  tools: [
-    'Figma',
-    'FigJam',
-    'Miro',
-    'Adobe Creative Suite',
-    'Photoshop',
-    'Premiere',
-    'Keynote',
-    'xCode',
-    'Swift',
-    'SwiftUI',
-    'SpriteKit',
-    'Git / GitHub',
-    'Jira',
-    'Notion',
-    'Sprint Planning',
-  ],
-};
+export const getProject = (id: string) => PROJECTS.find((p) => p.id === id);
+
+export interface CvItem {
+  years: string;
+  role: L;
+  org: string;
+  note: L;
+}
+
+export const EXPERIENCE: CvItem[] = [
+  {
+    years: '2023–oggi',
+    role: l('Digital designer e collaboratore eventi', 'Digital designer and events collaborator'),
+    org: 'Growing Greener',
+    note: l('Supporto UX/UI ai canali digitali della community e facilitazione di eventi.', 'UX/UI support for the community’s digital channels, and event facilitation.'),
+  },
+  {
+    years: '2025–2026',
+    role: l('Game e UX/UI designer', 'Game and UX/UI designer'),
+    org: 'Apple Developer Academy, PIER Program',
+    note: l(
+      'UX/UI, identità visiva e meccaniche di Orby’s Adventure; ricerca, test di usabilità e co-design in India con studenti e insegnanti; lavoro in Scrum.',
+      'UX/UI, visual identity and mechanics for Orby’s Adventure; research, usability testing and co-design in India with students and teachers; Scrum.'
+    ),
+  },
+  {
+    years: '2025',
+    role: l('Facilitatore e mentor, hackathon sulla biodiversità', 'Facilitator and mentor, biodiversity hackathon'),
+    org: 'Future Food, Innovation Village Napoli',
+    note: l(
+      'Due giorni a guidare i team dalla definizione del problema al prototipo, con sessioni di design thinking e feedback su UX e fattibilità.',
+      'Two days guiding teams from problem definition to prototype, with design thinking sessions and feedback on UX and feasibility.'
+    ),
+  },
+  {
+    years: '2023–2024',
+    role: l('Graphic designer e social media manager', 'Graphic designer and social media manager'),
+    org: 'VX Digital',
+    note: l('Grafica per campagne social, gestione dei canali e linee guida visive per i brand.', 'Graphics for social campaigns, channel management and visual guidelines for brands.'),
+  },
+  {
+    years: '2022–2023',
+    role: l('Graphic designer', 'Graphic designer'),
+    org: '3f&Edin, Arena Flegrea',
+    note: l(
+      'Materiali per il Noisy Naples Fest su web, social e stampa, a contatto con gli artisti; report e video per la comunicazione del festival.',
+      'Material for Noisy Naples Fest across web, social and print, working with the artists; reports and video for the festival’s communication.'
+    ),
+  },
+];
+
+export const EDUCATION: CvItem[] = [
+  {
+    years: '2026',
+    role: l('App designer, PIER Program', 'App designer, PIER Program'),
+    org: 'Apple Developer Academy, Università Federico II',
+    note: l('Progetto con un cliente internazionale non profit, in team multidisciplinare con Scrum e Jira.', 'A project with an international non-profit client, in a cross-functional team using Scrum and Jira.'),
+  },
+  {
+    years: '2025',
+    role: l('Design e sviluppo di app iOS', 'iOS app design and development'),
+    org: 'Apple Developer Academy, Università Federico II',
+    note: l(
+      'Ricerca, flussi e prototipi in Figma, interfacce native secondo le Human Interface Guidelines, sviluppo in SwiftUI e Xcode.',
+      'Research, flows and Figma prototypes, native interfaces following the Human Interface Guidelines, development in SwiftUI and Xcode.'
+    ),
+  },
+  {
+    years: '2023',
+    role: l('Corso in UX/UI design', 'UX/UI design course'),
+    org: 'dot Academy',
+    note: l('Personas, journey map, user flow, wireframe e prototipi in Figma, valutazione euristica.', 'Personas, journey maps, user flows, wireframes and Figma prototypes, heuristic evaluation.'),
+  },
+  {
+    years: '2022',
+    role: l('Corso in web design e UX/UI', 'Web design and UX/UI course'),
+    org: 'ILAS, Napoli',
+    note: l('Layout responsive, organizzazione dei contenuti, Figma e Adobe Creative Suite.', 'Responsive layouts, content structure, Figma and Adobe Creative Suite.'),
+  },
+  {
+    years: '2017–2021',
+    role: l('Laurea triennale in Nuove Tecnologie dell’Arte', 'BA in New Technologies of Art'),
+    org: 'Accademia di Belle Arti di Napoli',
+    note: l('Comunicazione visiva, media digitali e progetti interattivi in gruppo.', 'Visual communication, digital media and interactive group projects.'),
+  },
+];
+
+export const SKILLS: { group: L; items: string[] }[] = [
+  {
+    group: l('Ricerca', 'Research'),
+    items: ['User research', 'Field observation', 'Usability testing', 'Heuristic evaluation', 'Personas', 'Customer journey'],
+  },
+  {
+    group: l('Design', 'Design'),
+    items: ['User flows', 'Information architecture', 'Wireframing', 'Interactive prototyping', 'High-fidelity UI', 'Design systems', 'Apple HIG', 'Game UX'],
+  },
+  {
+    group: l('Sviluppo', 'Building'),
+    items: ['Swift', 'SwiftUI', 'SpriteKit', 'Xcode', 'TestFlight', 'Git / GitHub'],
+  },
+  {
+    group: l('Strumenti', 'Tools'),
+    items: ['Figma', 'FigJam', 'Miro', 'Adobe Creative Suite', 'Keynote', 'Jira', 'Notion'],
+  },
+  {
+    group: l('Modo di lavorare', 'Ways of working'),
+    items: ['Scrum', 'Sprint planning', 'Co-design with stakeholders', 'Workshop facilitation'],
+  },
+];

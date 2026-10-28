@@ -19,7 +19,12 @@ const routes = [
   'you-can-only/support',
   'you-can-only/privacy',
   'projects/orbys-adventure',
-  'case-study/orbys-adventure'
+  'case-study/orbys-adventure',
+  'projects/you-can-only',
+  'projects/melting-pot',
+  'projects/synk',
+  'projects/sortie',
+  'projects/bookmarked'
 ];
 
 routes.forEach((route) => {

@@ -1,81 +1,64 @@
-/* Modern Editorial Product Designer Tokens - V2 Redesign */
+/* Home-screen world: rose-grey ground, tone-step fields, brown-black ink, one green accent used sparingly. */
 :root {
-  /* Editorial Color Palette - Dark Mode (Default) */
-  --bg-primary: #050507;
-  --bg-secondary: #0b0b0f;
-  --bg-tertiary: #101015;
-  --bg-card: rgba(14, 14, 18, 0.6);
-  --bg-card-hover: rgba(22, 22, 28, 0.85);
-  --bg-glass: rgba(5, 5, 7, 0.75);
-  --bg-glass-heavy: rgba(5, 5, 7, 0.95);
-  
-  /* Text Colors */
-  --text-primary: #f3f3f6;
-  --text-secondary: #a1a1aa;
-  --text-tertiary: #6b6b75;
-  --text-inverse: #050507;
+  --ground: #ebe5e3;
+  --surface: #e1dad7;
+  --field: #ddd4d0;
+  --field-deep: #d4cac5;
+  --ink: #2b2622;
+  --muted: #564d49;
+  --night: #26211e;
+  --night-ink: #efeae8;
+  --night-muted: #bbb1ac;
+  --accent: #0f7d45;
+  --accent-ink: #ffffff;
+  --screen: #0e0f10;
+  --screen-ink: #f1f1ee;
 
-  /* Fonts */
-  --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Fraunces', 'Lora', Georgia, serif;
-  --font-mono: 'Space Mono', SFMono-Regular, Consolas, monospace;
+  --font: 'Hanken Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* Editorial Accent Palette */
-  --accent-primary: #8b5cf6;
-  --accent-hover: #7c3aed;
-  --accent-glow: rgba(139, 92, 246, 0.25);
-  --accent-teal: #14b8a6;
-  --accent-amber: #f59e0b;
-  --accent-rose: #f43f5e;
+  /* Five steps */
+  --step-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-display: clamp(2.25rem, 1rem + 5.4vw, 5.75rem);
 
-  /* Borders & Rules */
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-medium: rgba(255, 255, 255, 0.12);
-  --border-bold: rgba(255, 255, 255, 0.25);
+  --radius: 24px;
+  --margin: clamp(16px, 3.2vw, 48px);
+  --max: 1440px;
+  --section-gap: clamp(96px, 12vw, 200px);
 
-  /* Shadows & Blur */
-  --glass-blur: blur(24px) saturate(160%);
-  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.6);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-  /* Radii - Sharp Editorial Style */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-full: 9999px;
-
-  /* Expanded Layout Spacing */
-  --max-width: 1360px;
-  --section-padding: 8rem 2rem;
-
-  /* Transition Timings */
-  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-fast: 0.25s var(--ease-editorial);
-  --transition-normal: 0.4s var(--ease-editorial);
-  --transition-slow: 0.8s var(--ease-editorial);
-}
-
-[data-theme="light"] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f8f8fa;
-  --bg-card: #ffffff;
-  --bg-card-hover: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.9);
-  --bg-glass-heavy: rgba(255, 255, 255, 0.98);
-
-  --text-primary: #050507;
-  --text-secondary: #4b5563;
-  --text-tertiary: #9ca3af;
-  --text-inverse: #ffffff;
-
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-medium: rgba(0, 0, 0, 0.15);
-  --border-bold: rgba(0, 0, 0, 0.25);
-
-  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.12);
+  /* Aliases for the App Store support/privacy pages, which still read the old names */
+  --bg-primary: var(--ground);
+  --bg-secondary: var(--surface);
+  --bg-tertiary: var(--surface);
+  --bg-card: var(--surface);
+  --bg-card-hover: var(--field);
+  --bg-glass: var(--ground);
+  --bg-glass-heavy: var(--ground);
+  --text-primary: var(--ink);
+  --text-secondary: var(--muted);
+  --text-tertiary: var(--muted);
+  --text-inverse: var(--night-ink);
+  --border-subtle: transparent;
+  --border-medium: transparent;
+  --border-bold: transparent;
+  --accent-primary: var(--night);
+  --accent-hover: var(--ink);
+  --font-primary: var(--font);
+  --font-serif: var(--font);
+  --font-mono: var(--font);
+  --glass-blur: none;
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-full: 999px;
+  --max-width: var(--max);
+  --section-padding: var(--section-gap) var(--margin);
+  --transition-fast: 160ms var(--ease-out);
+  --transition-normal: 240ms var(--ease-out);
 }
