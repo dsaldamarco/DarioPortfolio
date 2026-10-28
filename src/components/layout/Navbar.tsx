@@ -29,8 +29,10 @@ export const Navbar: React.FC<{ onHome: boolean }> = ({ onHome }) => {
         <nav className="bar-nav" aria-label={language === 'it' ? 'Sezioni' : 'Sections'}>
           <ul>
             <li><a href={section('work')} onClick={follow}>{t.nav.work}</a></li>
+            <li><a href={section('method')} onClick={follow}>{t.nav.method}</a></li>
             <li><a href={section('about')} onClick={follow}>{t.nav.about}</a></li>
             <li><a href={section('cv')} onClick={follow}>{t.nav.cv}</a></li>
+            <li><a href={PROFILE.cv[language]} target="_blank" rel="noopener">{t.nav.resume}</a></li>
           </ul>
         </nav>
 

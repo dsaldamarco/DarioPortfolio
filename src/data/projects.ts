@@ -13,6 +13,8 @@ export interface Shot {
 export interface Note {
   title: L;
   body: L;
+  /** The option considered and set aside, when it is documented */
+  alternative?: L;
 }
 
 export interface Fact {
@@ -33,14 +35,20 @@ export interface Project {
   context?: L;
   problem: L;
   evidence?: { figure: string; label: L }[];
+  goal?: L;
+  scope?: { yes: L[]; no: L[] };
+  /** What Dario did himself */
   role: L[];
+  /** What was done by or with the rest of the team */
+  teamRole?: L[];
+  /** Milestones: title is the month or phase */
   process?: Note[];
   decisions: Note[];
   beforeAfter?: { before: Shot; after: Shot; note: L };
   outcome?: L;
   learnings?: Note[];
   gallery: Shot[];
-  research?: { intro: L; photos: Shot[] };
+  research?: { intro: L; findings?: L[]; photos: Shot[] };
   links?: { appStore?: string; support?: string; privacy?: string };
 }
 
@@ -54,6 +62,10 @@ export const PROFILE = {
     linkedin: 'https://www.linkedin.com/in/dario-saldamarco/',
     dribbble: 'https://dribbble.com/dardarius',
   },
+  cv: {
+    it: '/cv/Dario-Saldamarco-CV-IT.pdf',
+    en: '/cv/Dario-Saldamarco-CV-EN.pdf',
+  } as Record<Lang, string>,
 };
 
 const l = (it: string, en: string): L => ({ it, en });
@@ -69,51 +81,93 @@ export const PROJECTS: Project[] = [
     year: '2026',
     kind: l('Gioco educativo per iPad', 'Educational iPad game'),
     summary: l(
-      'Un gioco per iPad che aiuta gli studenti di 6ª classe delle scuole Akanksha, in India, a esercitarsi su frazioni, rapporti e operazioni.',
+      'Un gioco per iPad che aiuta i ragazzi delle scuole medie Akanksha, in India, a esercitarsi su frazioni, rapporti e operazioni.',
       'An iPad game that helps Grade 6 students in Akanksha schools, India, practise fractions, ratios and basic operations.'
     ),
     icon: '/img/orby/icon.png',
     facts: [
       { label: l('Cliente', 'Client'), value: l('The Akanksha Foundation, India', 'The Akanksha Foundation, India') },
-      { label: l('Il mio ruolo', 'My role'), value: l('UX/UI designer e game designer', 'UX/UI designer and game designer') },
-      { label: l('Team', 'Team'), value: l('7 persone, sprint Scrum di due settimane', '7 people, two-week Scrum sprints') },
+      { label: l('Il mio ruolo', 'My role'), value: l('Designer (UX/UI e game design), uno dei due del team', 'Designer (UX/UI and game design), one of two on the team') },
+      { label: l('Team', 'Team'), value: l('7 persone: 2 designer, 1 project manager, 4 sviluppatori', '7 people: 2 designers, 1 project manager, 4 developers') },
+      { label: l('Durata', 'Timeline'), value: l('Ottobre 2025 – giugno 2026', 'October 2025 – June 2026') },
       { label: l('Contesto', 'Setting'), value: l('Apple Developer Academy, PIER Program', 'Apple Developer Academy, PIER Program') },
       { label: l('Piattaforma', 'Platform'), value: l('iPadOS', 'iPadOS') },
-      { label: l('Strumenti', 'Tools'), value: l('Figma, Jira, TestFlight', 'Figma, Jira, TestFlight') },
+      { label: l('Metodo e strumenti', 'Method and tools'), value: l('Scrum su Jira, Figma, TestFlight', 'Scrum on Jira, Figma, TestFlight') },
     ],
     context: l(
-      'Akanksha gestisce 27 scuole a Mumbai, Pune e Nagpur, con oltre 14.000 studenti di famiglie a basso reddito. Ci ha chiesto uno strumento per far esercitare gli studenti fuori dalle ore di lezione.',
-      'Akanksha runs 27 schools in Mumbai, Pune and Nagpur, serving over 14,000 students from low-income families. They asked for a tool students could practise with outside class time.'
+      'Akanksha è una non profit indiana nata nel 1991: gestisce 27 scuole a Mumbai, Pune e Nagpur, con circa 14.000 studenti di famiglie a basso reddito. La richiesta iniziale era un’app per iPad che aiutasse gli studenti delle medie con la geometria e il ragionamento spaziale.',
+      'Akanksha is an Indian non-profit founded in 1991: it runs 27 schools in Mumbai, Pune and Nagpur, with about 14,000 students from low-income families. The initial brief was an iPad app to help middle-school students with geometry and spatial reasoning.'
     ),
     problem: l(
-      'Abbiamo analizzato i risultati di tre scuole, dalla 3ª all’8ª classe. Il calo arriva in 6ª, quando la matematica passa dal calcolo ai problemi scritti in inglese, che per molti studenti non è la prima lingua.',
-      'We analysed results from three schools, Grades 3 to 8. The drop comes in Grade 6, when maths moves from calculation to word problems written in English, which many students do not speak at home.'
+      'Prima di progettare abbiamo chiesto i dati: le prove di matematica di tre scuole, dalla terza elementare alla terza media, a inizio, metà e fine anno. In tutte e tre il calo arriva in prima media, quando la matematica smette di essere calcolo e diventa problemi da leggere e capire in inglese. Rapporti, proporzioni e percentuali sono gli argomenti più deboli, e tornano negli anni successivi.',
+      'Before designing, we asked for data: maths assessments from three schools, Grades 3 to 8, at the start, middle and end of the year. In all three, results drop in Grade 6, when maths stops being calculation and becomes problems to read and understand in English. Ratio, proportion and percentage are the weakest topics, and they come back in later years.'
     ),
     evidence: [
       { figure: '32,3%', label: l('superano le prove su rapporti e proporzioni', 'pass rate on ratio and proportion') },
       { figure: '38,2%', label: l('superano le prove su frazioni e geometria', 'pass rate on fractions and geometry') },
       { figure: '58,4%', label: l('superano le prove sulle operazioni base', 'pass rate on basic operations') },
     ],
+    goal: l(
+      'Un gioco per esercitarsi, non per insegnare: far ripassare in autonomia, fuori dalla lezione, gli argomenti che gli studenti hanno già visto in classe, finché diventano sicuri.',
+      'A game for practice, not for teaching: let students revise on their own, outside lessons, the topics they have already seen in class, until they feel confident.'
+    ),
+    scope: {
+      yes: [
+        l('Pratica e ripetizione su argomenti già spiegati dagli insegnanti', 'Practice and repetition on topics teachers have already explained'),
+        l('Gioco visivo e interattivo, con pochissimo testo', 'A visual, interactive game with very little text'),
+        l('Un’area mirata, scelta dai dati', 'One targeted area, chosen from the data'),
+        l('Uso autonomo, a complemento della lezione', 'Independent use, alongside teaching'),
+      ],
+      no: [
+        l('Insegnare gli argomenti da zero', 'Teaching topics from scratch'),
+        l('Sostituire gli strumenti già usati a scuola', 'Replacing the tools schools already use'),
+        l('Coprire tutto il programma di matematica', 'Covering the whole maths curriculum'),
+        l('Diventare lo strumento principale in classe', 'Becoming the main classroom tool'),
+      ],
+    },
     role: [
-      l('Ho progettato UX/UI, identità visiva e meccaniche di gioco.', 'Designed the UX/UI, visual identity and game mechanics.'),
-      l('Ho analizzato con il team i dati delle tre scuole per scegliere dove intervenire.', 'Analysed the three schools’ data with the team to choose where to intervene.'),
-      l('Ho condotto test di usabilità, osservazioni in classe e sessioni di co-design a Pune, con studenti e insegnanti.', 'Ran usability tests, classroom observation and co-design sessions in Pune with students and teachers.'),
-      l('Ho portato i flussi da wireframe a prototipi ad alta fedeltà in Figma e li ho iterati con gli sviluppatori nelle build TestFlight 1.1 e 1.2.', 'Took the flows from wireframes to high-fidelity Figma prototypes and iterated them with developers through TestFlight builds 1.1 and 1.2.'),
+      l('Ho progettato l’interfaccia e l’identità visiva del gioco, dai flussi ai prototipi ad alta fedeltà in Figma.', 'Designed the game’s interface and visual identity, from flows to high-fidelity Figma prototypes.'),
+      l('Ho progettato le meccaniche di gioco, in modo che ogni gesto corrisponda al ragionamento matematico.', 'Designed the game mechanics so that each gesture matches the mathematical reasoning.'),
+      l('A Pune ho condotto test di usabilità con studenti delle medie, osservazioni in classe e attività di co-design sullo storytelling.', 'In Pune, ran usability tests with Grade 6–8 students, classroom observation and storytelling co-design activities.'),
+      l('Ho trasformato quello che abbiamo visto in classe in modifiche concrete a onboarding, aiuti e struttura dei livelli.', 'Turned what we saw in class into concrete changes to onboarding, hints and level structure.'),
+    ],
+    teamRole: [
+      l('Analisi dei dati delle tre scuole e scelta della prima media come punto di intervento.', 'Analysis of the three schools’ data and the choice of Grade 6 as the point of intervention.'),
+      l('Obiettivi, perimetro e roadmap, con la project manager e il cliente.', 'Goals, scope and roadmap, with the project manager and the client.'),
+      l('Sviluppo dell’app in SwiftUI e SpriteKit, fatto dai quattro sviluppatori; io lavoravo con loro sulla fattibilità di gesti e animazioni.', 'App development in SwiftUI and SpriteKit by the four developers; I worked with them on the feasibility of gestures and animation.'),
+      l('Sprint Scrum di due settimane su Jira e revisioni periodiche con i responsabili educativi di Akanksha.', 'Two-week Scrum sprints on Jira and regular reviews with Akanksha’s education leads.'),
     ],
     process: [
-      { title: l('Dati', 'Data'), body: l('Risultati delle classi 3–8 in tre scuole: il punto debole è la 6ª.', 'Grade 3–8 results from three schools point to Grade 6.') },
-      { title: l('Problema', 'Problem'), body: l('Rapporti, proporzioni e frazioni, più la barriera della lingua.', 'Ratios, proportions and fractions, plus the language barrier.') },
-      { title: l('Idee e flussi', 'Ideas and flows'), body: l('Minigiochi basati sui gesti, dentro una storia unica.', 'Gesture-based mini-games inside one story.') },
-      { title: l('Prototipo', 'Prototype'), body: l('Wireframe interattivi per iPad e primi playtest.', 'Interactive iPad wireframes and first playtests.') },
-      { title: l('Test a Pune', 'Testing in Pune'), body: l('Sessioni in classe con studenti e insegnanti.', 'Classroom sessions with students and teachers.') },
-      { title: l('Iterazione', 'Iteration'), body: l('Build 1.1 e 1.2: onboarding, aiuti e rifiniture.', 'Builds 1.1 and 1.2: onboarding, hints and polish.') },
+      { title: l('Ottobre', 'October'), body: l('Concept approvato dal cliente, sulla base dell’analisi dei dati e dei bisogni.', 'Concept approved by the client, based on the data analysis and needs.') },
+      { title: l('Dicembre', 'December'), body: l('Primo prototipo interattivo, per validare meccaniche e approccio di gioco prima dei contenuti.', 'First interactive prototype, to validate mechanics and the game approach before the content.') },
+      { title: l('Febbraio', 'February'), body: l('Prima release giocabile: una porzione della storia, per provare il ciclo di gioco e gli esercizi.', 'First playable release: a slice of the story, to test the game loop and the exercises.') },
+      { title: l('Marzo', 'March'), body: l('Test a Pune con studenti e insegnanti; in parallelo lo sviluppo dell’MVP.', 'Testing in Pune with students and teachers; MVP development in parallel.') },
+      { title: l('Aprile', 'April'), body: l('Seconda versione con le correzioni emerse a Pune e primi test con il cliente.', 'Second version with the fixes found in Pune, and the first client tests.') },
+      { title: l('Maggio', 'May'), body: l('Nuove versioni in test su TestFlight: onboarding, aiuti, rifiniture dell’interfaccia e stabilità.', 'New test versions on TestFlight: onboarding, hints, interface polish and stability.') },
+      { title: l('Giugno', 'June'), body: l('Stabilizzazione, correzione dei bug e consegna finale.', 'Stabilisation, bug fixing and final delivery.') },
     ],
     decisions: [
       {
+        title: l('Esercitarsi, non studiare', 'Practice, not lessons'),
+        body: l(
+          'Nelle scuole Akanksha gli studenti usano già Khan Academy, Khanmigo, Mindspark, EDpuzzle e RAZ: strumenti che spiegano bene, ma fanno esercitare poco. Abbiamo scelto un gioco di ripasso che si affianca a loro.',
+          'Akanksha students already use Khan Academy, Khanmigo, Mindspark, EDpuzzle and RAZ: tools that explain well but give little practice. We chose a practice game that sits alongside them.'
+        ),
+        alternative: l('Un’altra app di lezioni, in concorrenza con quelle già in uso.', 'Another lesson app, competing with the ones already in use.'),
+      },
+      {
+        title: l('Un punto preciso invece di tutto il programma', 'One precise point instead of the whole curriculum'),
+        body: l(
+          'I dati indicavano la prima media e tre argomenti. Concentrarsi lì rendeva l’intervento più efficace ed evitava di inseguire aggiornamenti continui su tutto il programma.',
+          'The data pointed to Grade 6 and three topics. Focusing there made the intervention more effective and avoided chasing constant updates across the whole curriculum.'
+        ),
+        alternative: l('La geometria per tutte le medie, come nella richiesta iniziale.', 'Geometry across all middle-school grades, as in the initial brief.'),
+      },
+      {
         title: l('Istruzioni mostrate, non scritte', 'Instructions shown, not written'),
         body: l(
-          'In classe gli studenti passavano più tempo a decifrare le istruzioni che a risolvere i conti. Abbiamo sostituito il testo con animazioni che mostrano il gesto da fare.',
-          'In class, students spent more time decoding the instructions than doing the maths. We replaced the text with animations that show the gesture to make.'
+          'A Pune gli studenti faticavano più a capire le regole dei minigiochi che a fare i conti, e il problema con l’inglese era di vocabolario, non di lettura. Abbiamo sostituito il testo con animazioni che mostrano il gesto da fare.',
+          'In Pune, students struggled more to understand the mini-games’ rules than to do the maths, and their difficulty with English was vocabulary, not reading. We replaced the text with animations that show the gesture to make.'
         ),
       },
       {
@@ -122,13 +176,15 @@ export const PROJECTS: Project[] = [
           'Gli insegnanti chiedevano spiegazioni, non verdetti. L’Oracolo dà indizi visivi progressivi e lascia allo studente l’ultimo passo.',
           'Teachers asked for explanations, not verdicts. The Oracle gives progressive visual hints and leaves the last step to the student.'
         ),
+        alternative: l('Una semplice verifica corretto/errato.', 'A simple right/wrong check.'),
       },
       {
-        title: l('Un concetto per livello', 'One concept per level'),
+        title: l('Prima le basi, un concetto per volta', 'Foundations first, one concept at a time'),
         body: l(
-          'Mescolare più argomenti confondeva. Il gioco è diviso in cinque moduli (rapporti, proporzioni, operazioni, frazioni, problemi) con difficoltà crescente.',
-          'Mixing topics confused students. The game is split into five modules (ratio, proportion, operations, fractions, word problems) with rising difficulty.'
+          'Insegnanti e cliente ci hanno chiesto di includere i prerequisiti e di non mescolare gli argomenti. Il gioco è diventato cinque aree con difficoltà crescente: rapporti, proporzioni, operazioni base, frazioni e problemi. Così serve anche in seconda e terza media.',
+          'Teachers and the client asked us to include prerequisites and not to mix topics. The game became five areas of rising difficulty: ratio, proportion, basic operations, fractions and word problems. That makes it useful in Grades 7 and 8 too.'
         ),
+        alternative: l('Solo rapporti e proporzioni della prima media, argomenti mescolati nello stesso livello.', 'Only Grade 6 ratio and proportion, with topics mixed in the same level.'),
       },
       {
         title: l('Il gesto è il ragionamento', 'The gesture is the reasoning'),
@@ -147,17 +203,17 @@ export const PROJECTS: Project[] = [
       ),
     },
     outcome: l(
-      'Un gioco funzionante, testato in classe a Pune con studenti e insegnanti e affinato in due build TestFlight. Le revisioni ogni due settimane con i responsabili educativi di Akanksha hanno tenuto insieme rigore didattico e fattibilità in SwiftUI e SpriteKit.',
-      'A working game, tested in Pune classrooms with students and teachers and refined over two TestFlight builds. Fortnightly reviews with Akanksha’s education leads kept teaching rigour and feasibility in SwiftUI and SpriteKit together.'
+      'A Pune il concept è stato validato: gli studenti volevano continuare a giocare e gli insegnanti lo hanno riconosciuto come strumento di ripasso. Abbiamo anche osservato che rigiocare migliorava i risultati e la sicurezza degli studenti. Quello che è emerso ha cambiato onboarding, aiuti e struttura dei contenuti, fino alla consegna del prodotto finale a giugno.',
+      'In Pune the concept was validated: students wanted to keep playing and teachers saw it as a practice tool. We also saw that replaying improved students’ results and confidence. What we learned reshaped onboarding, hints and content structure, through to the final product delivered in June.'
     ),
     learnings: [
       {
         title: l('I dati dicono dove, il campo dice perché', 'Data says where, the field says why'),
-        body: l('I grafici ci hanno indicato la 6ª classe; solo stare in aula ci ha mostrato che il problema era la lettura.', 'The charts pointed at Grade 6; only being in the classroom showed us the problem was reading.'),
+        body: l('I grafici ci hanno indicato la prima media; solo stare in aula ci ha mostrato che il problema erano le istruzioni e il vocabolario.', 'The charts pointed at Grade 6; only being in the classroom showed us the problem was instructions and vocabulary.'),
       },
       {
-        title: l('Con i bambini, mostrare batte spiegare', 'With children, showing beats telling'),
-        body: l('Un segnale visivo non verbale funziona meglio di qualsiasi istruzione scritta.', 'A non-verbal visual cue works better than any written instruction.'),
+        title: l('Il perimetro è una decisione di design', 'Scope is a design decision'),
+        body: l('Dire cosa il prodotto non fa ci ha permesso di farlo bene, e di spiegarlo al cliente.', 'Saying what the product would not do let us do it well, and explain it to the client.'),
       },
       {
         title: l('Sbagliare deve far andare avanti', 'Mistakes should move you forward'),
@@ -177,9 +233,16 @@ export const PROJECTS: Project[] = [
     ],
     research: {
       intro: l(
-        'Siamo andati a Pune per test di usabilità, osservazioni in classe, interviste agli insegnanti e attività di co-design nelle scuole Akanksha.',
-        'We went to Pune for usability tests, classroom observation, teacher interviews and co-design activities in Akanksha schools.'
+        'A marzo siamo andati a Pune: presentazioni a presidi e insegnanti, test di usabilità con studenti delle medie, osservazioni in classe, attività di co-design e incontri con il cliente.',
+        'In March we went to Pune: presentations to principals and teachers, usability tests with Grade 6–8 students, classroom observation, co-design activities and client meetings.'
       ),
+      findings: [
+        l('Gli studenti faticavano più con le regole e le istruzioni dei minigiochi che con la matematica.', 'Students struggled more with the mini-games’ rules and instructions than with the maths.'),
+        l('La difficoltà con l’inglese era di vocabolario e contesto, non di velocità di lettura.', 'The difficulty with English was vocabulary and context, not reading speed.'),
+        l('Gli insegnanti volevano aiuti che spiegano, non solo giusto o sbagliato.', 'Teachers wanted hints that explain, not just right or wrong.'),
+        l('Mescolare più argomenti confondeva; serviva una progressione graduale.', 'Mixing topics confused students; they needed a gradual progression.'),
+        l('Rigiocare aiutava: risultati e sicurezza miglioravano nel tempo.', 'Replaying helped: results and confidence improved over time.'),
+      ],
       photos: [
         photo('/img/orby/testing2.jpg', l('Workshop di co-design e storytelling a Pune', 'Co-design and storytelling workshop in Pune'), l('Co-design e storytelling', 'Co-design and storytelling')),
         photo('/img/orby/testing3.jpg', l('Allineamento con i docenti a Pune', 'Alignment with teachers in Pune'), l('Allineamento con i docenti', 'Aligning with teachers')),

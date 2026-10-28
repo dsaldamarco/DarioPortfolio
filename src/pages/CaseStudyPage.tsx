@@ -119,24 +119,81 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
             )}
           </Row>
 
+          {p.goal && (
+            <Row title={t.cs.goal} id="cs-goal">
+              <p className="lead">{p.goal[language]}</p>
+              {p.scope && (
+                <div className="cs-scope">
+                  <div>
+                    <h3>{t.cs.scopeYes}</h3>
+                    <ul>{p.scope.yes.map((x) => <li key={x.en}>{x[language]}</li>)}</ul>
+                  </div>
+                  <div>
+                    <h3>{t.cs.scopeNo}</h3>
+                    <ul>{p.scope.no.map((x) => <li key={x.en}>{x[language]}</li>)}</ul>
+                  </div>
+                </div>
+              )}
+            </Row>
+          )}
+
           <Row title={t.cs.role} id="cs-role">
-            <ul className="cs-role">
-              {p.role.map((r) => (
-                <li key={r.en}>{r[language]}</li>
-              ))}
-            </ul>
+            <div className={p.teamRole ? 'cs-split' : undefined}>
+              <div>
+                {p.teamRole && <h3>{t.cs.roleMine}</h3>}
+                <ul className="cs-role">
+                  {p.role.map((r) => (
+                    <li key={r.en}>{r[language]}</li>
+                  ))}
+                </ul>
+              </div>
+              {p.teamRole && (
+                <div>
+                  <h3>{t.cs.roleTeam}</h3>
+                  <ul className="cs-role">
+                    {p.teamRole.map((r) => (
+                      <li key={r.en}>{r[language]}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </Row>
 
           {p.process && (
             <Row title={t.cs.process} id="cs-process">
-              <ol className="cs-process">
+              <ol className="cs-timeline">
                 {p.process.map((step) => (
                   <li key={step.title.en}>
-                    <h3>{step.title[language]}</h3>
-                    <p className="small">{step.body[language]}</p>
+                    <span className="cs-when">{step.title[language]}</span>
+                    <p>{step.body[language]}</p>
                   </li>
                 ))}
               </ol>
+            </Row>
+          )}
+
+          {p.research && (
+            <Row title={t.cs.research} id="cs-research" wide>
+              <p className="lead cs-note">{p.research.intro[language]}</p>
+              {p.research.findings && (
+                <div className="cs-findings">
+                  <h3>{t.cs.findings}</h3>
+                  <ul className="cs-role">
+                    {p.research.findings.map((f) => (
+                      <li key={f.en}>{f[language]}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="cs-photos">
+                {p.research.photos.map((s) => (
+                  <figure key={s.src}>
+                    <img src={s.src} alt={s.alt[language]} width={s.w} height={s.h} loading="lazy" decoding="async" className="cs-photo" />
+                    {s.caption && <figcaption className="small muted">{s.caption[language]}</figcaption>}
+                  </figure>
+                ))}
+              </div>
             </Row>
           )}
 
@@ -146,6 +203,11 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
                 <div key={d.title.en}>
                   <h3>{d.title[language]}</h3>
                   <p>{d.body[language]}</p>
+                  {d.alternative && (
+                    <p className="cs-alt small">
+                      <span>{t.cs.alternative}</span> {d.alternative[language]}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -162,20 +224,6 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
                 </figure>
               </div>
               <p className="cs-note">{p.beforeAfter.note[language]}</p>
-            </Row>
-          )}
-
-          {p.research && (
-            <Row title={t.cs.research} id="cs-research" wide>
-              <p className="lead cs-note">{p.research.intro[language]}</p>
-              <div className="cs-photos">
-                {p.research.photos.map((s) => (
-                  <figure key={s.src}>
-                    <img src={s.src} alt={s.alt[language]} width={s.w} height={s.h} loading="lazy" decoding="async" className="cs-photo" />
-                    {s.caption && <figcaption className="small muted">{s.caption[language]}</figcaption>}
-                  </figure>
-                ))}
-              </div>
             </Row>
           )}
 

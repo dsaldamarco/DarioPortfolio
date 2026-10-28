@@ -11,7 +11,7 @@ const ELSEWHERE = [
 ];
 
 export const Contact: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | undefined>(undefined);
 
@@ -47,6 +47,11 @@ export const Contact: React.FC = () => {
           <div className="contact-else">
             <h3 className="small">{t.contact.elsewhere}</h3>
             <ul>
+              <li>
+                <a href={PROFILE.cv[language]} target="_blank" rel="noopener">
+                  {t.contact.resume} <ArrowUpRight size={20} aria-hidden />
+                </a>
+              </li>
               {ELSEWHERE.map((link) => (
                 <li key={link.label}>
                   <a href={link.href} target="_blank" rel="noopener noreferrer">

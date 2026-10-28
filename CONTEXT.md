@@ -29,6 +29,17 @@ Le altre direzioni proposte e scartate: "Palco del keynote" (assegnata dal siste
 - **Tolto il minigioco** (file eliminati; resta nella cronologia git).
 - Tolta dalla lettera la frase sul mentoring all'hackathon (resta nell'esperienza) e tolto il nome gigante dal footer.
 
+## Terza sessione (29 ottobre): credibilità per i recruiter
+
+- **CV scaricabili**: `public/cv/Dario-Saldamarco-CV-IT.pdf` e `-EN.pdf` (copiati da `~/Desktop/CV-DarioSaldamarco-ITA.pdf` e `CV-Dario-Saldamarco-EN.pdf`). Il link segue la lingua della pagina: nella barra ("CV"), sotto il titolo in home, nella sezione Esperienza e nei contatti.
+- **Disponibilità**: Dario non la vuole sul sito (se ne parla al colloquio).
+- **Case study di Orby riscritto dalla documentazione** (`public/projects/orby/AKANKSHA PROJECT DOCUMENTATION.pdf`): team reale (Team WonderRaga: Dario e Alessia Frezzetti designer, Irem Nur Arslaner project manager, 4 sviluppatori), durata ottobre 2025 – giugno 2026, richiesta iniziale (geometria), obiettivo, "cosa fa / cosa non fa", contributo diviso in "Io" e "Con il team", tappe mese per mese, scoperte di Pune, decisioni con l'alternativa scartata.
+- **Nuova sezione "Come lavoro"** in home (e voce "Metodo" nel menu): 4 abitudini, ognuna con la prova presa da un progetto. La lettera ora si chiama "Chi sono".
+- **Classi scolastiche**: in italiano si usano gli equivalenti italiani, non la traduzione letterale (Grade 6 = prima media, Grades 3–8 = dalla terza elementare alla terza media, Grades 6–8 = le medie).
+- **Meno gergo tecnico**: il risultato di Orby (in home e nel case study) non cita più MVP 2.0 né le build TestFlight 1.1–1.2; le tappe ne parlano in modo generale.
+- **Da verificare con Dario**: la divisione del lavoro con Alessia Frezzetti (la colonna "Io" usa le voci del suo CV); nel CV inglese la descrizione del PIER Program e "2023 - in corso" sono rimasti in italiano.
+- **In attesa**: i materiali di processo (wireframe, user flow, iterazioni) che Dario manderà.
+
 ## Cosa c'era prima e perché non funzionava
 
 Sito React + Vite, tema scuro, sfondo 3D (three.js), cursore personalizzato, bagliori viola, 3 caratteri (Inter, Fraunces, Space Mono), etichette maiuscole in monospace, griglie di schede uguali, case study in una finestra modale (solo Orby aveva una pagina vera). Il controllo di taste-skill dava 13 errori. Bug di accessibilità: il minigioco catturava la tastiera su tutta la pagina (ogni tasto faceva partire il gioco, la barra spaziatrice non scorreva più).
@@ -66,9 +77,7 @@ Avvisi rimasti, giustificati: nessun video (non esistono filmati dei progetti); 
 
 - **Risultati misurati**: dati dai test di Orby, download o valutazioni di You Can Only.
 - **Dettagli dei 4 progetti minori**: team, ruolo preciso, ricerca, processo, stato (App Store o prototipo), se Synk ha vinto lo Swift Student Challenge.
-- **CV in PDF** da scaricare.
 - **Una foto vera** di Dario (oggi c'è solo l'avatar illustrato).
-- **Preferenze di lavoro**: città, remoto o ibrido, disponibilità.
 - **Lingue parlate** e livello.
 
 ## Da verificare con Dario

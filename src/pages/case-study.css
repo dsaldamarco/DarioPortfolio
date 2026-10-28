@@ -93,22 +93,54 @@
 }
 .cs-role li::marker { color: var(--muted); }
 
-.cs-process {
-  list-style: none;
+.cs-scope, .cs-split {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  counter-reset: step;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 48px);
 }
-.cs-process li {
+.cs-scope { margin-top: clamp(32px, 4vw, 48px); }
+.cs-scope > div {
   background: var(--surface);
   border-radius: var(--radius);
-  padding: clamp(18px, 2vw, 28px);
-  display: grid;
-  gap: 8px;
-  align-content: start;
+  padding: clamp(20px, 2.4vw, 32px);
 }
-.cs-process h3 { font-size: var(--step-body); }
+.cs-scope > div:last-child { background: var(--field-deep); }
+.cs-scope h3, .cs-split h3, .cs-findings h3 {
+  font-size: var(--step-body);
+  margin-bottom: 14px;
+}
+.cs-scope ul {
+  display: grid;
+  gap: 10px;
+  padding-left: 1.2em;
+}
+.cs-scope li::marker, .cs-role li::marker { color: var(--muted); }
+
+.cs-timeline {
+  list-style: none;
+  display: grid;
+}
+.cs-timeline li {
+  display: grid;
+  grid-template-columns: 7.5em minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 12px;
+}
+.cs-when { font-weight: 500; }
+
+.cs-findings {
+  margin-top: clamp(28px, 3vw, 40px);
+  max-width: 62ch;
+}
+
+.cs-alt {
+  margin-top: 12px;
+  color: var(--muted);
+}
+.cs-alt span {
+  font-weight: 500;
+  color: var(--ink);
+}
 
 .cs-decisions {
   display: grid;
@@ -210,7 +242,6 @@
 
 @media (max-width: 900px) {
   .cs-row { grid-template-columns: 1fr; }
-  .cs-process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cs-gallery--phone { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cs-photos figure, .cs-photos figure:nth-child(-n + 2) { grid-column: span 3; }
 }
@@ -218,7 +249,8 @@
 @media (max-width: 600px) {
   .cs-head { grid-template-columns: 1fr; }
   .cs-decisions, .cs-pair, .cs-evidence { grid-template-columns: 1fr; }
-  .cs-process { grid-template-columns: 1fr; }
+  .cs-scope, .cs-split { grid-template-columns: 1fr; }
+  .cs-timeline li { grid-template-columns: 1fr; gap: 4px; }
   .cs-gallery--tablet { grid-template-columns: 1fr; }
   .cs-cover--phones { padding-inline: 16px; }
   .cs-photos figure, .cs-photos figure:nth-child(-n + 2) { grid-column: 1 / -1; }

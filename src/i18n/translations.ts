@@ -4,7 +4,7 @@ export type Language = Lang;
 
 const it = {
   skip: 'Vai al contenuto',
-  nav: { work: 'Progetti', about: 'Chi sono', cv: 'Esperienza', contact: 'Scrivimi', home: 'Dario Saldamarco, torna alla home', lang: 'Lingua' },
+  nav: { work: 'Progetti', method: 'Metodo', about: 'Chi sono', cv: 'Esperienza', resume: 'CV', contact: 'Scrivimi', home: 'Dario Saldamarco, torna alla home', lang: 'Lingua' },
   status: { open: 'Cerco un ruolo da UX/UI o product designer' },
   hero: {
     title: 'Dalla ricerca al prodotto finito.',
@@ -12,6 +12,7 @@ const it = {
       'Sono Dario Saldamarco, UX/UI designer. Seguo un prodotto digitale dall’inizio alla fine: ricerca con le persone, flussi, interfaccia e prototipi, fino allo sviluppo insieme al team.',
     cta: 'Guarda i progetti',
     email: 'Scrivimi una mail',
+    resume: 'Scarica il CV',
     apps: 'Le mie app: apri un progetto',
   },
   work: {
@@ -26,8 +27,39 @@ const it = {
     moreIntro: 'Quattro app progettate tra il 2025 e il 2026, tra giochi, salute e lettura.',
     open: 'Apri',
   },
-  about: {
+  method: {
     title: 'Come lavoro',
+    intro: 'Quattro abitudini, ognuna con il progetto in cui si vede.',
+    proof: 'Dove si vede',
+    items: [
+      {
+        title: 'Parto dai dati, poi vado dalle persone',
+        body: 'I numeri dicono dove c’è un problema; osservare chi usa il prodotto dice perché. Uso entrambi prima di disegnare.',
+        proof: 'In Orby i risultati di tre scuole ci hanno indicato la prima media; i test in classe a Pune ci hanno mostrato che il blocco erano le istruzioni, non la matematica.',
+        project: 'orbys-adventure',
+      },
+      {
+        title: 'Decido anche cosa il prodotto non fa',
+        body: 'Un perimetro chiaro tiene il team concentrato e rende le scelte facili da spiegare a cliente e sviluppatori.',
+        proof: 'Orby è un gioco per esercitarsi, non per insegnare, e si concentra su un punto preciso invece che su tutto il programma.',
+        project: 'orbys-adventure',
+      },
+      {
+        title: 'Provo presto con chi userà il prodotto',
+        body: 'Preferisco un prototipo imperfetto davanti agli utenti a un file perfetto che nessuno ha toccato.',
+        proof: 'Orby: primo prototipo a dicembre, test in classe a marzo, poi nuove versioni costruite su quello che avevamo visto.',
+        project: 'orbys-adventure',
+      },
+      {
+        title: 'Progetto sapendo come si costruisce',
+        body: 'Conosco SwiftUI e SpriteKit: so cosa costa una scelta e posso discuterla con gli sviluppatori nei loro termini.',
+        proof: 'You Can Only l’ho progettato, sviluppato in Swift e pubblicato sull’App Store da solo; in Orby lavoravo ogni giorno con quattro sviluppatori.',
+        project: 'you-can-only',
+      },
+    ],
+  },
+  about: {
+    title: 'Chi sono',
     letter: [
       'Vengo dalle arti visive: mi sono laureato in Nuove Tecnologie dell’Arte all’Accademia di Belle Arti di Napoli e ho lavorato come graphic designer per un festival, per brand e sui social.',
       'Ho studiato UX/UI con ILAS e dot Academy, poi all’Apple Developer Academy ho imparato a progettare per iOS e a sviluppare in SwiftUI, in team con sviluppatori e product owner.',
@@ -42,6 +74,7 @@ const it = {
     experience: 'Esperienza',
     education: 'Formazione',
     skills: 'Competenze e strumenti',
+    download: 'Scarica il CV in PDF',
     now: 'oggi',
   },
   contact: {
@@ -50,6 +83,7 @@ const it = {
     copy: 'Copia indirizzo',
     copied: 'Indirizzo copiato',
     elsewhere: 'Altrove',
+    resume: 'CV in PDF',
     top: 'Torna su',
     rights: 'Progettato e sviluppato da Dario Saldamarco.',
   },
@@ -58,7 +92,14 @@ const it = {
     context: 'Contesto',
     problem: 'Il problema',
     role: 'Cosa ho fatto',
-    process: 'Processo',
+    process: 'Tappe del progetto',
+    goal: 'Obiettivo',
+    scopeYes: 'Cosa fa',
+    scopeNo: 'Cosa non fa, per scelta',
+    roleMine: 'Io',
+    roleTeam: 'Con il team',
+    findings: 'Cosa abbiamo scoperto',
+    alternative: 'Scartato:',
     decisions: 'Decisioni di design',
     beforeAfter: 'Prima e dopo il test in classe',
     research: 'Ricerca sul campo',
@@ -76,7 +117,7 @@ export type Translations = typeof it;
 
 const en: Translations = {
   skip: 'Skip to content',
-  nav: { work: 'Work', about: 'About', cv: 'Experience', contact: 'Email me', home: 'Dario Saldamarco, back to home', lang: 'Language' },
+  nav: { work: 'Work', method: 'Method', about: 'About', cv: 'Experience', resume: 'CV', contact: 'Email me', home: 'Dario Saldamarco, back to home', lang: 'Language' },
   status: { open: 'Looking for a UX/UI or product designer role' },
   hero: {
     title: 'From research to finished product.',
@@ -84,6 +125,7 @@ const en: Translations = {
       'I’m Dario Saldamarco, a UX/UI designer. I take a digital product from start to finish: research with people, flows, interface and prototypes, through to development with the team.',
     cta: 'See the work',
     email: 'Send me an email',
+    resume: 'Download my CV',
     apps: 'My apps: open a project',
   },
   work: {
@@ -98,8 +140,39 @@ const en: Translations = {
     moreIntro: 'Four apps designed between 2025 and 2026, across games, health and reading.',
     open: 'Open',
   },
-  about: {
+  method: {
     title: 'How I work',
+    intro: 'Four habits, each with the project where you can see it.',
+    proof: 'Where you can see it',
+    items: [
+      {
+        title: 'I start from data, then go to the people',
+        body: 'Numbers tell you where a problem is; watching people use the product tells you why. I use both before designing.',
+        proof: 'In Orby, results from three schools pointed us to Grade 6; classroom tests in Pune showed the blocker was the instructions, not the maths.',
+        project: 'orbys-adventure',
+      },
+      {
+        title: 'I decide what the product will not do',
+        body: 'A clear scope keeps the team focused and makes decisions easy to explain to clients and developers.',
+        proof: 'Orby is a game for practice, not for teaching, and it targets one precise point instead of the whole curriculum.',
+        project: 'orbys-adventure',
+      },
+      {
+        title: 'I test early with the people who will use it',
+        body: 'I would rather put a rough prototype in front of users than polish a file nobody has touched.',
+        proof: 'Orby: first prototype in December, classroom tests in March, then new versions built on what we saw.',
+        project: 'orbys-adventure',
+      },
+      {
+        title: 'I design knowing how it gets built',
+        body: 'I know SwiftUI and SpriteKit: I understand what a choice costs and can discuss it with developers in their own terms.',
+        proof: 'I designed, built in Swift and shipped You Can Only to the App Store on my own; on Orby I worked daily with four developers.',
+        project: 'you-can-only',
+      },
+    ],
+  },
+  about: {
+    title: 'About me',
     letter: [
       'I come from the visual arts: I studied New Technologies of Art at the Accademia di Belle Arti in Naples and worked as a graphic designer for a festival, for brands and on social channels.',
       'I studied UX/UI with ILAS and dot Academy, then at the Apple Developer Academy I learned to design for iOS and build in SwiftUI, in teams with developers and product owners.',
@@ -114,6 +187,7 @@ const en: Translations = {
     experience: 'Experience',
     education: 'Education',
     skills: 'Skills and tools',
+    download: 'Download my CV as PDF',
     now: 'now',
   },
   contact: {
@@ -122,6 +196,7 @@ const en: Translations = {
     copy: 'Copy address',
     copied: 'Address copied',
     elsewhere: 'Elsewhere',
+    resume: 'CV as PDF',
     top: 'Back to top',
     rights: 'Designed and built by Dario Saldamarco.',
   },
@@ -130,7 +205,14 @@ const en: Translations = {
     context: 'Context',
     problem: 'The problem',
     role: 'What I did',
-    process: 'Process',
+    process: 'Project milestones',
+    goal: 'Goal',
+    scopeYes: 'What it does',
+    scopeNo: 'What it does not do, by choice',
+    roleMine: 'Me',
+    roleTeam: 'With the team',
+    findings: 'What we found',
+    alternative: 'Set aside:',
     decisions: 'Design decisions',
     beforeAfter: 'Before and after classroom testing',
     research: 'Field research',

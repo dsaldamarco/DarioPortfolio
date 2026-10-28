@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { EDUCATION, EXPERIENCE, PROFILE, PROJECTS, SKILLS, getProject, type CvItem } from '../../data/projects';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { onLinkClick } from '../../lib/router';
@@ -31,6 +31,9 @@ const HomeScreen: React.FC = () => {
             </a>
             <a className="text-link" href={`mailto:${PROFILE.links.email}`}>
               {t.hero.email}
+            </a>
+            <a className="text-link" href={PROFILE.cv[language]} target="_blank" rel="noopener">
+              {t.hero.resume}
             </a>
           </div>
           <p className="home-status small" {...reveal(3)}>{t.status.open}</p>
@@ -225,6 +228,38 @@ const More: React.FC = () => {
   );
 };
 
+const Method: React.FC = () => {
+  const { t } = useLanguage();
+  return (
+    <section id="method" className="section" aria-labelledby="method-title">
+      <div className="wrap method-grid">
+        <div className="method-head" {...reveal(0)}>
+          <h2 id="method-title" className="section-title">{t.method.title}</h2>
+          <p className="lead muted">{t.method.intro}</p>
+        </div>
+        <ol className="method-list">
+          {t.method.items.map((item, i) => {
+            const project = getProject(item.project)!;
+            return (
+              <li key={item.title} {...reveal(i)}>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+                <p className="method-proof small">
+                  <span className="method-proof-label">{t.method.proof}</span>
+                  {item.proof}{' '}
+                  <a className="text-link" href={`/projects/${project.id}`} onClick={(e) => onLinkClick(e)}>
+                    {project.title}
+                  </a>
+                </p>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+  );
+};
+
 const Letter: React.FC = () => {
   const { t, language } = useLanguage();
   const orby = getProject('orbys-adventure')!;
@@ -279,7 +314,12 @@ const Resume: React.FC = () => {
   return (
     <section id="cv" className="section section--field" aria-labelledby="cv-title">
       <div className="wrap">
-        <h2 id="cv-title" className="section-title" {...reveal(0)}>{t.cv.title}</h2>
+        <div className="cv-head" {...reveal(0)}>
+          <h2 id="cv-title" className="section-title">{t.cv.title}</h2>
+          <a className="btn" href={PROFILE.cv[language]} target="_blank" rel="noopener">
+            {t.cv.download} <ArrowUpRight size={18} aria-hidden />
+          </a>
+        </div>
         <div className="cv-cols">
           <div>
             <h3 className="cv-heading">{t.cv.experience}</h3>
@@ -316,6 +356,7 @@ export const Home: React.FC = () => {
         <Featured />
         <Shipped />
         <More />
+        <Method />
         <Letter />
         <Resume />
       </main>
