@@ -1,6 +1,6 @@
 # Redesign del portfolio: contesto di lavoro
 
-Ultimo aggiornamento: 28 ottobre 2026, sera (seconda sessione). Committato sul branch `redesign-home-screen`.
+Ultimo aggiornamento: 28 ottobre 2026, sera (seconda sessione). Committato su `main`.
 
 ## Obiettivo
 
