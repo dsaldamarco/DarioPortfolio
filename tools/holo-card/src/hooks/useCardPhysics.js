@@ -86,6 +86,15 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
     [setFlipBase],
   );
 
+  /** Turn to 'front' or 'back' only if that face isn't already showing. */
+  const showSide = useCallback(
+    (side) => {
+      const backShowing = Math.abs(Math.round(flipBase.current / 180)) % 2 === 1;
+      if ((side === 'back') !== backShowing) flipCard();
+    },
+    [flipCard],
+  );
+
   const track = (e) => {
     const r = rectRef.current ?? measure();
     if (!r) return null;
@@ -188,6 +197,7 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
     stageRef,
     isFlipped,
     flipCard,
+    showSide,
     handlers: {
       onPointerEnter,
       onPointerMove,

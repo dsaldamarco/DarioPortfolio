@@ -19,7 +19,39 @@ export const DEFAULT_SETTINGS = {
   description:
     'Nasce dove il tramonto incontra l’orizzonte digitale. Ogni riflesso sulla sua superficie racconta una luce diversa.',
   number: 'HS · 001/151',
+  // Back
+  backMode: 'pattern', // 'pattern' | 'image' | 'tile'
+  backPattern: 'rings',
+  backTint: 'night',
+  backTileSize: 28, // cqw
+  backDim: 0.35,
+  backEmblem: true,
+  backTitle: 'Holo Studio',
+  backSubtitle: 'Trading Card Series',
 };
+
+export const BACK_MODES = [
+  { value: 'pattern', label: 'Pattern' },
+  { value: 'image', label: 'Immagine' },
+  { value: 'tile', label: 'Motivo' },
+];
+
+// Rendered by .back-pattern[data-pattern] in holo.css
+export const BACK_PATTERNS = [
+  { value: 'rings', label: 'Anelli' },
+  { value: 'diamonds', label: 'Rombi' },
+  { value: 'waves', label: 'Onde' },
+  { value: 'dots', label: 'Pois' },
+  { value: 'rays', label: 'Raggi' },
+];
+
+export const BACK_TINTS = [
+  { value: 'night', label: 'Notte', swatch: 'radial-gradient(circle at 50% 40%,#3a2878,#07060f)' },
+  { value: 'obsidian', label: 'Ossidiana', swatch: 'radial-gradient(circle at 50% 40%,#3a3a42,#09090b)' },
+  { value: 'crimson', label: 'Cremisi', swatch: 'radial-gradient(circle at 50% 40%,#7a2338,#12060a)' },
+  { value: 'ocean', label: 'Oceano', swatch: 'radial-gradient(circle at 50% 40%,#16557a,#03101a)' },
+  { value: 'emerald', label: 'Smeraldo', swatch: 'radial-gradient(circle at 50% 40%,#16694f,#03140e)' },
+];
 
 export const HOLO_STYLES = [
   { value: 'rainbow', label: 'Rainbow' },

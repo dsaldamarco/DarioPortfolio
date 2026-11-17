@@ -1,7 +1,21 @@
 import { useState } from 'react';
 import { ImageIcon, ResetIcon } from './icons';
 
-export default function ImageDropzone({ image, isDefault, onPick, onFile, onReset, error }) {
+/**
+ * Upload target with thumbnail. `image` may be null (nothing uploaded yet).
+ * `resetLabel` is shown when `canReset` is true.
+ */
+export default function ImageDropzone({
+  image,
+  canReset,
+  onPick,
+  onFile,
+  onReset,
+  error,
+  emptyLabel = 'Carica immagine',
+  replaceLabel = 'Sostituisci immagine',
+  resetLabel = 'Usa immagine di esempio',
+}) {
   const [over, setOver] = useState(false);
 
   const onDrop = (e) => {
@@ -30,13 +44,17 @@ export default function ImageDropzone({ image, isDefault, onPick, onFile, onRese
             : 'border border-dashed border-white/15 bg-white/[0.05] hover:bg-white/[0.08]'
         }`}
       >
-        <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-black ring-1 ring-white/10">
-          <img src={image} alt="" className="h-full w-full object-cover" />
+        <span className="relative grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-lg bg-black text-white/40 ring-1 ring-white/10">
+          {image ? (
+            <img src={image} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <ImageIcon width={22} height={22} />
+          )}
         </span>
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5 text-[14px] font-medium text-white">
             <ImageIcon width={16} height={16} />
-            {isDefault ? 'Carica immagine' : 'Sostituisci immagine'}
+            {canReset ? replaceLabel : emptyLabel}
           </span>
           <span className="mt-0.5 block text-[12px] leading-snug text-label">
             Trascina qui o tocca per scegliere · PNG, JPG, WebP
@@ -50,14 +68,14 @@ export default function ImageDropzone({ image, isDefault, onPick, onFile, onRese
         </p>
       )}
 
-      {!isDefault && (
+      {canReset && (
         <button
           type="button"
           onClick={onReset}
           className="flex items-center gap-1.5 px-1 text-[13px] text-accent outline-none hover:underline focus-visible:underline"
         >
           <ResetIcon width={14} height={14} />
-          Usa immagine di esempio
+          {resetLabel}
         </button>
       )}
     </div>

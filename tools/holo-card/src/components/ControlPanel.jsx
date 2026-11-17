@@ -2,9 +2,46 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ImageDropzone from './ImageDropzone';
 import { Section, Segmented, Slider, Swatches, TextField } from './ui';
 import { CloseIcon } from './icons';
-import { FOIL_AREAS, FRAMES, HOLO_STYLES } from '../settings';
+import { BACK_MODES, BACK_PATTERNS, BACK_TINTS, FOIL_AREAS, FRAMES, HOLO_STYLES } from '../settings';
 
 const pct = (v) => `${Math.round(v * 100)}%`;
+const YES_NO = [
+  { value: true, label: 'Sì' },
+  { value: false, label: 'No' },
+];
+
+/** Mini card-backs rendered with the same CSS as the real back. */
+function PatternPicker({ value, tint, onChange }) {
+  return (
+    <div role="radiogroup" aria-label="Pattern del retro" className="grid grid-cols-5 gap-2">
+      {BACK_PATTERNS.map((p) => {
+        const active = p.value === value;
+        return (
+          <button
+            key={p.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(p.value)}
+            className="group flex flex-col items-center gap-1.5 outline-none"
+          >
+            <span
+              className={`pattern-swatch transition-all duration-200 group-focus-visible:ring-2 group-focus-visible:ring-accent ${
+                active
+                  ? 'ring-2 ring-white ring-offset-2 ring-offset-[#1c1c20]'
+                  : 'ring-1 ring-white/10 group-hover:ring-white/30'
+              }`}
+              data-tint={tint}
+            >
+              <span className="back-pattern" data-pattern={p.value} />
+            </span>
+            <span className={`text-[11px] ${active ? 'text-white' : 'text-label'}`}>{p.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function ControlPanel({
   open,
@@ -12,9 +49,13 @@ export default function ControlPanel({
   onClose,
   settings,
   update,
+  updateBack,
   onResetSettings,
-  imageProps,
+  frontImageProps,
+  backImageProps,
 }) {
+  const needsBackImage = settings.backMode !== 'pattern';
+  const hasBackImage = Boolean(backImageProps.image);
   const desktopMotion = {
     initial: { x: 40, opacity: 0 },
     animate: { x: 0, opacity: 1 },
@@ -54,7 +95,11 @@ export default function ControlPanel({
               </div>
             )}
 
-            <header className="flex items-center justify-between px-5 pt-4 pb-3">
+            <header
+              className={`flex items-center justify-between px-5 pt-4 pb-3 ${
+                isDesktop ? '' : 'mx-auto w-full max-w-xl'
+              }`}
+            >
               <h2 className="text-[19px] font-semibold tracking-tight">Personalizza</h2>
               <div className="flex items-center gap-1">
                 <button
@@ -76,12 +121,14 @@ export default function ControlPanel({
             </header>
 
             <div
-              className="scrollbar-thin flex-1 space-y-6 overflow-y-auto px-4 pb-6"
+              className={`scrollbar-thin flex-1 space-y-6 overflow-y-auto px-4 pb-6 ${
+                isDesktop ? '' : 'mx-auto w-full max-w-xl'
+              }`}
               // Only the handle/header drags the sheet; the content keeps native scrolling
               onPointerDown={(e) => !isDesktop && e.stopPropagation()}
             >
-              <Section title="Immagine">
-                <ImageDropzone {...imageProps} />
+              <Section title="Immagine fronte">
+                <ImageDropzone {...frontImageProps} />
               </Section>
 
               <Section title="Effetto olografico">
@@ -132,6 +179,108 @@ export default function ControlPanel({
                 />
               </Section>
 
+              <Section title="Retro">
+                <Segmented
+                  label="Sfondo del retro"
+                  options={BACK_MODES}
+                  value={settings.backMode}
+                  onChange={(v) => updateBack('backMode', v)}
+                />
+
+                {(!needsBackImage || !hasBackImage) && (
+                  <>
+                    <PatternPicker
+                      value={settings.backPattern}
+                      tint={settings.backTint}
+                      onChange={(v) => updateBack('backPattern', v)}
+                    />
+                    <div className="space-y-2">
+                      <span className="block px-0.5 text-[12px] text-label">Colore</span>
+                      <div role="radiogroup" aria-label="Colore del retro" className="flex gap-2.5">
+                        {BACK_TINTS.map((t) => {
+                          const active = t.value === settings.backTint;
+                          return (
+                            <button
+                              key={t.value}
+                              type="button"
+                              role="radio"
+                              aria-checked={active}
+                              aria-label={t.label}
+                              title={t.label}
+                              onClick={() => updateBack('backTint', t.value)}
+                              className={`h-8 w-8 rounded-full outline-none transition-all focus-visible:ring-2 focus-visible:ring-accent ${
+                                active
+                                  ? 'ring-2 ring-white ring-offset-2 ring-offset-[#1c1c20]'
+                                  : 'ring-1 ring-white/15 hover:ring-white/40'
+                              }`}
+                              style={{ background: t.swatch }}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {needsBackImage && (
+                  <>
+                    <ImageDropzone
+                      {...backImageProps}
+                      emptyLabel={settings.backMode === 'tile' ? 'Carica immagine per il motivo' : 'Carica immagine'}
+                      resetLabel="Rimuovi immagine"
+                    />
+                    {!hasBackImage && (
+                      <p className="px-1 text-[12px] leading-snug text-label">
+                        Finché non carichi un’immagine, il retro usa il pattern qui sopra.
+                      </p>
+                    )}
+                    {hasBackImage && settings.backMode === 'tile' && (
+                      <Slider
+                        label="Dimensione motivo"
+                        value={settings.backTileSize}
+                        min={8}
+                        max={100}
+                        step={1}
+                        onChange={(v) => updateBack('backTileSize', v)}
+                        format={(v) => `${Math.round(v)}%`}
+                      />
+                    )}
+                    {hasBackImage && (
+                      <Slider
+                        label="Oscura dietro al testo"
+                        value={settings.backDim}
+                        min={0}
+                        max={0.9}
+                        onChange={(v) => updateBack('backDim', v)}
+                        format={pct}
+                      />
+                    )}
+                  </>
+                )}
+
+                <div className="space-y-2">
+                  <span className="block px-0.5 text-[12px] text-label">Emblema</span>
+                  <Segmented
+                    label="Mostra emblema"
+                    options={YES_NO}
+                    value={settings.backEmblem}
+                    onChange={(v) => updateBack('backEmblem', v)}
+                  />
+                </div>
+                <TextField
+                  label="Titolo"
+                  value={settings.backTitle}
+                  maxLength={24}
+                  onChange={(v) => updateBack('backTitle', v)}
+                />
+                <TextField
+                  label="Sottotitolo"
+                  value={settings.backSubtitle}
+                  maxLength={32}
+                  onChange={(v) => updateBack('backSubtitle', v)}
+                />
+              </Section>
+
               <Section title="Movimento">
                 <Slider
                   label="Inclinazione massima"
@@ -144,7 +293,7 @@ export default function ControlPanel({
                 />
               </Section>
 
-              <Section title="Testi">
+              <Section title="Testi fronte">
                 <TextField label="Nome" value={settings.name} maxLength={28} onChange={(v) => update('name', v)} />
                 <TextField label="Tipo" value={settings.subtitle} maxLength={14} onChange={(v) => update('subtitle', v)} />
                 <TextField

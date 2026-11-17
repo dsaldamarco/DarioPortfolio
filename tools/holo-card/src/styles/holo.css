@@ -216,19 +216,95 @@
 }
 
 /* ---------- Back ---------- */
+/* Tints: --back-a (centre) → --back-b (edges). Also used by the panel's mini previews. */
+[data-tint='night'] { --back-a: #2b1d5c; --back-m: #120d2a; --back-b: #07060f; }
+[data-tint='obsidian'] { --back-a: #2c2c33; --back-m: #141417; --back-b: #070708; }
+[data-tint='crimson'] { --back-a: #5e1a2c; --back-m: #2a0b14; --back-b: #0d0406; }
+[data-tint='ocean'] { --back-a: #124a6b; --back-m: #08233a; --back-b: #020b12; }
+[data-tint='emerald'] { --back-a: #125a43; --back-m: #082a1f; --back-b: #020c08; }
+
+.card-back-body,
+.pattern-swatch {
+  background: radial-gradient(80% 60% at 50% 45%, var(--back-a) 0%, var(--back-m) 55%, var(--back-b) 100%);
+}
 .card-back-body {
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(80% 60% at 50% 45%, #2b1d5c 0%, #120d2a 55%, #07060f 100%);
 }
-.back-rings {
+
+/* --- Pattern presets (all sized in cqw, so they scale with the card) ---- */
+.back-pattern {
+  --line: rgb(255 255 255 / 0.07);
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  mask-image: radial-gradient(circle at 50% 45%, #000 30%, transparent 78%);
+}
+.back-pattern[data-pattern='rings'] {
   background:
-    repeating-radial-gradient(circle at 50% 45%, rgb(255 255 255 / 0.06) 0 1px, transparent 1px 5cqw),
+    repeating-radial-gradient(circle at 50% 45%, var(--line) 0 1px, transparent 1px 5cqw),
     repeating-conic-gradient(from 0deg at 50% 45%, rgb(255 255 255 / 0.035) 0 4deg, transparent 4deg 12deg);
-  mask-image: radial-gradient(circle at 50% 45%, #000 30%, transparent 75%);
+}
+.back-pattern[data-pattern='diamonds'] {
+  background:
+    repeating-linear-gradient(45deg, var(--line) 0 1px, transparent 1px 7cqw),
+    repeating-linear-gradient(-45deg, var(--line) 0 1px, transparent 1px 7cqw);
+  mask-image: radial-gradient(circle at 50% 45%, #000 45%, transparent 95%);
+}
+.back-pattern[data-pattern='waves'] {
+  --w: 14cqw;
+  background:
+    radial-gradient(circle at 50% 100%, transparent 30%, var(--line) 31% 34%, transparent 35% 52%, var(--line) 53% 56%, transparent 57% 70%, var(--line) 71% 74%, transparent 75%) 0 0 / var(--w) calc(var(--w) / 2),
+    radial-gradient(circle at 50% 100%, transparent 30%, var(--line) 31% 34%, transparent 35% 52%, var(--line) 53% 56%, transparent 57% 70%, var(--line) 71% 74%, transparent 75%) calc(var(--w) / 2) calc(var(--w) / 4) / var(--w) calc(var(--w) / 2);
+  mask-image: radial-gradient(circle at 50% 45%, #000 45%, transparent 95%);
+}
+.back-pattern[data-pattern='dots'] {
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.13) 0.55cqw, transparent 0.7cqw) 0 0 / 5cqw 5cqw,
+    radial-gradient(circle, rgb(255 255 255 / 0.06) 0.35cqw, transparent 0.5cqw) 2.5cqw 2.5cqw / 5cqw 5cqw;
+  mask-image: radial-gradient(circle at 50% 45%, #000 35%, transparent 90%);
+}
+.back-pattern[data-pattern='rays'] {
+  background:
+    repeating-conic-gradient(from 0deg at 50% 45%, rgb(255 255 255 / 0.075) 0 3deg, transparent 3deg 10deg),
+    radial-gradient(circle at 50% 45%, rgb(255 255 255 / 0.12), transparent 40%);
+  mask-image: radial-gradient(circle at 50% 45%, #000 20%, transparent 85%);
+}
+
+/* --- Uploaded image: cover or tile -------------------------------------- */
+.back-image,
+.back-tile,
+.back-dim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.back-image {
+  object-fit: cover;
+}
+.back-tile {
+  background-repeat: repeat;
+  background-size: var(--tile, 28cqw) auto;
+  background-position: center;
+}
+.back-dim {
+  background: radial-gradient(circle at 50% 45%, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0.35) 75%);
+}
+
+/* --- Mini previews in the control panel --------------------------------- */
+.pattern-swatch {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 63 / 88;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: 9px;
+}
+.pattern-swatch .back-pattern {
+  --line: rgb(255 255 255 / 0.16);
 }
 .back-emblem {
   position: relative;
@@ -236,15 +312,21 @@
   flex-direction: column;
   align-items: center;
   gap: 2.4cqw;
+  max-width: 100%;
+  padding-inline: 4cqw;
   text-align: center;
+  text-shadow: 0 0.4cqw 3cqw rgb(0 0 0 / 0.5);
+  overflow-wrap: anywhere;
 }
 .back-emblem svg {
   width: 30cqw;
   height: 30cqw;
   filter: drop-shadow(0 0 4cqw rgb(170 140 255 / 0.55));
 }
-.back-title {
+.back-emblem svg + .back-title {
   margin-top: 2cqw;
+}
+.back-title {
   font-size: 7cqw;
   font-weight: 700;
   letter-spacing: -0.02em;

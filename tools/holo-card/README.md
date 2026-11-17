@@ -17,6 +17,21 @@ npm run dev
 | Flip | pulsante ↻, tasto **F**, o trascina in orizzontale | pulsante ↻ o swipe orizzontale |
 | Carica immagine | pulsante ↑, drag & drop ovunque, o incolla (Ctrl/⌘+V) | pulsante ↑ |
 
+Upload, drop e incolla vanno sulla faccia visibile: se la carta mostra il retro,
+l'immagine finisce sul retro.
+
+## Retro personalizzabile
+
+Sezione **Retro** del pannello (modificarla gira la carta in automatico):
+
+- **Pattern**: 5 motivi in CSS (Anelli, Rombi, Onde, Pois, Raggi) × 5 colori.
+- **Immagine**: un'immagine caricata copre tutto il retro.
+- **Motivo**: l'immagine caricata viene ripetuta come pattern, con dimensione regolabile.
+- Emblema sì/no, titolo e sottotitolo modificabili, "Oscura dietro al testo"
+  per leggere il testo sopra le immagini.
+
+Senza immagine caricata, Immagine e Motivo mostrano il pattern scelto.
+
 ## Struttura
 
 ```

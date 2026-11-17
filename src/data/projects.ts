@@ -439,6 +439,24 @@ export const PROJECTS: Project[] = [
 
 export const getProject = (id: string) => PROJECTS.find((p) => p.id === id);
 
+/**
+ * Interactive web experiment, listed with the other projects but without a case
+ * study: it opens the tool itself (a separate app in tools/holo-card).
+ */
+export const HOLO_STUDIO = {
+  id: 'holo-studio',
+  title: 'Holo Studio',
+  year: '2026',
+  href: '/tools/holo-card/',
+  kind: l('Esperimento web interattivo', 'Interactive web experiment'),
+  summary: l(
+    'Una carta collezionabile olografica: carichi un’immagine, la inclini con il cursore e la giri. Riflessi e fisica in React e CSS.',
+    'A holographic trading card: upload an image, tilt it with your cursor and flip it. Reflections and physics in React and CSS.',
+  ),
+  icon: '/img/holo-studio/icon.png',
+  preview: { src: '/img/holo-studio/preview.webp', w: 1024, h: 1376 },
+};
+
 export interface CvItem {
   years: string;
   role: L;

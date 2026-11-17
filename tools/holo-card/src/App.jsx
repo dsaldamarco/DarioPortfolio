@@ -18,46 +18,63 @@ export default function App() {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [image, setImage] = useState(DEFAULT_IMAGE);
-  const [error, setError] = useState('');
+  const [backImage, setBackImage] = useState(null);
+  const [errors, setErrors] = useState({ front: '', back: '' });
   const [panelOpen, setPanelOpen] = useState(isDesktop);
   const [flipped, setFlipped] = useState(false);
   const [dragging, setDragging] = useState(false);
   const cardRef = useRef(null);
   const inputRef = useRef(null);
+  const pickTarget = useRef('front');
   const dragDepth = useRef(0);
+  const flippedRef = useRef(false);
+  flippedRef.current = flipped;
 
   useEffect(() => setPanelOpen(isDesktop), [isDesktop]);
 
   const update = useCallback((key, value) => setSettings((s) => ({ ...s, [key]: value })), []);
 
-  // ---------- Image handling ----------
-  const loadFile = useCallback((file) => {
-    if (!file) return;
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      setError('Formato non supportato. Usa PNG, JPG, WebP, GIF o SVG.');
-      return;
-    }
-    if (file.size > MAX_FILE_MB * 1024 * 1024) {
-      setError(`L’immagine supera i ${MAX_FILE_MB} MB.`);
-      return;
-    }
-    setError('');
-    const url = URL.createObjectURL(file);
-    setImage((prev) => {
-      if (prev.startsWith('blob:')) URL.revokeObjectURL(prev);
-      return url;
+  // Editing the back turns the card around so you see what you change.
+  const updateBack = useCallback(
+    (key, value) => {
+      update(key, value);
+      cardRef.current?.showSide('back');
+    },
+    [update],
+  );
+
+  // ---------- Image handling (front and back) ----------
+  const swap = (setter, next) =>
+    setter((prev) => {
+      if (prev?.startsWith('blob:')) URL.revokeObjectURL(prev);
+      return next;
     });
+
+  const loadFile = useCallback((file, target = 'front') => {
+    if (!file) return;
+    const fail = (msg) => setErrors((e) => ({ ...e, [target]: msg }));
+    if (!ACCEPTED_TYPES.includes(file.type)) return fail('Formato non supportato. Usa PNG, JPG, WebP, GIF o SVG.');
+    if (file.size > MAX_FILE_MB * 1024 * 1024) return fail(`L’immagine supera i ${MAX_FILE_MB} MB.`);
+    setErrors((e) => ({ ...e, [target]: '' }));
+    const url = URL.createObjectURL(file);
+    if (target === 'back') {
+      swap(setBackImage, url);
+      // An uploaded back image implies image mode, unless you chose the tile mode.
+      setSettings((s) => (s.backMode === 'pattern' ? { ...s, backMode: 'image' } : s));
+      cardRef.current?.showSide('back');
+    } else {
+      swap(setImage, url);
+      cardRef.current?.showSide('front');
+    }
   }, []);
 
-  const resetImage = () => {
-    setImage((prev) => {
-      if (prev.startsWith('blob:')) URL.revokeObjectURL(prev);
-      return DEFAULT_IMAGE;
-    });
-    setError('');
-  };
+  /** Drops, pastes and the top upload button go to the face you're looking at. */
+  const visibleFace = () => (flippedRef.current ? 'back' : 'front');
 
-  const pickFile = () => inputRef.current?.click();
+  const pickFile = (target) => {
+    pickTarget.current = target ?? visibleFace();
+    inputRef.current?.click();
+  };
 
   // Whole-window drag & drop
   useEffect(() => {
@@ -77,7 +94,7 @@ export default function App() {
       e.preventDefault();
       dragDepth.current = 0;
       setDragging(false);
-      loadFile(e.dataTransfer?.files?.[0]);
+      loadFile(e.dataTransfer?.files?.[0], visibleFace());
     };
     window.addEventListener('dragenter', onEnter);
     window.addEventListener('dragover', onOver);
@@ -95,7 +112,7 @@ export default function App() {
   useEffect(() => {
     const onPaste = (e) => {
       const item = [...(e.clipboardData?.items ?? [])].find((i) => i.type.startsWith('image/'));
-      if (item) loadFile(item.getAsFile());
+      if (item) loadFile(item.getAsFile(), visibleFace());
     };
     window.addEventListener('paste', onPaste);
     return () => window.removeEventListener('paste', onPaste);
@@ -146,7 +163,10 @@ export default function App() {
           </div>
         </div>
         <nav className="flex items-center gap-2">
-          <IconButton label="Carica immagine" onClick={pickFile}>
+          <IconButton
+            label={flipped ? 'Carica immagine per il retro' : 'Carica immagine'}
+            onClick={() => pickFile()}
+          >
             <UploadIcon />
           </IconButton>
           <IconButton label={flipped ? 'Mostra fronte' : 'Gira carta'} onClick={() => cardRef.current?.flip()}>
@@ -174,7 +194,13 @@ export default function App() {
           '--card-w': 'min(80vw, calc((100dvh - 190px) * 0.716), 400px)',
         }}
       >
-        <HoloCard ref={cardRef} image={image} settings={settings} onFlipChange={setFlipped} />
+        <HoloCard
+          ref={cardRef}
+          image={image}
+          backImage={backImage}
+          settings={settings}
+          onFlipChange={setFlipped}
+        />
       </motion.main>
 
       {/* Hint */}
@@ -196,14 +222,23 @@ export default function App() {
         onClose={() => setPanelOpen(false)}
         settings={settings}
         update={update}
+        updateBack={updateBack}
         onResetSettings={() => setSettings(DEFAULT_SETTINGS)}
-        imageProps={{
+        frontImageProps={{
           image,
-          isDefault: image === DEFAULT_IMAGE,
-          onPick: pickFile,
-          onFile: loadFile,
-          onReset: resetImage,
-          error,
+          canReset: image !== DEFAULT_IMAGE,
+          onPick: () => pickFile('front'),
+          onFile: (f) => loadFile(f, 'front'),
+          onReset: () => swap(setImage, DEFAULT_IMAGE),
+          error: errors.front,
+        }}
+        backImageProps={{
+          image: backImage,
+          canReset: Boolean(backImage),
+          onPick: () => pickFile('back'),
+          onFile: (f) => loadFile(f, 'back'),
+          onReset: () => swap(setBackImage, null),
+          error: errors.back,
         }}
       />
 
@@ -213,7 +248,7 @@ export default function App() {
         accept={ACCEPTED_TYPES.join(',')}
         className="hidden"
         onChange={(e) => {
-          loadFile(e.target.files?.[0]);
+          loadFile(e.target.files?.[0], pickTarget.current);
           e.target.value = '';
         }}
       />
@@ -233,7 +268,9 @@ export default function App() {
               className="flex flex-col items-center gap-3 rounded-[28px] border-2 border-dashed border-white/30 px-12 py-10 text-center"
             >
               <UploadIcon width={32} height={32} />
-              <p className="text-[17px] font-semibold">Rilascia per applicare l’immagine</p>
+              <p className="text-[17px] font-semibold">
+                {flipped ? 'Rilascia per applicarla al retro' : 'Rilascia per applicare l’immagine'}
+              </p>
               <p className="text-[13px] text-label">PNG, JPG, WebP, GIF o SVG</p>
             </motion.div>
           </motion.div>

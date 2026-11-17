@@ -13,13 +13,13 @@ import CardBack from './CardBack';
  *         .card-face.card-front   art + holo + glare
  *         .card-face.card-back
  */
-const HoloCard = forwardRef(function HoloCard({ image, settings, onFlipChange }, ref) {
-  const { stageRef, handlers, values, flipCard, isFlipped } = useCardPhysics({
+const HoloCard = forwardRef(function HoloCard({ image, backImage, settings, onFlipChange }, ref) {
+  const { stageRef, handlers, values, flipCard, showSide, isFlipped } = useCardPhysics({
     maxTilt: settings.tilt,
   });
   const { rx, ry, px, py, hyp, active, flip, scale } = values;
 
-  useImperativeHandle(ref, () => ({ flip: flipCard }), [flipCard]);
+  useImperativeHandle(ref, () => ({ flip: flipCard, showSide }), [flipCard, showSide]);
   useEffect(() => onFlipChange?.(isFlipped), [isFlipped, onFlipChange]);
 
   return (
@@ -53,7 +53,7 @@ const HoloCard = forwardRef(function HoloCard({ image, settings, onFlipChange },
             <CardFront image={image} settings={settings} />
           </div>
           <div className="card-face card-back">
-            <CardBack />
+            <CardBack settings={settings} image={backImage} />
           </div>
         </motion.div>
       </motion.div>

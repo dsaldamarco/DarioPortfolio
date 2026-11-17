@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { EDUCATION, EXPERIENCE, PROFILE, PROJECTS, SKILLS, getProject, type CvItem } from '../../data/projects';
+import { EDUCATION, EXPERIENCE, HOLO_STUDIO, PROFILE, PROJECTS, SKILLS, getProject, type CvItem } from '../../data/projects';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { onLinkClick } from '../../lib/router';
 import { useReveal } from '../../lib/useReveal';
@@ -175,10 +175,46 @@ const Shipped: React.FC = () => {
   );
 };
 
+interface MoreRow {
+  id: string;
+  href: string;
+  title: string;
+  icon: string;
+  iconInset?: boolean;
+  meta: string;
+  summary: string;
+  preview: { src: string; w: number; h: number };
+  /** Case studies open in-site with the icon launch transition; the tool is a separate app. */
+  caseStudy: boolean;
+}
+
 const More: React.FC = () => {
   const { t, language } = useLanguage();
   const rest = PROJECTS.filter((p) => p.id !== 'orbys-adventure' && p.id !== 'you-can-only');
-  const [active, setActive] = useState(rest[0].id);
+  const rows: MoreRow[] = [
+    ...rest.map((p) => ({
+      id: p.id,
+      href: `/projects/${p.id}`,
+      title: p.title,
+      icon: p.icon,
+      iconInset: p.iconInset,
+      meta: `${p.kind[language]} · ${p.year}`,
+      summary: p.problem[language],
+      preview: p.gallery[0],
+      caseStudy: true,
+    })),
+    {
+      id: HOLO_STUDIO.id,
+      href: HOLO_STUDIO.href,
+      title: HOLO_STUDIO.title,
+      icon: HOLO_STUDIO.icon,
+      meta: `${HOLO_STUDIO.kind[language]} · ${HOLO_STUDIO.year}`,
+      summary: HOLO_STUDIO.summary[language],
+      preview: HOLO_STUDIO.preview,
+      caseStudy: false,
+    },
+  ];
+  const [active, setActive] = useState(rows[0].id);
   return (
     <section className="section" aria-labelledby="more-title">
       <div className="wrap">
@@ -188,20 +224,20 @@ const More: React.FC = () => {
         </div>
         <div className="more-grid">
           <ul className="more-list">
-            {rest.map((p, i) => (
+            {rows.map((p, i) => (
               <li key={p.id} {...reveal(i)}>
                 <a
-                  href={`/projects/${p.id}`}
+                  href={p.href}
                   className={`more-row ${active === p.id ? 'is-active' : ''}`}
                   onMouseEnter={() => setActive(p.id)}
                   onFocus={() => setActive(p.id)}
-                  onClick={launch}
+                  onClick={p.caseStudy ? launch : undefined}
                 >
                   <AppIcon src={p.icon} inset={p.iconInset} size="clamp(56px, 5vw, 72px)" />
                   <span className="more-main">
                     <span className="more-title">{p.title}</span>
-                    <span className="more-kind">{p.kind[language]} · {p.year}</span>
-                    <span className="more-summary">{p.problem[language]}</span>
+                    <span className="more-kind">{p.meta}</span>
+                    <span className="more-summary">{p.summary}</span>
                   </span>
                   <ArrowRight className="more-arrow" size={22} aria-hidden />
                 </a>
@@ -209,13 +245,13 @@ const More: React.FC = () => {
             ))}
           </ul>
           <div className="more-preview" aria-hidden="true">
-            {rest.map((p) => (
+            {rows.map((p) => (
               <img
                 key={p.id}
-                src={p.gallery[0].src}
+                src={p.preview.src}
                 alt=""
-                width={p.gallery[0].w}
-                height={p.gallery[0].h}
+                width={p.preview.w}
+                height={p.preview.h}
                 loading="lazy"
                 decoding="async"
                 className={active === p.id ? 'is-on' : ''}
