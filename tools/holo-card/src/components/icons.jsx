@@ -27,6 +27,14 @@ export const UploadIcon = (p) => (
   </svg>
 );
 
+export const DownloadIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M12 4v11" />
+    <path d="m7 10 5 5 5-5" />
+    <path d="M5 19h14" />
+  </svg>
+);
+
 export const SlidersIcon = (p) => (
   <svg {...base} {...p}>
     <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" />

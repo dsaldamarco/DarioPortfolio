@@ -32,6 +32,27 @@ Sezione **Retro** del pannello (modificarla gira la carta in automatico):
 
 Senza immagine caricata, Immagine e Motivo mostrano il pattern scelto.
 
+## Salva foto o GIF
+
+Pulsante ↓ in alto. Mentre il pannello è aperto la carta si blocca e mostra
+esattamente quello che verrà salvato.
+
+- **Foto (PNG, 1400 px)**: 5 angolazioni, fronte o retro, sfondo trasparente,
+  scuro o chiaro. "Tutte e 5" salva tutte le angolazioni in un colpo.
+- **GIF animata (520 px, 30 fotogrammi, loop 1,8 s)**: Oscilla, Orbita o
+  Giro 360°, sfondo scuro o chiaro (le GIF non gestiscono le ombre trasparenti).
+- Su telefono si apre il foglio di condivisione, da cui si salva in Foto.
+
+Come funziona (`src/lib/exportCard.js`): `setPose` della fisica mette la carta
+in una posa esatta e scrive subito gli stili; modern-screenshot rasterizza il
+DOM vero (stessi blend mode del live); gifenc codifica i fotogrammi.
+Due accorgimenti necessari:
+
+- il rasterizzatore ignora `backface-visibility`, quindi durante l'export
+  `data-capture` sulla carta nasconde la faccia girata;
+- le maschere del glitter sono PNG generati su canvas (`src/lib/noise.js`):
+  le texture SVG `feTurbulence` non vengono rese nell'export.
+
 ## Struttura
 
 ```

@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import HoloCard from './components/HoloCard';
 import ControlPanel from './components/ControlPanel';
+import ExportDialog from './components/ExportDialog';
 import { IconButton } from './components/ui';
-import { FlipIcon, SlidersIcon, UploadIcon } from './components/icons';
+import { DownloadIcon, FlipIcon, SlidersIcon, UploadIcon } from './components/icons';
 import { useMediaQuery } from './hooks/useMediaQuery';
 import { ACCEPTED_TYPES, DEFAULT_IMAGE, DEFAULT_SETTINGS, MAX_FILE_MB } from './settings';
 
@@ -23,6 +24,9 @@ export default function App() {
   const [panelOpen, setPanelOpen] = useState(isDesktop);
   const [flipped, setFlipped] = useState(false);
   const [dragging, setDragging] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
+  const exportOpenRef = useRef(false);
+  exportOpenRef.current = exportOpen;
   const cardRef = useRef(null);
   const inputRef = useRef(null);
   const pickTarget = useRef('front');
@@ -31,7 +35,6 @@ export default function App() {
   flippedRef.current = flipped;
 
   useEffect(() => setPanelOpen(isDesktop), [isDesktop]);
-
   const update = useCallback((key, value) => setSettings((s) => ({ ...s, [key]: value })), []);
 
   // Editing the back turns the card around so you see what you change.
@@ -121,7 +124,7 @@ export default function App() {
   // Keyboard: F = flip
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target.closest?.('input, textarea, [contenteditable]')) return;
+      if (exportOpenRef.current || e.target.closest?.('input, textarea, [contenteditable]')) return;
       if (e.key === 'f' || e.key === 'F') cardRef.current?.flip();
     };
     window.addEventListener('keydown', onKey);
@@ -169,6 +172,15 @@ export default function App() {
           >
             <UploadIcon />
           </IconButton>
+          <IconButton
+            label="Salva foto o GIF"
+            onClick={() => {
+              if (!isDesktop) setPanelOpen(false); // the sheet would cover the preview
+              setExportOpen(true);
+            }}
+          >
+            <DownloadIcon />
+          </IconButton>
           <IconButton label={flipped ? 'Mostra fronte' : 'Gira carta'} onClick={() => cardRef.current?.flip()}>
             <FlipIcon />
           </IconButton>
@@ -185,13 +197,17 @@ export default function App() {
         className="absolute inset-0 flex items-center justify-center"
         animate={{
           paddingRight: shiftForPanel ? 376 : 0,
-          // Fit the card into the ~40% of screen left above the sheet
-          y: sheetOpen ? '-28dvh' : 0,
-          scale: sheetOpen ? 0.46 : 1,
+          // Fit the card into the space left above the sheet / save dialog.
+          // The save dialog shrinks the card via --card-w (layout), never via
+          // scale: the exporter can't capture a visually scaled element.
+          y: exportOpen ? -190 : sheetOpen ? '-28dvh' : 0,
+          scale: sheetOpen && !exportOpen ? 0.46 : 1,
         }}
         transition={{ type: 'spring', stiffness: 260, damping: 32 }}
         style={{
-          '--card-w': 'min(80vw, calc((100dvh - 190px) * 0.716), 400px)',
+          '--card-w': exportOpen
+            ? 'max(150px, min(70vw, calc((100dvh - 500px) * 0.716), 340px))'
+            : 'min(80vw, calc((100dvh - 190px) * 0.716), 400px)',
         }}
       >
         <HoloCard
@@ -240,6 +256,14 @@ export default function App() {
           onReset: () => swap(setBackImage, null),
           error: errors.back,
         }}
+      />
+
+      <ExportDialog
+        open={exportOpen}
+        onClose={() => setExportOpen(false)}
+        cardRef={cardRef}
+        cardName={settings.name}
+        flipped={flipped}
       />
 
       <input

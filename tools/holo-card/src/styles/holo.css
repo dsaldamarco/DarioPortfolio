@@ -12,6 +12,22 @@
   --noise-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='1' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 9 0 0 0 -4.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+.card-capture {
+  --cap-x: calc(var(--card-w, 340px) * 0.16);
+  padding: calc(var(--card-w, 340px) * 0.12) var(--cap-x) calc(var(--card-w, 340px) * 0.3);
+  margin: calc(var(--card-w, 340px) * -0.12) calc(var(--cap-x) * -1) calc(var(--card-w, 340px) * -0.3);
+  pointer-events: none;
+}
+.card-capture > .card-stage {
+  pointer-events: auto;
+}
+/* The DOM rasterizer ignores backface-visibility: during an export the
+   exporter says which face is visible and the other one is hidden. */
+.card-stage[data-capture='front'] .card-back,
+.card-stage[data-capture='back'] .card-front {
+  visibility: hidden;
+}
+
 .card-stage {
   --px: 0.5;
   --py: 0.5;
@@ -28,6 +44,7 @@
   position: relative;
   width: var(--card-w, 340px);
   aspect-ratio: 63 / 88;
+  transition: width 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
   container-type: inline-size;
   perspective: 1400px;
   touch-action: none;

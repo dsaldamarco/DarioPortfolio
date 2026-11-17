@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useCardPhysics } from '../hooks/useCardPhysics';
 import CardFront from './CardFront';
@@ -14,15 +14,29 @@ import CardBack from './CardBack';
  *         .card-face.card-back
  */
 const HoloCard = forwardRef(function HoloCard({ image, backImage, settings, onFlipChange }, ref) {
-  const { stageRef, handlers, values, flipCard, showSide, isFlipped } = useCardPhysics({
-    maxTilt: settings.tilt,
-  });
+  const { stageRef, handlers, values, flipCard, showSide, setPose, sideAngles, lock, isFlipped } =
+    useCardPhysics({ maxTilt: settings.tilt });
   const { rx, ry, px, py, hyp, active, flip, scale } = values;
+  const captureRef = useRef(null);
 
-  useImperativeHandle(ref, () => ({ flip: flipCard, showSide }), [flipCard, showSide]);
+  useImperativeHandle(
+    ref,
+    () => ({
+      flip: flipCard,
+      showSide,
+      setPose,
+      sideAngles,
+      lock,
+      captureNode: () => captureRef.current,
+    }),
+    [flipCard, showSide, setPose, sideAngles, lock],
+  );
   useEffect(() => onFlipChange?.(isFlipped), [isFlipped, onFlipChange]);
 
   return (
+    // Export target: padded so the tilted card and its shadow fit, with
+    // matching negative margins so it doesn't change the layout.
+    <div ref={captureRef} className="card-capture">
     <motion.div
       ref={stageRef}
       className="card-stage"
@@ -58,6 +72,7 @@ const HoloCard = forwardRef(function HoloCard({ image, backImage, settings, onFl
         </motion.div>
       </motion.div>
     </motion.div>
+    </div>
   );
 });
 

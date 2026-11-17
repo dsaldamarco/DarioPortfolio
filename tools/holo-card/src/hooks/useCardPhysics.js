@@ -86,6 +86,75 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
     [setFlipBase],
   );
 
+  // ---------- Export support: exact poses, no springs, no pointer ----------
+  const lockedRef = useRef(false);
+
+  /**
+   * Jump instantly to a pose. x/y: light/pointer position 0..1 (tilt follows),
+   * active: 0..1 foil intensity boost, flip: absolute flip angle in degrees.
+   */
+  const setPose = useCallback(
+    ({ x = 0.5, y = 0.5, active: a = 1, flip: f } = {}) => {
+      stopIntro();
+      const t = maxTiltRef.current;
+      const pairs = [
+        [ptrX, px, x],
+        [ptrY, py, y],
+        [rotY, ry, (x - 0.5) * 2 * t],
+        [rotX, rx, -(y - 0.5) * 2 * t],
+        [activeT, active, a],
+      ];
+      if (f !== undefined) pairs.push([flipT, flip, f]);
+      for (const [target, spring, v] of pairs) {
+        target.set(v);
+        spring.jump(v);
+      }
+
+      // Framer Motion writes these on its next animation frame, which browsers
+      // throttle in background tabs. Write them now too (same format) so an
+      // export can read the pose synchronously.
+      const stage = stageRef.current;
+      if (!stage) return;
+      const rxv = -(y - 0.5) * 2 * t;
+      const ryv = (x - 0.5) * 2 * t;
+      const vars = {
+        '--px': x,
+        '--py': y,
+        '--rx': rxv,
+        '--ry': ryv,
+        '--active': a,
+        '--hyp': Math.min(1, Math.hypot(x - 0.5, y - 0.5) / 0.5),
+      };
+      for (const [k, v] of Object.entries(vars)) stage.style.setProperty(k, String(v));
+      const tilt = stage.querySelector('.card-tilt');
+      if (tilt) tilt.style.transform = `scale(${1 + 0.04 * a}) rotateX(${rxv}deg) rotateY(${ryv}deg)`;
+      const flipEl = stage.querySelector('.card-flip');
+      if (flipEl && f !== undefined) flipEl.style.transform = `rotateY(${f}deg)`;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  /** Front/back flip angles closest to where the card is now. */
+  const sideAngles = useCallback(() => {
+    const k = Math.round(flipBase.current / 180);
+    const front = (Math.abs(k) % 2 === 0 ? k : k - 1) * 180;
+    return { front, back: front + 180 };
+  }, []);
+
+  const lock = useCallback(
+    (on) => {
+      lockedRef.current = on;
+      if (!on) {
+        // Hand control back: settle at rest, on the side the user left it.
+        dragRef.current = null;
+        reset();
+        flipT.set(flipBase.current);
+      }
+    },
+    [reset, flipT],
+  );
+
   /** Turn to 'front' or 'back' only if that face isn't already showing. */
   const showSide = useCallback(
     (side) => {
@@ -111,11 +180,13 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
   };
 
   const onPointerEnter = () => {
+    if (lockedRef.current) return;
     stopIntro();
     measure();
   };
 
   const onPointerMove = (e) => {
+    if (lockedRef.current) return;
     const r = track(e);
     const d = dragRef.current;
     if (!r || !d || d.id !== e.pointerId) return;
@@ -128,6 +199,7 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
   };
 
   const onPointerDown = (e) => {
+    if (lockedRef.current) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     stopIntro();
     measure();
@@ -147,6 +219,7 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
   };
 
   const onPointerUp = (e) => {
+    if (lockedRef.current) return;
     endDrag(e);
     const r = rectRef.current;
     const outside =
@@ -156,10 +229,12 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
   };
 
   const onPointerLeave = () => {
+    if (lockedRef.current) return;
     if (!dragRef.current) reset();
   };
 
   const onPointerCancel = (e) => {
+    if (lockedRef.current) return;
     endDrag(e);
     reset();
   };
@@ -198,6 +273,9 @@ export function useCardPhysics({ maxTilt = 14, intro = true } = {}) {
     isFlipped,
     flipCard,
     showSide,
+    setPose,
+    sideAngles,
+    lock,
     handlers: {
       onPointerEnter,
       onPointerMove,
