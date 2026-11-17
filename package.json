@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/postbuild.js",
+    "build": "tsc -b && vite build && npm run build:tools && node scripts/postbuild.js",
+    "build:tools": "npm --prefix tools/holo-card install --include=dev --no-audit --no-fund && npm --prefix tools/holo-card run build -- --outDir ../../dist/tools/holo-card --emptyOutDir",
     "lint": "oxlint",
     "preview": "vite preview"
   },

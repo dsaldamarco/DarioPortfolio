@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/tools/holo-card", "destination": "/tools/holo-card/index.html" },
+    { "source": "/tools/holo-card/", "destination": "/tools/holo-card/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
