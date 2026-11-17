@@ -6,7 +6,21 @@ import ExportDialog from './components/ExportDialog';
 import { IconButton } from './components/ui';
 import { DownloadIcon, FlipIcon, SlidersIcon, UploadIcon } from './components/icons';
 import { useMediaQuery } from './hooks/useMediaQuery';
-import { ACCEPTED_TYPES, DEFAULT_IMAGE, DEFAULT_SETTINGS, MAX_FILE_MB } from './settings';
+import { DEFAULT_IMAGE, DEFAULT_SETTINGS } from './settings';
+import {
+  ACCEPT,
+  MAX_IMAGE_MB,
+  MAX_LAYERED_MB,
+  autoDepths,
+  flattenArt,
+  isImageFile,
+  isLayeredFile,
+  readLayers,
+  releaseArt,
+  singleImageArt,
+} from './lib/layers';
+
+const DEFAULT_ART = singleImageArt(DEFAULT_IMAGE, 'Illustrazione di esempio');
 
 const AMBIENT = {
   rainbow: ['#ff5f9e', '#5cc8ff'],
@@ -18,7 +32,9 @@ const AMBIENT = {
 export default function App() {
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-  const [image, setImage] = useState(DEFAULT_IMAGE);
+  const [art, setArt] = useState(DEFAULT_ART);
+  const [busy, setBusy] = useState(false);
+  const [toast, setToast] = useState('');
   const [backImage, setBackImage] = useState(null);
   const [errors, setErrors] = useState({ front: '', back: '' });
   const [panelOpen, setPanelOpen] = useState(isDesktop);
@@ -53,23 +69,90 @@ export default function App() {
       return next;
     });
 
-  const loadFile = useCallback((file, target = 'front') => {
-    if (!file) return;
+  // Free blob URLs the new art no longer uses (layer edits keep the same URLs).
+  const prevArt = useRef(art);
+  useEffect(() => {
+    if (prevArt.current !== art) releaseArt(prevArt.current, art);
+    prevArt.current = art;
+  }, [art]);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(''), 3200);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  const loadFiles = useCallback(async (input, target = 'front') => {
+    const files = [...(input ?? [])].filter(Boolean);
+    if (!files.length) return;
     const fail = (msg) => setErrors((e) => ({ ...e, [target]: msg }));
-    if (!ACCEPTED_TYPES.includes(file.type)) return fail('Formato non supportato. Usa PNG, JPG, WebP, GIF o SVG.');
-    if (file.size > MAX_FILE_MB * 1024 * 1024) return fail(`L’immagine supera i ${MAX_FILE_MB} MB.`);
+    const unknown = files.find((f) => !isImageFile(f) && !isLayeredFile(f));
+    if (unknown) return fail(`Formato non supportato: ${unknown.name}`);
+    const layered = files.length > 1 || isLayeredFile(files[0]);
+    const limit = layered ? MAX_LAYERED_MB : MAX_IMAGE_MB;
+    const tooBig = files.find((f) => f.size > limit * 1024 * 1024);
+    if (tooBig) return fail(`${tooBig.name} supera i ${limit} MB.`);
     setErrors((e) => ({ ...e, [target]: '' }));
-    const url = URL.createObjectURL(file);
+
     if (target === 'back') {
+      let url;
+      if (layered) {
+        setBusy(true);
+        try {
+          const doc = await readLayers(files);
+          url = await flattenArt(doc);
+          releaseArt(doc);
+        } catch (err) {
+          console.error(err);
+          return fail(err.message || 'File non leggibile.');
+        } finally {
+          setBusy(false);
+        }
+      } else {
+        url = URL.createObjectURL(files[0]);
+      }
       swap(setBackImage, url);
       // An uploaded back image implies image mode, unless you chose the tile mode.
       setSettings((s) => (s.backMode === 'pattern' ? { ...s, backMode: 'image' } : s));
       cardRef.current?.showSide('back');
-    } else {
-      swap(setImage, url);
-      cardRef.current?.showSide('front');
+      return;
+    }
+
+    cardRef.current?.showSide('front');
+    if (!layered) {
+      setArt(singleImageArt(URL.createObjectURL(files[0]), files[0].name.replace(/\.[^.]+$/, '')));
+      return;
+    }
+    setBusy(true);
+    try {
+      const next = await readLayers(files);
+      setArt(next);
+      setToast(`${next.source} · ${next.layers.length} ${next.layers.length === 1 ? 'livello' : 'livelli'}`);
+    } catch (err) {
+      console.error(err);
+      fail(err.message || 'File non leggibile.');
+    } finally {
+      setBusy(false);
     }
   }, []);
+
+  // ---------- Layer edits ----------
+  const layerProps = {
+    onLayerChange: useCallback(
+      (id, patch) => setArt((a) => ({ ...a, layers: a.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) })),
+      [],
+    ),
+    onArtChange: useCallback((patch) => setArt((a) => ({ ...a, ...patch })), []),
+    onAutoDepth: useCallback(
+      () =>
+        setArt((a) => {
+          const d = autoDepths(a.layers.length);
+          return { ...a, layers: a.layers.map((l, i) => ({ ...l, depth: d[i] })) };
+        }),
+      [],
+    ),
+    onResetDepth: useCallback(() => setArt((a) => ({ ...a, layers: a.layers.map((l) => ({ ...l, depth: 0 })) })), []),
+  };
 
   /** Drops, pastes and the top upload button go to the face you're looking at. */
   const visibleFace = () => (flippedRef.current ? 'back' : 'front');
@@ -97,7 +180,7 @@ export default function App() {
       e.preventDefault();
       dragDepth.current = 0;
       setDragging(false);
-      loadFile(e.dataTransfer?.files?.[0], visibleFace());
+      loadFiles(e.dataTransfer?.files, visibleFace());
     };
     window.addEventListener('dragenter', onEnter);
     window.addEventListener('dragover', onOver);
@@ -109,17 +192,17 @@ export default function App() {
       window.removeEventListener('dragleave', onLeave);
       window.removeEventListener('drop', onDrop);
     };
-  }, [loadFile]);
+  }, [loadFiles]);
 
   // Paste an image from the clipboard
   useEffect(() => {
     const onPaste = (e) => {
       const item = [...(e.clipboardData?.items ?? [])].find((i) => i.type.startsWith('image/'));
-      if (item) loadFile(item.getAsFile(), visibleFace());
+      if (item) loadFiles([item.getAsFile()], visibleFace());
     };
     window.addEventListener('paste', onPaste);
     return () => window.removeEventListener('paste', onPaste);
-  }, [loadFile]);
+  }, [loadFiles]);
 
   // Keyboard: F = flip
   useEffect(() => {
@@ -212,7 +295,7 @@ export default function App() {
       >
         <HoloCard
           ref={cardRef}
-          image={image}
+          art={art}
           backImage={backImage}
           settings={settings}
           onFlipChange={setFlipped}
@@ -241,18 +324,22 @@ export default function App() {
         updateBack={updateBack}
         onResetSettings={() => setSettings(DEFAULT_SETTINGS)}
         frontImageProps={{
-          image,
-          canReset: image !== DEFAULT_IMAGE,
+          image: art.preview,
+          canReset: art.preview !== DEFAULT_IMAGE,
           onPick: () => pickFile('front'),
-          onFile: (f) => loadFile(f, 'front'),
-          onReset: () => swap(setImage, DEFAULT_IMAGE),
+          onFiles: (f) => loadFiles(f, 'front'),
+          onReset: () => setArt(DEFAULT_ART),
           error: errors.front,
+          busy,
         }}
+        art={art}
+        layerProps={layerProps}
         backImageProps={{
           image: backImage,
           canReset: Boolean(backImage),
           onPick: () => pickFile('back'),
-          onFile: (f) => loadFile(f, 'back'),
+          onFiles: (f) => loadFiles(f, 'back'),
+          busy,
           onReset: () => swap(setBackImage, null),
           error: errors.back,
         }}
@@ -269,10 +356,11 @@ export default function App() {
       <input
         ref={inputRef}
         type="file"
-        accept={ACCEPTED_TYPES.join(',')}
+        accept={ACCEPT}
+        multiple
         className="hidden"
         onChange={(e) => {
-          loadFile(e.target.files?.[0], pickTarget.current);
+          loadFiles(e.target.files, pickTarget.current);
           e.target.value = '';
         }}
       />
@@ -295,7 +383,7 @@ export default function App() {
               <p className="text-[17px] font-semibold">
                 {flipped ? 'Rilascia per applicarla al retro' : 'Rilascia per applicare l’immagine'}
               </p>
-              <p className="text-[13px] text-label">PNG, JPG, WebP, GIF o SVG</p>
+              <p className="text-[13px] text-label">Immagini, PSD, Procreate, TIFF, ORA o ZIP</p>
             </motion.div>
           </motion.div>
         )}

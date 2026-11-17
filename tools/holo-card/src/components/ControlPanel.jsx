@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import ImageDropzone from './ImageDropzone';
+import LayersPanel from './LayersPanel';
 import { Section, Segmented, Slider, Swatches, TextField } from './ui';
 import { CloseIcon } from './icons';
 import { BACK_MODES, BACK_PATTERNS, BACK_TINTS, FOIL_AREAS, FRAMES, HOLO_STYLES } from '../settings';
@@ -53,6 +54,8 @@ export default function ControlPanel({
   onResetSettings,
   frontImageProps,
   backImageProps,
+  art,
+  layerProps,
 }) {
   const needsBackImage = settings.backMode !== 'pattern';
   const hasBackImage = Boolean(backImageProps.image);
@@ -128,7 +131,16 @@ export default function ControlPanel({
               onPointerDown={(e) => !isDesktop && e.stopPropagation()}
             >
               <Section title="Immagine fronte">
-                <ImageDropzone {...frontImageProps} />
+                <ImageDropzone
+                  {...frontImageProps}
+                  emptyLabel="Carica immagine o livelli"
+                  replaceLabel="Sostituisci immagine o livelli"
+                  hint="Immagini, PSD, Procreate, TIFF, ORA, ZIP o più immagini insieme"
+                />
+              </Section>
+
+              <Section title="Livelli">
+                <LayersPanel art={art} {...layerProps} />
               </Section>
 
               <Section title="Effetto olografico">

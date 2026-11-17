@@ -88,5 +88,4 @@ export const FRAMES = [
   },
 ];
 
-export const ACCEPTED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif', 'image/svg+xml'];
-export const MAX_FILE_MB = 25;
+

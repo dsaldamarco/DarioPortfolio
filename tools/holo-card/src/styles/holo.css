@@ -188,12 +188,73 @@
     0 0 0 0.6cqw rgb(255 255 255 / 0.1),
     0 2cqw 5cqw rgb(0 0 0 / 0.55);
 }
-.card-art img {
+
+/* ---------- Art layers (2.5D parallax) ----------
+   Each layer moves by the offset translateZ(--d px) would give it under the
+   current tilt (see ArtLayers.jsx). 1 depth px = 0.25cqw ≈ 1px on a 400px card.
+   --tan-x/--tan-y are resolved per layer from the --rx/--ry springs. */
+.card-stage {
+  --tan-x: tan(calc(var(--rx) * 1deg));
+  --tan-y: tan(calc(var(--ry) * 1deg));
+}
+.layer-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.art-layer {
+  --d: 0;
+  --s: 1;
+  --unit: 0.25cqw;
+  position: absolute;
+  transform: translate3d(
+      calc(var(--d) * var(--tan-y) * var(--unit)),
+      calc(var(--d) * var(--tan-x) * var(--unit) * -1),
+      0
+    )
+    scale(var(--s));
+}
+/* Only moving layers get their own compositor layer (GPU memory). */
+.art-layer[data-moving] {
+  will-change: transform;
+}
+.art-layer img {
+  position: absolute;
   display: block;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+}
+.art-layer img.art-fill {
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/* Static filter (cached by the compositor); only the transform animates. */
+.art-layer-shadow {
+  transform: translate3d(
+      calc(var(--d) * var(--tan-y) * var(--unit)),
+      calc(var(--d) * var(--tan-x) * var(--unit) * -1 + var(--gap) * 0.06cqw),
+      0
+    )
+    scale(var(--s));
+}
+.art-layer-shadow img {
+  filter: brightness(0) blur(calc(0.4cqw + var(--gap) * 0.04cqw));
+  opacity: 0.55;
+}
+/* "Above holo" layers when the foil covers the whole card: same box as .card-art. */
+.art-overlay {
+  position: absolute;
+  overflow: hidden;
   pointer-events: none;
+}
+/* Full-card designs: the layers replace frame and body. */
+.layer-backing {
+  position: absolute;
+  inset: 0;
+  background: #0c0c10;
 }
 
 .card-info {
@@ -547,4 +608,9 @@
     -webkit-mask-position: 0 0, 0 0;
     mask-position: 0 0, 0 0;
   }
+}
+
+/* cqw inside .art-overlay refers to the card, not .card-body: match the unit. */
+.art-overlay .art-layer {
+  --unit: 0.234cqw;
 }

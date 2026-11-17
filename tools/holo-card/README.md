@@ -15,10 +15,53 @@ npm run dev
 | Inclinazione 3D + riflessi | muovi il cursore sulla carta | tocca e muovi il dito |
 | Ritorno a riposo (spring) | esci dalla carta | solleva il dito |
 | Flip | pulsante ↻, tasto **F**, o trascina in orizzontale | pulsante ↻ o swipe orizzontale |
-| Carica immagine | pulsante ↑, drag & drop ovunque, o incolla (Ctrl/⌘+V) | pulsante ↑ |
+| Carica immagine o file a livelli | pulsante ↑, drag & drop ovunque, o incolla (Ctrl/⌘+V) | pulsante ↑ |
 
 Upload, drop e incolla vanno sulla faccia visibile: se la carta mostra il retro,
-l'immagine finisce sul retro.
+l'immagine finisce sul retro (un file a livelli lì viene unito in un'immagine sola).
+
+## Livelli e parallasse 2.5D
+
+Il fronte è sempre una pila di livelli. Un'immagine singola è un livello a
+profondità 0 (identica a prima); un file a livelli diventa una pila che si
+muove in parallasse quando la carta si inclina.
+
+| Formato | Cosa viene letto |
+| --- | --- |
+| `.psd` / `.psb` (Photoshop, Fresco, Affinity…) | tutti i livelli con posizione, opacità, metodo di fusione; gruppi appiattiti, maschere di livello e maschere di ritaglio applicate |
+| `.procreate` | livelli, opacità, nascosti, ritaglio; orientamento della tela verificato sull'anteprima del file. Se il file non è leggibile si usa l'anteprima piatta |
+| `.ora` (OpenRaster: Krita, GIMP, MyPaint) | livelli e gruppi con posizione e opacità |
+| `.tif` / `.tiff` | ogni pagina è un livello. I livelli interni dei TIFF di Photoshop non sono leggibili: si usa l'immagine unita |
+| `.kra` (Krita) | solo l'immagine unita (meglio esportare in .ora o .psd) |
+| `.zip` o più immagini insieme | ogni immagine è un livello, in ordine di nome; le immagini senza trasparenza vanno in fondo |
+
+I livelli nascosti nel file arrivano spenti, si possono riaccendere.
+Il documento viene ridotto a 2048 px sul lato lungo (basta per l'export a 1400 px).
+
+Sezione **Livelli** del pannello, per ogni livello:
+
+- **Visibilità** (occhio).
+- **Profondità** da −40 a +40 px (doppio clic azzera). Negativo = dietro la carta, positivo = sporge.
+- **Ombra**: ombra sotto il livello che scivola in direzione opposta all'inclinazione.
+- **Sopra holo**: il livello resta nitido sopra foil e glitter (testi, cornici, UI).
+
+Più **Profondità automatica** (dal fondo −24 alla cima +32), **Azzera**, e
+**I livelli coprono: Illustrazione / Carta intera**. In "Carta intera" il file
+è la carta: cornice e testi della carta vengono nascosti. Si sceglie da solo
+quando il documento ha le proporzioni di una carta (63:88).
+
+Come funziona (`ArtLayers.jsx`): la faccia della carta deve restare piatta
+(ritaglio con angoli arrotondati e `mix-blend-mode` del foil), quindi un
+`translateZ` vero lì dentro verrebbe schiacciato. Ogni livello riceve lo
+spostamento esatto che `translateZ(profondità)` produrrebbe con l'inclinazione
+corrente: `x = d · tan(rotateY)`, `y = −d · tan(rotateX)`, calcolato in CSS
+dalle stesse variabili `--rx --ry`. Cambia solo `transform`, quindi niente
+render React e niente repaint durante il movimento. Misurato contro un
+elemento con `translateZ` reale: differenza sotto 0,3 px.
+
+I parser (`src/lib/layers/`) si caricano solo quando servono: ag-psd per i PSD,
+fflate per gli archivi ZIP, UTIF per i TIFF; LZO/LZ4 (tile di Procreate) e la
+plist binaria di Procreate sono implementati lì dentro.
 
 ## Retro personalizzabile
 
@@ -62,9 +105,12 @@ src/
 ├─ hooks/
 │  ├─ useCardPhysics.js     puntatore → motion values → spring → CSS vars
 │  └─ useMediaQuery.js
+├─ lib/layers/             lettura file a livelli (PSD, Procreate, TIFF, ORA, ZIP)
 ├─ components/
 │  ├─ HoloCard.jsx          stage 3D (perspective, tilt, flip, ombra)
 │  ├─ CardFront.jsx         layout fronte
+│  ├─ ArtLayers.jsx         pila di livelli con parallasse
+│  ├─ LayersPanel.jsx       sezione Livelli del pannello
 │  ├─ CardBack.jsx          retro
 │  ├─ HoloLayers.jsx        foil + glitter
 │  ├─ ControlPanel.jsx      pannello laterale (desktop) / bottom sheet (mobile)

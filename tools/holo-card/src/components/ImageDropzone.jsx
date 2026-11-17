@@ -9,9 +9,11 @@ export default function ImageDropzone({
   image,
   canReset,
   onPick,
-  onFile,
+  onFiles,
   onReset,
   error,
+  busy = false,
+  hint = 'PNG, JPG, WebP',
   emptyLabel = 'Carica immagine',
   replaceLabel = 'Sostituisci immagine',
   resetLabel = 'Usa immagine di esempio',
@@ -22,8 +24,8 @@ export default function ImageDropzone({
     e.preventDefault();
     e.stopPropagation();
     setOver(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) onFile(file);
+    const files = [...(e.dataTransfer.files ?? [])];
+    if (files.length) onFiles(files);
   };
 
   return (
@@ -31,6 +33,8 @@ export default function ImageDropzone({
       <button
         type="button"
         onClick={onPick}
+        disabled={busy}
+        aria-busy={busy}
         onDragOver={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -57,7 +61,7 @@ export default function ImageDropzone({
             {canReset ? replaceLabel : emptyLabel}
           </span>
           <span className="mt-0.5 block text-[12px] leading-snug text-label">
-            Trascina qui o tocca per scegliere · PNG, JPG, WebP
+            {busy ? 'Lettura del file…' : `Trascina qui o tocca per scegliere · ${hint}`}
           </span>
         </span>
       </button>
