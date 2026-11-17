@@ -24,7 +24,7 @@ const it = {
     shipped: 'Pubblicato',
     appStore: 'Scarica sull’App Store',
     moreTitle: 'Altri progetti',
-    moreIntro: 'Quattro app progettate tra il 2025 e il 2026, tra giochi, salute e lettura, e un esperimento web da provare subito.',
+    moreIntro: 'App ed esperimenti web progettati tra il 2025 e il 2026: giochi, salute, lettura e qualcosa da provare subito nel browser.',
     open: 'Apri',
   },
   method: {
@@ -137,7 +137,7 @@ const en: Translations = {
     shipped: 'Shipped',
     appStore: 'Download on the App Store',
     moreTitle: 'More projects',
-    moreIntro: 'Four apps designed between 2025 and 2026, across games, health and reading, plus a web experiment you can try right now.',
+    moreIntro: 'Apps and web experiments designed between 2025 and 2026: games, health, reading and something to try right in your browser.',
     open: 'Open',
   },
   method: {
