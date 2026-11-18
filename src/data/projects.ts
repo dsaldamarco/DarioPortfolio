@@ -49,7 +49,9 @@ export interface Project {
   learnings?: Note[];
   gallery: Shot[];
   research?: { intro: L; findings?: L[]; photos: Shot[] };
-  links?: { appStore?: string; support?: string; privacy?: string };
+  links?: { appStore?: string; support?: string; privacy?: string; github?: string };
+  /** false keeps the project out of the home screen icon grid (it stays in More projects) */
+  homeScreen?: boolean;
 }
 
 export const PROFILE = {
@@ -305,6 +307,146 @@ export const PROJECTS: Project[] = [
     },
   },
   {
+    id: 'tapp',
+    title: 'Tapp',
+    year: '2026',
+    kind: l('App per iPhone e Mac', 'iPhone and Mac app'),
+    summary: l(
+      'Trasforma l’iPhone in un trackpad multi-touch e in una tastiera per il Mac, senza fili e senza niente da configurare.',
+      'Turns your iPhone into a multi-touch trackpad and keyboard for your Mac, wireless and with nothing to set up.'
+    ),
+    icon: '/img/tapp/icon.png',
+    homeScreen: false,
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('Design e sviluppo, progetto personale', 'Design and development, personal project') },
+      { label: l('Piattaforme', 'Platforms'), value: l('iPhone e Mac', 'iPhone and Mac') },
+      { label: l('Strumenti', 'Tools'), value: l('SwiftUI, MultipeerConnectivity', 'SwiftUI, MultipeerConnectivity') },
+      { label: l('Stato', 'Status'), value: l('Open source su GitHub', 'Open source on GitHub') },
+    ],
+    problem: l(
+      'Con il Mac collegato alla TV, dal divano o durante una presentazione, tastiera e trackpad restano lontani: per mettere in pausa un video, scorrere una pagina o scrivere una ricerca bisogna alzarsi.',
+      'With the Mac hooked up to a TV, from the couch or during a presentation, the keyboard and trackpad are out of reach: to pause a video, scroll a page or type a search you have to get up.'
+    ),
+    role: [
+      l('Ho progettato e sviluppato le due app native in SwiftUI: quella per iPhone e quella per Mac, che vive nella barra dei menu.', 'Designed and built both native SwiftUI apps: the iPhone one and the Mac one, which lives in the menu bar.'),
+      l('Ho definito i gesti del trackpad, la barra delle scorciatoie e le due modalità, con un feedback aptico per ogni gesto.', 'Defined the trackpad gestures, the shortcut bar and the two modes, with haptic feedback for every gesture.'),
+      l('Ho scritto il protocollo tra i due dispositivi: i movimenti viaggiano veloci, i clic e i tasti arrivano tutti e in ordine.', 'Wrote the protocol between the two devices: movement travels fast, clicks and keys all arrive, in order.'),
+    ],
+    decisions: [
+      {
+        title: l('Gli stessi gesti del trackpad del Mac', 'The same gestures as the Mac trackpad'),
+        body: l(
+          'Un dito muove il puntatore, il tocco con due dita è il clic destro, due dita trascinate scorrono con l’inerzia, tenere premuto e muovere trascina. Non c’è niente da imparare.',
+          'One finger moves the pointer, a two-finger tap is a right click, a two-finger drag scrolls with inertia, press and hold then move drags. There is nothing to learn.'
+        ),
+      },
+      {
+        title: l('La tastiera dell’iPhone, più i tasti che le mancano', 'The iPhone keyboard, plus the keys it lacks'),
+        body: l(
+          'Uso la tastiera di sistema, con accenti, emoji e dettatura. Sopra c’è una barra con esc, tab, frecce e ⌘ ⌥ ⌃ ⇧: tocchi il modificatore, poi il tasto, e ⌘ poi c copia.',
+          'It uses the system keyboard, with accents, emoji and dictation. Above it, a bar adds esc, tab, arrows and ⌘ ⌥ ⌃ ⇧: tap the modifier, then the key, so ⌘ then c copies.'
+        ),
+      },
+      {
+        title: l('Una barra spaziatrice gigante', 'A giant space bar'),
+        body: l(
+          'La seconda modalità mette una barra spaziatrice enorme accanto al trackpad: per mettere in pausa i video, andare avanti con le slide o giocare senza guardare lo schermo.',
+          'The second mode puts a huge space bar next to the trackpad: to pause videos, move through slides or play without looking at the screen.'
+        ),
+      },
+      {
+        title: l('Si apre e funziona', 'Open it and it works'),
+        body: l(
+          'L’iPhone trova il Mac da solo, via Wi-Fi o Bluetooth, e si ricollega da solo se la connessione cade. Lo schermo resta acceso finché l’app è aperta.',
+          'The iPhone finds the Mac on its own, over Wi-Fi or Bluetooth, and reconnects by itself if the connection drops. The screen stays on while the app is open.'
+        ),
+      },
+    ],
+    outcome: l('Le due app sono open source su GitHub, con licenza MIT.', 'Both apps are open source on GitHub, under the MIT licence.'),
+    gallery: [
+      phone('/img/tapp/1tapp.webp', l('Modalità tastiera: trackpad, barra delle scorciatoie e tastiera dell’iPhone', 'Keyboard mode: trackpad, shortcut bar and the iPhone keyboard'), 600, 1304),
+      phone('/img/tapp/2tapp.webp', l('Modalità barra spaziatrice: una barra gigante sopra il trackpad', 'Spacebar mode: a giant space bar above the trackpad'), 600, 1304),
+      phone('/img/tapp/3tapp.webp', l('L’iPhone cerca il Mac per collegarsi', 'The iPhone searching for the Mac to connect'), 600, 1304),
+    ],
+    links: { github: 'https://github.com/dsaldamarco/Tapp' },
+  },
+  {
+    id: 'betterboxd',
+    title: 'Betterboxd',
+    year: '2026',
+    kind: l('App per la watchlist di Letterboxd', 'Letterboxd watchlist app'),
+    summary: l(
+      'Un’app per iPhone per la watchlist di Letterboxd: la ordini, crei le tue classifiche, trovi i film in comune con gli amici e lasci al caso la scelta della serata.',
+      'An iPhone app for your Letterboxd watchlist: sort it, build your own rankings, find the films you have in common with friends and let chance pick tonight’s movie.'
+    ),
+    icon: '/img/betterboxd/icon.png',
+    homeScreen: false,
+    facts: [
+      { label: l('Il mio ruolo', 'My role'), value: l('Design e sviluppo, progetto personale', 'Design and development, personal project') },
+      { label: l('Piattaforma', 'Platform'), value: l('iPhone, iOS 26', 'iPhone, iOS 26') },
+      { label: l('Strumenti', 'Tools'), value: l('SwiftUI, API di TMDb', 'SwiftUI, TMDb API') },
+      { label: l('Lingue', 'Languages'), value: l('Italiano e inglese', 'Italian and English') },
+    ],
+    problem: l(
+      'La watchlist di Letterboxd cresce e basta: centinaia di film in fila, senza un modo per dare priorità. E quando si sceglie un film in compagnia nessuno sa da dove cominciare, perché ognuno ha la sua lista.',
+      'A Letterboxd watchlist only grows: hundreds of films in a row, with no way to set priorities. And when a group picks a film nobody knows where to start, because everyone has their own list.'
+    ),
+    role: [
+      l('Ho progettato e sviluppato l’app in SwiftUI, dall’onboarding a tutte le schermate.', 'Designed and built the app in SwiftUI, from onboarding to every screen.'),
+      l('Ho scritto la lettura della watchlist da Letterboxd e i dettagli dei film da TMDb, salvati sul telefono.', 'Wrote the watchlist reading from Letterboxd and the film details from TMDb, cached on the phone.'),
+      l('Ho tradotto l’app in italiano e in inglese; segue la lingua del sistema.', 'Localised the app in Italian and English; it follows the system language.'),
+    ],
+    decisions: [
+      {
+        title: l('Basta lo username', 'Your username is enough'),
+        body: l(
+          'Si scrive lo username, @nome o il link del profilo e arriva tutta la watchlist, che si aggiorna da sola quando riapri l’app. L’API di Letterboxd non è pubblica, quindi l’app legge la pagina pubblica della watchlist; in alternativa si importa il file CSV esportato da Letterboxd.',
+          'You type your username, @name or profile link and the whole watchlist arrives, refreshing on its own when you reopen the app. Letterboxd’s API is not public, so the app reads the public watchlist page; as an alternative you can import the CSV file exported from Letterboxd.'
+        ),
+        alternative: l('Chiedere l’accesso all’API di Letterboxd, che viene concesso raramente.', 'Requesting access to Letterboxd’s API, which is rarely granted.'),
+      },
+      {
+        title: l('Classifiche tue, quante ne vuoi', 'Your own rankings, as many as you like'),
+        body: l(
+          'Liste come “Con gli amici” o “Serata a due”: aggiungi un film con la stella e lo trascini al suo posto.',
+          'Lists like “With friends” or “Date night”: star a film to add it and drag it into place.'
+        ),
+      },
+      {
+        title: l('Insieme', 'Together'),
+        body: l(
+          'Aggiungi gli username degli amici e vedi i film che avete tutti in watchlist. Con tre o più persone mostra anche quelli che hanno quasi tutti, e il dado ne sceglie uno.',
+          'Add your friends’ usernames and see the films you all have in your watchlists. With three or more people it also shows the ones almost everyone has, and the dice picks one.'
+        ),
+      },
+      {
+        title: l('Quando non si decide', 'When nobody can decide'),
+        body: l(
+          'Casuale fa scorrere i titoli e si ferma su un film, da tutta la watchlist o da una delle tue liste.',
+          'Random spins through the titles and stops on a film, from the whole watchlist or one of your lists.'
+        ),
+      },
+      {
+        title: l('Nativa iOS 26', 'Native iOS 26'),
+        body: l(
+          'Liquid Glass su barra delle schede, barre degli strumenti e pulsanti, modalità scura, e una barra delle schede che si riduce mentre scorri.',
+          'Liquid Glass on the tab bar, toolbars and buttons, dark mode, and a tab bar that shrinks as you scroll.'
+        ),
+      },
+    ],
+    outcome: l('L’app è open source su GitHub, con licenza MIT.', 'The app is open source on GitHub, under the MIT licence.'),
+    gallery: [
+      phone('/img/betterboxd/2bb.webp', l('La watchlist a griglia, con le locandine', 'The watchlist as a grid of posters'), 588, 1278),
+      phone('/img/betterboxd/3bb.webp', l('Una classifica personale da riordinare trascinando', 'A personal ranking to reorder by dragging'), 588, 1278),
+      phone('/img/betterboxd/4bb.webp', l('Serata film: chi guarda e i film in comune', 'Movie night: who’s watching and the films in common'), 588, 1278),
+      phone('/img/betterboxd/1bb.webp', l('La schermata di benvenuto: username di Letterboxd o file CSV', 'The welcome screen: Letterboxd username or CSV file'), 588, 1278),
+      phone('/img/betterboxd/5bb.webp', l('Casuale: il film scelto dalla watchlist', 'Random: the film picked from the watchlist'), 588, 1278),
+      phone('/img/betterboxd/6bb.webp', l('Scheda del film in modalità scura', 'Film details in dark mode'), 588, 1278),
+      phone('/img/betterboxd/7bb.webp', l('Scheda del film in modalità chiara', 'Film details in light mode'), 588, 1278),
+    ],
+    links: { github: 'https://github.com/dsaldamarco/Smarterboxd' },
+  },
+  {
     id: 'melting-pot',
     title: 'Melting Pot',
     year: '2025',
@@ -455,6 +597,66 @@ export const HOLO_STUDIO = {
   ),
   icon: '/img/holo-studio/icon.png',
   preview: { src: '/img/holo-studio/preview.webp', w: 1024, h: 1376 },
+};
+
+const wide = (src: string, alt: L): Shot => ({ src, alt, kind: 'photo', w: 1600, h: 900 });
+
+/**
+ * Free, unofficial fan game with its own site: featured on the home after Orby
+ * and listed in More projects, both linking out to nosurvivors.online.
+ */
+export const NOSURVIVORS = {
+  id: 'nosurvivors',
+  title: 'NoSurvivors',
+  year: '2026',
+  href: 'https://nosurvivors.online',
+  site: 'nosurvivors.online',
+  kind: l('Roguelike per PC e browser', 'Roguelike for PC and browser'),
+  badge: l('Fan game gratuito', 'Free fan game'),
+  summary: l(
+    'Un roguelike di sopravvivenza ambientato nel mondo di NosTale: ondate infinite di mostri, da soli o in cooperativa online fino a 4 giocatori. Gratuito per Windows, macOS e nel browser.',
+    'A survival roguelike set in the world of NosTale: endless waves of monsters, alone or in online co-op with up to 4 players. Free on Windows, macOS and in the browser.',
+  ),
+  more: l(
+    'Roguelike di sopravvivenza nel mondo di NosTale, con cooperativa online fino a 4 giocatori e sei modalità extra, dai kart al tower defense.',
+    'A survival roguelike in the world of NosTale, with online co-op for up to 4 players and six extra modes, from karts to tower defense.',
+  ),
+  icon: '/img/nosurvivors/icon.png',
+  facts: [
+    { label: l('Il mio ruolo', 'My role'), value: l('Game design, UX/UI e sviluppo', 'Game design, UX/UI and development') },
+    { label: l('Piattaforme', 'Platforms'), value: l('Windows, macOS e browser, anche da telefono', 'Windows, macOS and browser, phone included') },
+    { label: l('Multigiocatore', 'Multiplayer'), value: l('Cooperativa online fino a 4 giocatori', 'Online co-op for up to 4 players') },
+    { label: l('Strumenti', 'Tools'), value: l('Godot 4, GDScript', 'Godot 4, GDScript') },
+  ],
+  decisions: [
+    {
+      title: l('Un mondo che conosci', 'A world you already know'),
+      body: l(
+        'Interfaccia, finestre, puntatori e numeri dei danni vengono dal client originale: chi ha giocato a NosTale si orienta senza spiegazioni.',
+        'Interface, windows, pointers and damage numbers come from the original client: anyone who played NosTale finds their way without explanations.',
+      ),
+    },
+    {
+      title: l('Scegliere senza fermarsi', 'Choosing without stopping'),
+      body: l(
+        'A ogni livello tre carte affiancate e una scelta sola. Chi vuole solo giocare attiva la scelta automatica di skill e oggetti, e la partita non si ferma.',
+        'Each level-up shows three cards side by side and one choice. Players who just want to play can turn on automatic skill and item picks, so the run never stops.',
+      ),
+    },
+    {
+      title: l('Si gioca ovunque', 'Play it anywhere'),
+      body: l(
+        'Un solo progetto per PC e browser: tastiera, controller Xbox o PlayStation riconosciuto da solo, e sul telefono si cammina tenendo il dito sullo schermo.',
+        'One project for PC and browser: keyboard, an Xbox or PlayStation controller detected on its own, and on a phone you walk by holding a finger on the screen.',
+      ),
+    },
+  ] as Note[],
+  gallery: [
+    wide('/img/nosurvivors/horde.webp', l('Uno spadaccino circondato da un’orda di mostri nell’Avamposto Fernon, con minimappa e danni per skill', 'A swordsman surrounded by a horde of monsters in Fernon Outpost, with minimap and damage per skill')),
+    wide('/img/nosurvivors/levelup.webp', l('La schermata di level-up: il personaggio al centro e tre potenziamenti tra cui scegliere', 'The level-up screen: the character in the centre and three upgrades to choose from')),
+    wide('/img/nosurvivors/raid.webp', l('Il raid di Lord Draco: il boss in volo e le meteore da schivare', 'The Lord Draco raid: the boss in flight and meteors to dodge')),
+    wide('/img/nosurvivors/nosville.webp', l('NosVille, il menu principale da girare a piedi tra gli NPC', 'NosVille, the main menu you walk around among the NPCs')),
+  ],
 };
 
 export interface CvItem {

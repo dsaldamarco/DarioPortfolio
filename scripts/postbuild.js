@@ -24,7 +24,9 @@ const routes = [
   'projects/melting-pot',
   'projects/synk',
   'projects/sortie',
-  'projects/bookmarked'
+  'projects/bookmarked',
+  'projects/tapp',
+  'projects/betterboxd'
 ];
 
 routes.forEach((route) => {

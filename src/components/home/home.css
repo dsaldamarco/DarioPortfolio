@@ -183,6 +183,10 @@
   .feat-body, .feat-story { grid-template-columns: 1fr; }
 }
 
+/* ── Fan game: NoSurvivors ───────────────────────────────── */
+.ns-stage .shot { border-radius: 14px; }
+.ns-actions { margin-top: clamp(32px, 4vw, 48px); }
+
 /* ── Shipped: You Can Only ───────────────────────────────── */
 .ship-grid {
   display: grid;
@@ -305,17 +309,62 @@
   padding: clamp(24px, 3vw, 48px);
   aspect-ratio: 4 / 5;
 }
-.more-preview img {
+.more-shots {
   grid-area: 1 / 1;
+  width: 100%;
   height: 100%;
-  max-height: 560px;
-  width: auto;
-  object-fit: contain;
   opacity: 0;
   transform: scale(0.97);
   transition: opacity 320ms ease, transform 420ms var(--ease-out);
 }
-.more-preview img.is-on { opacity: 1; transform: none; }
+.more-shots.is-on { opacity: 1; transform: none; }
+
+/* One portrait picture, as tall as the panel */
+.more-shots--single {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.more-shots--single img {
+  height: 100%;
+  max-height: 560px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Three phone screens, the middle one raised */
+.more-shots--phones {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.2vw, 16px);
+  align-items: center;
+}
+.more-shots--phones img {
+  width: 100%;
+  height: auto;
+  border-radius: 9% / 4.2%;
+}
+.more-shots--phones img:nth-child(2) { transform: translateY(-8%); }
+
+/* Wide game shots: one large on top, two below */
+.more-shots--mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.2vw, 14px);
+  align-content: center;
+}
+.more-shots--mosaic img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.more-shots--mosaic img:first-child {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 3;
+}
 
 @media (max-width: 900px) {
   .more-head, .more-grid { grid-template-columns: 1fr; }

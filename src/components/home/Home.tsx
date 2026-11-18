@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { EDUCATION, EXPERIENCE, HOLO_STUDIO, PROFILE, PROJECTS, SKILLS, getProject, type CvItem } from '../../data/projects';
+import { EDUCATION, EXPERIENCE, HOLO_STUDIO, NOSURVIVORS, PROFILE, PROJECTS, SKILLS, getProject, type CvItem } from '../../data/projects';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { onLinkClick } from '../../lib/router';
 import { useReveal } from '../../lib/useReveal';
@@ -41,7 +41,7 @@ const HomeScreen: React.FC = () => {
 
         <nav className="home-apps" aria-label={t.hero.apps}>
           <ul>
-            {PROJECTS.map((p, i) => (
+            {PROJECTS.filter((p) => p.homeScreen !== false).map((p, i) => (
               <li key={p.id} {...reveal(i + 1)}>
                 <a href={`/projects/${p.id}`} className="home-app" onClick={launch}>
                   <AppIcon src={p.icon} inset={p.iconInset} size="var(--icon)" eager />
@@ -120,6 +120,59 @@ const Featured: React.FC = () => {
   );
 };
 
+const FanGame: React.FC = () => {
+  const { t, language } = useLanguage();
+  const p = NOSURVIVORS;
+  return (
+    <section className="section" aria-labelledby="ns-title">
+      <div className="wrap">
+        <header className="proj-head" {...reveal(0)}>
+          <AppIcon src={p.icon} size="clamp(56px, 6vw, 80px)" />
+          <div>
+            <h2 id="ns-title" className="section-title">{p.title}</h2>
+            <p className="muted proj-meta">
+              {p.kind[language]} · {p.year} · {p.badge[language]}
+            </p>
+          </div>
+        </header>
+
+        <div className="feat-body">
+          <div className="feat-stage ns-stage" {...reveal(1)}>
+            <Crossfade shots={p.gallery} lang={language} />
+          </div>
+          <div className="feat-aside" {...reveal(2)}>
+            <p className="lead">{p.summary[language]}</p>
+            <dl className="facts">
+              {p.facts.map((f) => (
+                <div key={f.label.en}>
+                  <dt>{f.label[language]}</dt>
+                  <dd>{f.value[language]}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+
+        <div className="feat-story">
+          {p.decisions.map((d, i) => (
+            <div key={d.title.en} {...reveal(i)}>
+              <h3>{d.title[language]}</h3>
+              <p>{d.body[language]}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="ns-actions" {...reveal(0)}>
+          <a className="btn" href={p.href} target="_blank" rel="noopener noreferrer">
+            {t.work.visit} {p.site} <ArrowUpRight size={18} aria-hidden />
+            <span className="sr-only"> {t.work.newTab}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Shipped: React.FC = () => {
   const { t, language } = useLanguage();
   const p = getProject('you-can-only')!;
@@ -183,26 +236,43 @@ interface MoreRow {
   iconInset?: boolean;
   meta: string;
   summary: string;
-  preview: { src: string; w: number; h: number };
+  /** single: one picture; phones: three screens side by side; mosaic: one wide shot over two */
+  preview: { layout: 'single' | 'phones' | 'mosaic'; shots: { src: string; w: number; h: number }[] };
   /** Case studies open in-site with the icon launch transition; the tool is a separate app. */
   caseStudy: boolean;
+  /** Another website: opens in a new tab */
+  external?: boolean;
 }
+
+/** Order of the More projects list, newest first */
+const MORE_ORDER = ['nosurvivors', 'holo-studio', 'tapp', 'betterboxd', 'sortie', 'melting-pot', 'bookmarked', 'synk'];
 
 const More: React.FC = () => {
   const { t, language } = useLanguage();
-  const rest = PROJECTS.filter((p) => p.id !== 'orbys-adventure' && p.id !== 'you-can-only');
-  const rows: MoreRow[] = [
-    ...rest.map((p) => ({
-      id: p.id,
-      href: `/projects/${p.id}`,
-      title: p.title,
-      icon: p.icon,
-      iconInset: p.iconInset,
-      meta: `${p.kind[language]} · ${p.year}`,
-      summary: p.problem[language],
-      preview: p.gallery[0],
-      caseStudy: true,
-    })),
+  const caseStudies: MoreRow[] = PROJECTS.filter((p) => p.id !== 'orbys-adventure' && p.id !== 'you-can-only').map((p) => ({
+    id: p.id,
+    href: `/projects/${p.id}`,
+    title: p.title,
+    icon: p.icon,
+    iconInset: p.iconInset,
+    meta: `${p.kind[language]} · ${p.year}`,
+    summary: p.problem[language],
+    preview: { layout: 'phones', shots: p.gallery.slice(0, 3) },
+    caseStudy: true,
+  }));
+  const rows = ([
+    ...caseStudies,
+    {
+      id: NOSURVIVORS.id,
+      href: NOSURVIVORS.href,
+      title: NOSURVIVORS.title,
+      icon: NOSURVIVORS.icon,
+      meta: `${NOSURVIVORS.kind[language]} · ${NOSURVIVORS.year}`,
+      summary: NOSURVIVORS.more[language],
+      preview: { layout: 'mosaic', shots: NOSURVIVORS.gallery.slice(0, 3) },
+      caseStudy: false,
+      external: true,
+    },
     {
       id: HOLO_STUDIO.id,
       href: HOLO_STUDIO.href,
@@ -210,10 +280,10 @@ const More: React.FC = () => {
       icon: HOLO_STUDIO.icon,
       meta: `${HOLO_STUDIO.kind[language]} · ${HOLO_STUDIO.year}`,
       summary: HOLO_STUDIO.summary[language],
-      preview: HOLO_STUDIO.preview,
+      preview: { layout: 'single', shots: [HOLO_STUDIO.preview] },
       caseStudy: false,
     },
-  ];
+  ] satisfies MoreRow[] as MoreRow[]).sort((a, b) => MORE_ORDER.indexOf(a.id) - MORE_ORDER.indexOf(b.id));
   const [active, setActive] = useState(rows[0].id);
   return (
     <section className="section" aria-labelledby="more-title">
@@ -232,30 +302,31 @@ const More: React.FC = () => {
                   onMouseEnter={() => setActive(p.id)}
                   onFocus={() => setActive(p.id)}
                   onClick={p.caseStudy ? launch : undefined}
+                  {...(p.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   <AppIcon src={p.icon} inset={p.iconInset} size="clamp(56px, 5vw, 72px)" />
                   <span className="more-main">
                     <span className="more-title">{p.title}</span>
                     <span className="more-kind">{p.meta}</span>
                     <span className="more-summary">{p.summary}</span>
+                    {p.external && <span className="sr-only"> {t.work.newTab}</span>}
                   </span>
-                  <ArrowRight className="more-arrow" size={22} aria-hidden />
+                  {p.external ? (
+                    <ArrowUpRight className="more-arrow" size={22} aria-hidden />
+                  ) : (
+                    <ArrowRight className="more-arrow" size={22} aria-hidden />
+                  )}
                 </a>
               </li>
             ))}
           </ul>
           <div className="more-preview" aria-hidden="true">
             {rows.map((p) => (
-              <img
-                key={p.id}
-                src={p.preview.src}
-                alt=""
-                width={p.preview.w}
-                height={p.preview.h}
-                loading="lazy"
-                decoding="async"
-                className={active === p.id ? 'is-on' : ''}
-              />
+              <div key={p.id} className={`more-shots more-shots--${p.preview.layout} ${active === p.id ? 'is-on' : ''}`}>
+                {p.preview.shots.map((s) => (
+                  <img key={s.src} src={s.src} alt="" width={s.w} height={s.h} loading="lazy" decoding="async" />
+                ))}
+              </div>
             ))}
           </div>
         </div>
@@ -390,6 +461,7 @@ export const Home: React.FC = () => {
       <main id="main">
         <HomeScreen />
         <Featured />
+        <FanGame />
         <Shipped />
         <More />
         <Method />

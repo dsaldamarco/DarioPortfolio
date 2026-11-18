@@ -26,6 +26,8 @@ const it = {
     moreTitle: 'Altri progetti',
     moreIntro: 'App ed esperimenti web progettati tra il 2025 e il 2026: giochi, salute, lettura e qualcosa da provare subito nel browser.',
     open: 'Apri',
+    visit: 'Gioca su',
+    newTab: '(si apre in una nuova scheda)',
   },
   method: {
     title: 'Come lavoro',
@@ -108,6 +110,7 @@ const it = {
     gallery: 'Schermate',
     next: 'Prossimo progetto',
     support: 'Supporto',
+    github: 'Il codice su GitHub',
     privacy: 'Privacy',
     notFound: 'Questo progetto non esiste.',
   },
@@ -139,6 +142,8 @@ const en: Translations = {
     moreTitle: 'More projects',
     moreIntro: 'Apps and web experiments designed between 2025 and 2026: games, health, reading and something to try right in your browser.',
     open: 'Open',
+    visit: 'Play on',
+    newTab: '(opens in a new tab)',
   },
   method: {
     title: 'How I work',
@@ -221,6 +226,7 @@ const en: Translations = {
     gallery: 'Screens',
     next: 'Next project',
     support: 'Support',
+    github: 'Code on GitHub',
     privacy: 'Privacy',
     notFound: 'This project does not exist.',
   },

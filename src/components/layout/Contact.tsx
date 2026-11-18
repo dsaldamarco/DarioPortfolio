@@ -59,12 +59,6 @@ export const Contact: React.FC = () => {
                   </a>
                 </li>
               ))}
-              <li>
-                {/* Separate Vite app (tools/holo-card): plain link, full page load */}
-                <a href="/tools/holo-card/">
-                  Holo Studio <ArrowUpRight size={20} aria-hidden />
-                </a>
-              </li>
             </ul>
           </div>
         </div>

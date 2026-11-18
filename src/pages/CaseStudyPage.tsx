@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { PROJECTS, getProject, type Shot } from '../data/projects';
 import { useLanguage } from '../i18n/LanguageContext';
 import { onLinkClick } from '../lib/router';
@@ -88,6 +88,11 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
               )}
               {p.links.support && <a className="text-link" href={p.links.support}>{t.cs.support}</a>}
               {p.links.privacy && <a className="text-link" href={p.links.privacy}>{t.cs.privacy}</a>}
+              {p.links.github && (
+                <a className="btn btn--quiet" href={p.links.github} target="_blank" rel="noopener noreferrer">
+                  {t.cs.github} <ArrowUpRight size={18} aria-hidden />
+                </a>
+              )}
             </div>
           )}
 
