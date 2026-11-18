@@ -448,32 +448,112 @@ export const PROJECTS: Project[] = [
     year: '2025',
     kind: l('Party game cooperativo per iPhone', 'Co-op party game for iPhone'),
     summary: l(
-      'Un party game cooperativo da giocare in gruppo intorno a un solo iPhone: si mescolano ingredienti assurdi e si preparano pozioni in una cucina magica nel caos.',
-      'A co-op party game played as a group around one iPhone: you mix absurd ingredients and brew potions in a magical kitchen gone wild.'
+      'Un party game cooperativo da 2 a 6 giocatori, ognuno con il suo iPhone: si urla, si passano ingredienti assurdi attraverso i portali e si preparano pozioni in una cucina magica, prima che scada il tempo.',
+      'A co-op party game for 2 to 6 players, each on their own iPhone: you shout, pass absurd ingredients through portals and brew potions in a magical kitchen before time runs out.'
     ),
     icon: '/img/melting-pot/icon.png',
     facts: [
       { label: l('Il mio ruolo', 'My role'), value: l('Game designer e UX/UI designer', 'Game designer and UX/UI designer') },
-      { label: l('Piattaforma', 'Platform'), value: l('iPhone', 'iPhone') },
+      { label: l('Team', 'Team'), value: l('5 persone', '5 people') },
+      { label: l('Giocatori', 'Players'), value: l('Da 2 a 6, in locale, un iPhone a testa', '2 to 6, local, one iPhone each') },
+      { label: l('Lingue', 'Languages'), value: l('Inglese, italiano e spagnolo', 'English, Italian and Spanish') },
+      { label: l('Stato', 'Status'), value: l('Prototipo funzionante', 'Working prototype') },
     ],
+    context: l(
+      'Siamo partiti da un tema, non da un gioco: le decisioni. Secondo una ricerca del 2024 prendiamo in media 35.000 decisioni al giorno, e la fatica di decidere peggiora il giudizio e aumenta lo stress. Secondo Daniel Kahneman (“Pensieri lenti e veloci”) il cervello usa due sistemi: uno veloce e intuitivo, uno lento e analitico. Le attività che chiedono decisioni rapide, come i giochi, allenano il primo.',
+      'We started from a theme, not a game: decisions. According to a 2024 study we make about 35,000 decisions a day, and decision fatigue worsens judgment and increases stress. According to Daniel Kahneman (“Thinking, Fast and Slow”) the brain runs two systems: one fast and intuitive, one slow and analytical. Activities that demand quick decisions, like games, train the first.'
+    ),
     problem: l(
-      'Far collaborare un gruppo da subito, durante una festa, senza dover spiegare lunghe regole.',
-      'Get a group cooperating straight away, at a party, without explaining long rules.'
+      'Complessità, paura delle conseguenze, incertezza, fatica ed emozioni rendono le decisioni difficili, e fanno pensare troppo. La domanda che ci siamo fatti: come possiamo aiutare le persone a decidere più in fretta, e con più fiducia?',
+      'Complexity, fear of consequences, uncertainty, fatigue and emotions make decisions hard, and make people overthink. The question we asked ourselves: how can we help people decide faster, and with more confidence?'
+    ),
+    evidence: [
+      { figure: '35.000', label: l('decisioni prese in media ogni giorno (ricerca del 2024)', 'decisions made on average every day (2024 study)') },
+      { figure: '31,8%', label: l('del nostro sondaggio gioca a Uno con amici e famiglia', 'of our survey play Uno with friends and family') },
+      { figure: '3–5', label: l('persone per ogni sessione di playtest', 'people in each playtest session') },
+    ],
+    goal: l(
+      'Un gioco veloce in cui si decide in gruppo e sotto pressione: chi gioca smette di ragionare troppo e si fida della squadra.',
+      'A fast game where you decide as a group and under pressure: players stop overthinking and trust their team.'
     ),
     role: [
-      l('Ho progettato le meccaniche cooperative e l’interfaccia di gioco.', 'Designed the co-op mechanics and the game interface.'),
+      l('Ho progettato le meccaniche cooperative: ricette, portali tra i telefoni, timer e personaggi.', 'Designed the co-op mechanics: recipes, portals between phones, timer and characters.'),
+      l('Ho disegnato l’interfaccia di gioco e il sistema visivo in pixel art.', 'Designed the game interface and the pixel-art visual system.'),
+      l('Ho trasformato quello che abbiamo visto nei playtest in modifiche a regole, ritmo e interfaccia.', 'Turned what we saw in playtests into changes to rules, pacing and interface.'),
     ],
+    teamRole: [
+      l('Analisi di giochi basati sulle decisioni, digitali e da tavolo: Papers, Please, Reigns, Overcooked, Codenames e altri.', 'Analysis of decision-based games, digital and tabletop: Papers, Please, Reigns, Overcooked, Codenames and others.'),
+      l('Sondaggio sui giochi preferiti con amici e famiglia, test interni e playtest con piccoli gruppi.', 'A survey on favourite games with friends and family, internal tests and playtests with small groups.'),
+      l('Sviluppo dell’app per iPhone e del multigiocatore in locale.', 'Development of the iPhone app and local multiplayer.'),
+      l('Localizzazione in inglese, italiano e spagnolo, e un modello di business con acquisti in app.', 'Localisation into English, Italian and Spanish, and a business model with in-app purchases.'),
+    ],
+    research: {
+      intro: l(
+        'Abbiamo chiesto alle persone: “Qual è il tuo gioco preferito con amici o famiglia, e perché?”. Uno, Exploding Kittens e Cards Against Humanity in testa. Piacciono perché sono intuitivi, dinamici, facili da spiegare e fanno decidere in fretta; non piacciono troppe regole, confusione, partite lunghe e troppa fortuna. Poi abbiamo fatto test interni e playtest con gruppi di 3–5 persone, osservando dove si confondevano.',
+        'We asked people: “What’s your go-to game with friends or family, and why do you like it?”. Uno, Exploding Kittens and Cards Against Humanity came out on top. People like them because they are intuitive, dynamic, easy to explain and make you decide fast; they dislike too many rules, confusion, long sessions and too much luck. Then we ran internal tests and playtests with groups of 3–5 people, watching where they got confused.'
+      ),
+      findings: [
+        l('Un ritmo veloce aumenta il coinvolgimento.', 'A fast pace increases engagement.'),
+        l('Scelte più semplici riducono il carico cognitivo.', 'Simpler choices reduce cognitive load.'),
+        l('Le dinamiche di gruppo cambiano la velocità con cui si decide.', 'Group dynamics change how fast people decide.'),
+        l('Un feedback chiaro fa sentire sicuri delle proprie scelte.', 'Clear feedback makes players feel confident in their choices.'),
+        l('“Collaborare con la squadra mi ha tolto la paura delle conseguenze” (Gina, 26). “Ho smesso di pensarci troppo e ho seguito l’istinto” (Luca, 29).', '“Collaborating with my team made me not have fear about my consequences” (Gina, 26). “I stopped overthinking and just went with it” (Luca, 29).'),
+      ],
+      photos: [
+        { src: '/img/melting-pot/playtest1.jpg', kind: 'photo', w: 669, h: 396, alt: l('Un gruppo gioca a un prototipo di carta di Melting Pot intorno a un tavolo, con i volti sfocati', 'A group plays a paper prototype of Melting Pot around a table, faces blurred'), caption: l('Playtest con piccoli gruppi', 'Playtests with small groups') },
+        { src: '/img/melting-pot/playtest2.jpg', kind: 'photo', w: 580, h: 486, alt: l('Membri del team provano le meccaniche con carte e oggetti su un tavolo', 'Team members try out the mechanics with cards and objects on a table'), caption: l('Test interni sulle meccaniche', 'Internal tests of the mechanics') },
+      ],
+    },
     decisions: [
       {
-        title: l('Leggibile da tutto il gruppo', 'Readable by the whole group'),
+        title: l('Ognuno ha la ricetta, gli altri hanno gli ingredienti', 'Everyone has a recipe, the others have the ingredients'),
         body: l(
-          'Grafica ad alto contrasto e animazioni vivaci, pensate per uno schermo guardato da più persone insieme.',
-          'High-contrast graphics and lively animation, made for one screen watched by several people at once.'
+          'Ogni mago vede sul suo telefono la ricetta da completare entro il tempo limite, ma gli ingredienti compaiono sui telefoni degli altri. Per vincere bisogna parlarsi, anzi urlare.',
+          'Each mage sees on their phone the recipe to complete within the time limit, but the ingredients appear on the others’ phones. To win you have to talk, or rather shout.'
         ),
       },
       {
-        title: l('Voce e tocco insieme', 'Voice and touch together'),
-        body: l('Comandi vocali e tattili sincronizzati, così il gioco passa anche per la conversazione.', 'Synchronised voice and touch controls, so the game also runs through conversation.'),
+        title: l('I telefoni diventano un tavolo', 'The phones become one table'),
+        body: l(
+          'Gli iPhone si mettono in cerchio e gli ingredienti passano da uno all’altro attraverso i portali ai lati dello schermo: lo spazio fisico fa parte del gioco.',
+          'The iPhones sit in a circle and ingredients move from one to the next through portals at the sides of the screen: the physical space is part of the game.'
+        ),
+      },
+      {
+        title: l('Regole che si spiegano in un minuto', 'Rules you can explain in a minute'),
+        body: l(
+          'Il sondaggio diceva che troppe regole e partite lunghe rovinano la serata. Un obiettivo solo, la pozione, e round brevi con il timer sempre visibile.',
+          'The survey said too many rules and long sessions ruin the night. One goal, the potion, and short rounds with the timer always on screen.'
+        ),
+        alternative: l('Un gioco di strategia a turni, con più regole e partite lunghe.', 'A turn-based strategy game, with more rules and long sessions.'),
+      },
+      {
+        title: l('Leggibile da tutti', 'Readable by everyone'),
+        body: l(
+          'Pixel art ad alto contrasto, sei maghi riconoscibili da colore e forma (Pyrocaster, Frostmancer, Mossbinder, Stonemaker, Stormcaller, Nightbringer) e animazioni vivaci, pensate per giocare in fretta e da più persone insieme.',
+          'High-contrast pixel art, six mages you recognise by colour and shape (Pyrocaster, Frostmancer, Mossbinder, Stonemaker, Stormcaller, Nightbringer) and lively animation, made for quick play by several people at once.'
+        ),
+      },
+      {
+        title: l('Diventa sempre più difficile', 'It only gets harder'),
+        body: l(
+          'Gli aggiornamenti previsti aggiungono più ingredienti per ricetta, etichette enigmatiche al posto dei nomi e ingredienti intrappolati negli incantesimi.',
+          'Planned updates add more ingredients per recipe, riddle labels instead of names and ingredients trapped in spells.'
+        ),
+      },
+    ],
+    outcome: l(
+      'Il prototipo funziona su iPhone da 2 a 6 giocatori ed è tradotto in tre lingue. Nei playtest le persone dicevano di essersi divertite, di voler rigiocare e di aver smesso di pensarci troppo.',
+      'The prototype runs on iPhone for 2 to 6 players and is translated into three languages. In playtests people said they had fun, wanted to play again and had stopped overthinking.'
+    ),
+    learnings: [
+      {
+        title: l('Partire dal comportamento, non dal genere', 'Start from behaviour, not from a genre'),
+        body: l('Il tema delle decisioni ci ha dato un criterio per ogni scelta di gioco: aiuta a decidere più in fretta, o no?', 'The theme of decisions gave us a test for every game choice: does it help people decide faster, or not?'),
+      },
+      {
+        title: l('Il gruppo toglie la paura di sbagliare', 'The group removes the fear of mistakes'),
+        body: l('Decidere insieme rende l’errore leggero: è la cosa che i giocatori hanno notato di più.', 'Deciding together makes mistakes feel light: it is what players noticed most.'),
       },
     ],
     gallery: [1, 2, 3].map((n) => phone(`/img/melting-pot/${n}mp.png`, l(`Melting Pot, schermata ${n} di 3`, `Melting Pot, screen ${n} of 3`), 597, 1200)),
@@ -484,28 +564,66 @@ export const PROJECTS: Project[] = [
     year: '2025',
     kind: l('App di sleep coaching per iPhone', 'Sleep coaching app for iPhone'),
     summary: l(
-      'Un’app di sleep coaching basata sulla terapia di restrizione del sonno, con tracciamento della salute, consigli personalizzati e integrazione con Apple Watch.',
-      'A sleep coaching app built on sleep restriction therapy, with health tracking, personal guidance and Apple Watch integration.'
+      'Un coach del sonno per iPhone e Apple Watch basato sulla terapia di restrizione del sonno: ti dà una finestra di ore a letto, misura quanto bene dormi e la allarga settimana dopo settimana.',
+      'A sleep coach for iPhone and Apple Watch built on sleep restriction therapy: it gives you a window of hours in bed, measures how well you sleep and widens it week by week.'
     ),
     icon: '/img/sortie/icon.png',
     iconInset: true,
     facts: [
       { label: l('Il mio ruolo', 'My role'), value: l('Product designer', 'Product designer') },
       { label: l('Piattaforma', 'Platform'), value: l('iPhone e Apple Watch', 'iPhone and Apple Watch') },
+      { label: l('Metodo', 'Method'), value: l('Terapia di restrizione del sonno', 'Sleep restriction therapy') },
     ],
-    problem: l(
-      'Molte app per il sonno riempiono di grafici e notifiche luminose proprio prima di dormire.',
-      'Many sleep apps fill the screen with charts and bright notifications right before bed.'
+    context: l(
+      'La restrizione del sonno è una tecnica usata nella terapia cognitivo-comportamentale per l’insonnia: si riduce il tempo passato a letto a quello in cui si dorme davvero, così il sonno diventa più compatto, poi lo si allunga man mano che l’efficienza del sonno migliora. Lo slogan dell’app lo riassume: dormire di più dormendo meno.',
+      'Sleep restriction is a technique used in cognitive behavioural therapy for insomnia: you cut the time spent in bed down to the time you actually sleep, so sleep becomes more consolidated, then extend it as sleep efficiency improves. The app’s tagline sums it up: sleep more by sleeping less.'
     ),
-    role: [l('Ho progettato l’esperienza su iPhone e Apple Watch.', 'Designed the experience across iPhone and Apple Watch.')],
+    problem: l(
+      'Molte app per il sonno riempiono di grafici e notifiche luminose proprio prima di dormire, e misurano senza dire cosa fare. Seguire una terapia che chiede di andare a letto più tardi, invece, richiede regole chiare e qualcuno che incoraggi.',
+      'Many sleep apps fill the screen with charts and bright notifications right before bed, and measure without telling you what to do. Following a therapy that asks you to go to bed later, instead, needs clear rules and someone to encourage you.'
+    ),
+    goal: l(
+      'Rendere la terapia facile da seguire ogni notte: un orario chiaro, un numero solo da guardare al risveglio e un coach che accompagna.',
+      'Make the therapy easy to follow every night: a clear schedule, a single number to check when you wake up and a coach to keep you going.'
+    ),
+    role: [
+      l('Ho progettato l’esperienza su iPhone e Apple Watch: programma settimanale, schermata del risveglio, statistiche e app per il polso.', 'Designed the experience across iPhone and Apple Watch: weekly programme, wake-up screen, statistics and the wrist app.'),
+    ],
     decisions: [
       {
-        title: l('Un’interfaccia per la notte', 'An interface for the night'),
-        body: l('Fondo scuro e una palette calma, per non accendere lo schermo in faccia prima di dormire.', 'A dark ground and a calm palette, so the screen does not glare at you before sleep.'),
+        title: l('Un orario, non un grafico', 'A schedule, not a chart'),
+        body: l(
+          'La schermata principale mostra la settimana del programma e la finestra di sonno: a che ora andare a letto e a che ora alzarsi.',
+          'The main screen shows the week of the programme and the sleep window: when to go to bed and when to get up.'
+        ),
       },
       {
-        title: l('Una occhiata dal polso', 'A glance from the wrist'),
-        body: l('Complicazioni sintetiche su Apple Watch e consigli graduali, invece di grafici da studiare.', 'Concise Apple Watch complications and gradual advice, instead of charts to study.'),
+        title: l('Un numero solo al risveglio', 'One number when you wake up'),
+        body: l(
+          'Quanto hai dormito e l’efficienza del sonno in grande, con un incoraggiamento (“You got this!”). Le statistiche giorno per giorno sono un tocco più in là, con i colori per capire subito le notti andate male.',
+          'How long you slept and your sleep efficiency, big, with a word of encouragement (“You got this!”). Day-by-day statistics are one tap away, with colours that show the bad nights at a glance.'
+        ),
+      },
+      {
+        title: l('Un coach con una faccia', 'A coach with a face'),
+        body: l(
+          'Il coach è un piccolo personaggio a forma di sveglia: rende la terapia meno clinica e dà una voce ai consigli.',
+          'The coach is a small alarm-clock character: it makes the therapy feel less clinical and gives the advice a voice.'
+        ),
+      },
+      {
+        title: l('Due modi di registrare il sonno', 'Two ways to log sleep'),
+        body: l(
+          'Il sonno si registra da solo con l’Apple Watch, oppure lo si inserisce a mano in qualsiasi momento. Sul polso si vedono la percentuale e le ore della notte.',
+          'Sleep is tracked automatically with Apple Watch, or you can log it by hand at any time. On the wrist you see the percentage and the hours of the night.'
+        ),
+      },
+      {
+        title: l('Un’interfaccia per la notte', 'An interface for the night'),
+        body: l(
+          'Fondo nero, un solo colore acceso e caratteri da display digitale, per non accendere lo schermo in faccia prima di dormire.',
+          'A black ground, one bright accent and digital-display type, so the screen does not glare at you before sleep.'
+        ),
       },
     ],
     gallery: [1, 2, 3].map((n) => phone(`/img/sortie/${n}sortie.png`, l(`Sortie, schermata ${n} di 3`, `Sortie, screen ${n} of 3`), 594, 1200)),
@@ -516,31 +634,62 @@ export const PROJECTS: Project[] = [
     year: '2025',
     kind: l('Social di lettura per iPhone', 'Social reading app for iPhone'),
     summary: l(
-      'Una piattaforma sociale per lettori ispirata a Letterboxd: si scoprono, recensiscono e condividono libri in un’app nativa iOS che funziona anche offline.',
-      'A social platform for readers inspired by Letterboxd: discover, review and share books in a native iOS app that also works offline.'
+      'Un’app per iPhone per chi legge, ispirata a Letterboxd: tieni traccia dei libri letti, li valuti, scrivi recensioni, crei liste e scopri cosa leggono gli altri.',
+      'An iPhone app for readers, inspired by Letterboxd: track the books you read, rate them, write reviews, build lists and see what others are reading.'
     ),
     icon: '/img/bookmarked/icon.png',
     iconInset: true,
     facts: [
       { label: l('Il mio ruolo', 'My role'), value: l('Product designer e sviluppatore iOS', 'Product designer and iOS developer') },
       { label: l('Piattaforma', 'Platform'), value: l('iPhone', 'iPhone') },
+      { label: l('Strumenti', 'Tools'), value: l('SwiftUI, Core Data', 'SwiftUI, Core Data') },
+      { label: l('Stato', 'Status'), value: l('Open source su GitHub', 'Open source on GitHub') },
     ],
     problem: l(
-      'Le app per tenere traccia delle letture sono spesso datate, lente e poco curate nella tipografia.',
-      'Reading-tracker apps are often dated, slow and careless with typography.'
+      'Per i film c’è Letterboxd, un posto curato dove segnare, votare e consigliare. Per i libri le app che tengono traccia delle letture sono spesso datate, lente e poco curate nella tipografia, e scrivere una recensione o fare una lista richiede troppi passaggi.',
+      'Films have Letterboxd, a polished place to log, rate and recommend. For books, reading-tracker apps are often dated, slow and careless with typography, and writing a review or making a list takes too many steps.'
     ),
-    role: [l('Ho progettato il prodotto e contribuito allo sviluppo iOS.', 'Designed the product and contributed to the iOS build.')],
+    role: [
+      l('Ho progettato il prodotto: struttura, flussi e interfaccia.', 'Designed the product: structure, flows and interface.'),
+      l('Ho sviluppato l’app in SwiftUI, con Core Data per salvare tutto sul telefono.', 'Built the app in SwiftUI, with Core Data to keep everything on the phone.'),
+    ],
     decisions: [
       {
         title: l('Il libro al centro', 'The book at the centre'),
-        body: l('Schede libro editoriali, con copertina e tipografia in primo piano, dentro i pattern nativi di iOS.', 'Editorial book pages with the cover and type up front, inside native iOS patterns.'),
+        body: l(
+          'La scheda del libro è editoriale: copertina, titolo, autore, anno e voto medio in primo piano, poi la descrizione.',
+          'The book page is editorial: cover, title, author, year and average rating up front, then the description.'
+        ),
+      },
+      {
+        title: l('Tre gesti a portata di pollice', 'Three actions within thumb reach'),
+        body: l(
+          'Letto, Consiglia e Segnalibro sono i primi pulsanti della scheda, con le stelline per votare subito sotto. Recensione, aggiunta alle liste e condivisione vengono dopo.',
+          'Read, Recommend and Bookmark are the first buttons on the page, with the stars to rate right below. Review, add to lists and share come after.'
+        ),
+      },
+      {
+        title: l('Libri, recensioni e liste', 'Books, reviews and lists'),
+        body: l(
+          'La home separa le tre cose che si fanno su un social di lettura: scoprire libri, leggere le recensioni degli altri e sfogliare le liste.',
+          'The home splits the three things you do on a reading social: discover books, read other people’s reviews and browse lists.'
+        ),
+      },
+      {
+        title: l('Un profilo che racconta chi legge', 'A profile that tells who you are as a reader'),
+        body: l(
+          'Libri letti e da leggere, i preferiti in copertina, l’attività recente con i voti e l’obiettivo di lettura dell’anno.',
+          'Books read and to read, favourites shown as covers, recent activity with ratings and the reading goal for the year.'
+        ),
       },
       {
         title: l('Offline prima di tutto', 'Offline first'),
-        body: l('Sincronizzazione locale immediata, perché si legge anche dove non c’è rete.', 'Instant local sync, because people read where there is no signal.'),
+        body: l('Tutto è salvato sul telefono, perché si legge anche dove non c’è rete.', 'Everything is saved on the phone, because people read where there is no signal.'),
       },
     ],
+    outcome: l('L’app è open source su GitHub, con licenza MIT.', 'The app is open source on GitHub, under the MIT licence.'),
     gallery: [1, 2, 3].map((n) => phone(`/img/bookmarked/${n}book.png`, l(`Bookmarked, schermata ${n} di 3`, `Bookmarked, screen ${n} of 3`), 594, 1200)),
+    links: { github: 'https://github.com/dsaldamarco/Bookmarked' },
   },
 ];
 

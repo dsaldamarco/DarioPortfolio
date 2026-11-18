@@ -372,6 +372,20 @@
   aspect-ratio: 4 / 3;
 }
 
+/* iPad screens: the same mosaic, without cropping */
+.more-shots--tablets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.2vw, 14px);
+  align-content: center;
+}
+.more-shots--tablets img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.more-shots--tablets img:first-child { grid-column: 1 / -1; }
+
 @media (max-width: 900px) {
   .more-head, .more-grid { grid-template-columns: 1fr; }
   .more-preview { display: none; }

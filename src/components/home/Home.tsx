@@ -254,8 +254,8 @@ interface MoreRow {
   iconInset?: boolean;
   meta: string;
   summary: string;
-  /** single: one picture; phones: three screens side by side; mosaic: one wide shot over two */
-  preview: { layout: 'single' | 'phones' | 'mosaic'; shots: { src: string; w: number; h: number }[] };
+  /** single: one picture; phones: three screens fanned out; mosaic and tablets: one wide shot over two */
+  preview: { layout: 'single' | 'phones' | 'mosaic' | 'tablets'; shots: { src: string; w: number; h: number }[] };
   /** Case studies open in-site with the icon launch transition; the tool is a separate app. */
   caseStudy: boolean;
   /** Another website: opens in a new tab */
@@ -263,20 +263,23 @@ interface MoreRow {
 }
 
 /** Order of the More projects list, newest first */
-const MORE_ORDER = ['nosurvivors', 'holo-studio', 'tapp', 'betterboxd', 'sortie', 'melting-pot', 'bookmarked'];
+const MORE_ORDER = ['nosurvivors', 'holo-studio', 'tapp', 'betterboxd', 'orbys-adventure', 'sortie', 'melting-pot', 'bookmarked'];
 
 const More: React.FC = () => {
   const { t, language } = useLanguage();
-  const caseStudies: MoreRow[] = PROJECTS.filter((p) => p.id !== 'orbys-adventure' && p.id !== 'you-can-only').map((p) => ({
+  const caseStudies: MoreRow[] = PROJECTS.filter((p) => p.id !== 'you-can-only').map((p) => ({
     id: p.id,
     href: `/projects/${p.id}`,
     title: p.title,
     icon: p.icon,
     iconInset: p.iconInset,
     meta: `${p.kind[language]} · ${p.year}`,
-    summary: p.problem[language],
-    // the first screen goes in the middle, in front
-    preview: { layout: 'phones', shots: [p.gallery[1], p.gallery[0], p.gallery[2]] },
+    summary: p.summary[language],
+    preview:
+      p.gallery[0].kind === 'tablet'
+        ? { layout: 'tablets', shots: p.gallery.slice(0, 3) }
+        : // the first screen goes in the middle, in front
+          { layout: 'phones', shots: [p.gallery[1], p.gallery[0], p.gallery[2]] },
     caseStudy: true,
   }));
   const rows = ([
