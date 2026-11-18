@@ -14,6 +14,24 @@ const launch = (e: React.MouseEvent<HTMLAnchorElement>) =>
 
 const reveal = (i: number) => ({ 'data-reveal': '', style: { '--i': i } as React.CSSProperties });
 
+/** The six icons of the home screen, in grid order */
+const HOME_GRID = ['orbys-adventure', 'you-can-only', 'melting-pot', 'betterboxd', 'sortie', 'bookmarked'];
+
+/** Turns **bold** and *italic* marks in a translated paragraph into elements */
+const Emphasis: React.FC<{ text: string }> = ({ text }) => (
+  <>
+    {text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/).map((part, i) =>
+      part.startsWith('**') ? (
+        <strong key={i}>{part.slice(2, -2)}</strong>
+      ) : part.startsWith('*') ? (
+        <em key={i}>{part.slice(1, -1)}</em>
+      ) : (
+        part
+      )
+    )}
+  </>
+);
+
 const HomeScreen: React.FC = () => {
   const { t, language } = useLanguage();
   return (
@@ -41,7 +59,7 @@ const HomeScreen: React.FC = () => {
 
         <nav className="home-apps" aria-label={t.hero.apps}>
           <ul>
-            {PROJECTS.filter((p) => p.homeScreen !== false).map((p, i) => (
+            {HOME_GRID.map((id) => getProject(id)!).map((p, i) => (
               <li key={p.id} {...reveal(i + 1)}>
                 <a href={`/projects/${p.id}`} className="home-app" onClick={launch}>
                   <AppIcon src={p.icon} inset={p.iconInset} size="var(--icon)" eager />
@@ -245,7 +263,7 @@ interface MoreRow {
 }
 
 /** Order of the More projects list, newest first */
-const MORE_ORDER = ['nosurvivors', 'holo-studio', 'tapp', 'betterboxd', 'sortie', 'melting-pot', 'bookmarked', 'synk'];
+const MORE_ORDER = ['nosurvivors', 'holo-studio', 'tapp', 'betterboxd', 'sortie', 'melting-pot', 'bookmarked'];
 
 const More: React.FC = () => {
   const { t, language } = useLanguage();
@@ -257,7 +275,8 @@ const More: React.FC = () => {
     iconInset: p.iconInset,
     meta: `${p.kind[language]} · ${p.year}`,
     summary: p.problem[language],
-    preview: { layout: 'phones', shots: p.gallery.slice(0, 3) },
+    // the first screen goes in the middle, in front
+    preview: { layout: 'phones', shots: [p.gallery[1], p.gallery[0], p.gallery[2]] },
     caseStudy: true,
   }));
   const rows = ([
@@ -368,9 +387,7 @@ const Method: React.FC = () => {
 };
 
 const Letter: React.FC = () => {
-  const { t, language } = useLanguage();
-  const orby = getProject('orbys-adventure')!;
-  const plate = orby.research!.photos[2];
+  const { t } = useLanguage();
   return (
     <section id="about" className="section" aria-labelledby="about-title">
       <div className="wrap letter-grid">
@@ -380,7 +397,9 @@ const Letter: React.FC = () => {
             <h2 id="about-title" className="section-title">{t.about.title}</h2>
           </header>
           {t.about.letter.map((para) => (
-            <p key={para.slice(0, 24)}>{para}</p>
+            <p key={para.slice(0, 24)}>
+              <Emphasis text={para} />
+            </p>
           ))}
           <p className="letter-sign">
             {t.about.signoff}
@@ -388,10 +407,7 @@ const Letter: React.FC = () => {
           </p>
         </article>
         <figure className="letter-plate" {...reveal(1)}>
-          <img src={plate.src} alt={plate.alt[language]} width={plate.w} height={plate.h} loading="lazy" decoding="async" />
-          <figcaption className="small muted">
-            {plate.caption![language]}, Pune · {orby.title}
-          </figcaption>
+          <img src="/img/about/dario.jpg" alt={t.about.photoAlt} width="1200" height="1600" loading="lazy" decoding="async" />
         </figure>
       </div>
     </section>

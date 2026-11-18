@@ -50,8 +50,6 @@ export interface Project {
   gallery: Shot[];
   research?: { intro: L; findings?: L[]; photos: Shot[] };
   links?: { appStore?: string; support?: string; privacy?: string; github?: string };
-  /** false keeps the project out of the home screen icon grid (it stays in More projects) */
-  homeScreen?: boolean;
 }
 
 export const PROFILE = {
@@ -316,7 +314,6 @@ export const PROJECTS: Project[] = [
       'Turns your iPhone into a multi-touch trackpad and keyboard for your Mac, wireless and with nothing to set up.'
     ),
     icon: '/img/tapp/icon.png',
-    homeScreen: false,
     facts: [
       { label: l('Il mio ruolo', 'My role'), value: l('Design e sviluppo, progetto personale', 'Design and development, personal project') },
       { label: l('Piattaforme', 'Platforms'), value: l('iPhone e Mac', 'iPhone and Mac') },
@@ -380,7 +377,6 @@ export const PROJECTS: Project[] = [
       'An iPhone app for your Letterboxd watchlist: sort it, build your own rankings, find the films you have in common with friends and let chance pick tonight’s movie.'
     ),
     icon: '/img/betterboxd/icon.png',
-    homeScreen: false,
     facts: [
       { label: l('Il mio ruolo', 'My role'), value: l('Design e sviluppo, progetto personale', 'Design and development, personal project') },
       { label: l('Piattaforma', 'Platform'), value: l('iPhone, iOS 26', 'iPhone, iOS 26') },
@@ -481,37 +477,6 @@ export const PROJECTS: Project[] = [
       },
     ],
     gallery: [1, 2, 3].map((n) => phone(`/img/melting-pot/${n}mp.png`, l(`Melting Pot, schermata ${n} di 3`, `Melting Pot, screen ${n} of 3`), 597, 1200)),
-  },
-  {
-    id: 'synk',
-    title: 'Synk',
-    year: '2025',
-    kind: l('Esperienza interattiva per iPhone', 'Interactive iPhone experience'),
-    summary: l(
-      'Un’esperienza interattiva sulla sinestesia, il legame tra i sensi, realizzata per lo Swift Student Challenge di Apple.',
-      'An interactive experience about synesthesia, the link between senses, built for Apple’s Swift Student Challenge.'
-    ),
-    icon: '/img/synk/icon.png',
-    facts: [
-      { label: l('Il mio ruolo', 'My role'), value: l('UX/UI designer e sviluppatore iOS', 'UX/UI designer and iOS developer') },
-      { label: l('Contesto', 'Setting'), value: l('Swift Student Challenge', 'Swift Student Challenge') },
-      { label: l('Strumenti', 'Tools'), value: l('SwiftUI', 'SwiftUI') },
-    ],
-    problem: l(
-      'Far percepire la sinestesia con suono, colore e tocco senza un’interfaccia caotica o che sovraccarichi i sensi.',
-      'Convey synesthesia through sound, colour and touch without an interface that feels chaotic or overwhelming.'
-    ),
-    role: [l('Ho progettato e sviluppato l’esperienza in SwiftUI.', 'Designed and built the experience in SwiftUI.')],
-    decisions: [
-      {
-        title: l('Poco a schermo, molto al tatto', 'Little on screen, a lot under the finger'),
-        body: l(
-          'Interfaccia minimale, con risposte aptiche sincronizzate e colori che reagiscono al gesto delle dita.',
-          'A minimal interface, with synchronised haptics and colours that react to the finger’s gesture.'
-        ),
-      },
-    ],
-    gallery: [1, 2, 3].map((n) => phone(`/img/synk/${n}synk.png`, l(`Synk, schermata ${n} di 3`, `Synk, screen ${n} of 3`), 580, 1200)),
   },
   {
     id: 'sortie',

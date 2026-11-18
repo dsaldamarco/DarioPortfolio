@@ -24,7 +24,6 @@ italiano / inglese, pubblicato su **Vercel**.
 - **[Sortie](https://dariosaldamarco.com/projects/sortie)** (2025): app di sleep coaching per iPhone.
 - **[Melting Pot](https://dariosaldamarco.com/projects/melting-pot)** (2025): party game cooperativo per iPhone.
 - **[Bookmarked](https://dariosaldamarco.com/projects/bookmarked)** (2025): social di lettura per iPhone.
-- **[Synk](https://dariosaldamarco.com/projects/synk)** (2025): esperienza interattiva per iPhone.
 
 ## Contatti
 

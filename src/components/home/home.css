@@ -333,19 +333,25 @@
   object-fit: contain;
 }
 
-/* Three phone screens, the middle one raised */
+/* Three phone screens fanned out: the main one large in front, two behind */
 .more-shots--phones {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(8px, 1.2vw, 16px);
-  align-items: center;
+  place-items: center;
 }
 .more-shots--phones img {
-  width: 100%;
+  grid-area: 1 / 1;
+  width: 44%;
   height: auto;
   border-radius: 9% / 4.2%;
 }
-.more-shots--phones img:nth-child(2) { transform: translateY(-8%); }
+.more-shots--phones img:nth-child(1) { transform: translateX(-62%) rotate(-4deg); }
+.more-shots--phones img:nth-child(3) { transform: translateX(62%) rotate(4deg); }
+.more-shots--phones img:nth-child(2) {
+  z-index: 1;
+  width: 56%;
+  /* a ring in the panel colour separates the front screen from the ones behind */
+  outline: clamp(4px, 0.5vw, 8px) solid var(--field-deep);
+}
 
 /* Wide game shots: one large on top, two below */
 .more-shots--mosaic {
@@ -462,17 +468,17 @@
 }
 .letter-sign span { font-style: normal; }
 
+.letter p strong { font-weight: 600; }
 .letter-plate img {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  object-position: 50% 45%;
   border-radius: var(--radius);
 }
-.letter-plate figcaption { margin-top: 12px; }
 
 @media (max-width: 900px) {
   .letter-grid { grid-template-columns: 1fr; }
-  .letter-plate img { aspect-ratio: 3 / 2; }
 }
 
 /* ── CV ──────────────────────────────────────────────────── */

@@ -22,7 +22,6 @@ const routes = [
   'case-study/orbys-adventure',
   'projects/you-can-only',
   'projects/melting-pot',
-  'projects/synk',
   'projects/sortie',
   'projects/bookmarked',
   'projects/tapp',

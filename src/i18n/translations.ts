@@ -63,11 +63,12 @@ const it = {
   about: {
     title: 'Chi sono',
     letter: [
-      'Vengo dalle arti visive: mi sono laureato in Nuove Tecnologie dell’Arte all’Accademia di Belle Arti di Napoli e ho lavorato come graphic designer per un festival, per brand e sui social.',
-      'Ho studiato UX/UI con ILAS e dot Academy, poi all’Apple Developer Academy ho imparato a progettare per iOS e a sviluppare in SwiftUI, in team con sviluppatori e product owner.',
-      'Il progetto che conta di più per me è Orby’s Adventure: i dati ci hanno detto dove gli studenti si bloccavano, la ricerca in classe a Pune ci ha detto perché.',
-      'Unisco la cura visiva all’attenzione per chi userà il prodotto e alla conoscenza di come viene sviluppato: so cosa costa una scelta e posso provarla in un prototipo vero.',
+      'Vengo dalle **arti visive**: mi sono laureato in *Nuove Tecnologie dell’Arte* all’Accademia di Belle Arti di Napoli e ho lavorato come graphic designer per un festival, per brand e sui social.',
+      'Ho studiato UX/UI con ILAS e dot Academy, poi all’**Apple Developer Academy** ho imparato a **progettare per iOS e a sviluppare in SwiftUI**, in team con sviluppatori e product owner.',
+      'Il progetto che conta di più per me è *Orby’s Adventure*: **i dati ci hanno detto dove** gli studenti si bloccavano, **la ricerca in classe a Pune ci ha detto perché**.',
+      'Unisco la **cura visiva** all’**attenzione per chi userà il prodotto** e alla **conoscenza di come viene sviluppato**: *so cosa costa una scelta e posso provarla in un prototipo vero.*',
     ],
+    photoAlt: 'Dario sorride sul lungomare di Napoli, con il Vesuvio sullo sfondo',
     signoff: 'Dario',
     signrole: 'UX/UI designer',
   },
@@ -179,11 +180,12 @@ const en: Translations = {
   about: {
     title: 'About me',
     letter: [
-      'I come from the visual arts: I studied New Technologies of Art at the Accademia di Belle Arti in Naples and worked as a graphic designer for a festival, for brands and on social channels.',
-      'I studied UX/UI with ILAS and dot Academy, then at the Apple Developer Academy I learned to design for iOS and build in SwiftUI, in teams with developers and product owners.',
-      'The project that matters most to me is Orby’s Adventure: the data told us where students got stuck, and classroom research in Pune told us why.',
-      'I bring visual care together with attention to the people who will use the product and an understanding of how it gets built: I know what a choice costs and can try it in a real prototype.',
+      'I come from the **visual arts**: I studied *New Technologies of Art* at the Accademia di Belle Arti in Naples and worked as a graphic designer for a festival, for brands and on social channels.',
+      'I studied UX/UI with ILAS and dot Academy, then at the **Apple Developer Academy** I learned to **design for iOS and build in SwiftUI**, in teams with developers and product owners.',
+      'The project that matters most to me is *Orby’s Adventure*: **the data told us where** students got stuck, and **classroom research in Pune told us why**.',
+      'I bring **visual care** together with **attention to the people who will use the product** and an **understanding of how it gets built**: *I know what a choice costs and can try it in a real prototype.*',
     ],
+    photoAlt: 'Dario smiling on the Naples seafront, with Mount Vesuvius in the background',
     signoff: 'Dario',
     signrole: 'UX/UI designer',
   },
