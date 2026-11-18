@@ -489,15 +489,14 @@ export const PROJECTS: Project[] = [
     ],
     research: {
       intro: l(
-        'Abbiamo chiesto alle persone: “Qual è il tuo gioco preferito con amici o famiglia, e perché?”. Uno, Exploding Kittens e Cards Against Humanity in testa. Piacciono perché sono intuitivi, dinamici, facili da spiegare e fanno decidere in fretta; non piacciono troppe regole, confusione, partite lunghe e troppa fortuna. Poi abbiamo fatto test interni e playtest con gruppi di 3–5 persone, osservando dove si confondevano.',
-        'We asked people: “What’s your go-to game with friends or family, and why do you like it?”. Uno, Exploding Kittens and Cards Against Humanity came out on top. People like them because they are intuitive, dynamic, easy to explain and make you decide fast; they dislike too many rules, confusion, long sessions and too much luck. Then we ran internal tests and playtests with groups of 3–5 people, watching where they got confused.'
+        'Abbiamo analizzato giochi basati sulle decisioni, digitali e da tavolo, da Papers, Please e Reigns a Overcooked e Codenames. Poi abbiamo chiesto alle persone a cosa giocano con amici e famiglia, e abbiamo provato l’idea prima su carta e poi con piccoli gruppi.',
+        'We analysed decision-based games, digital and tabletop, from Papers, Please and Reigns to Overcooked and Codenames. Then we asked people what they play with friends and family, and tested the idea first on paper and then with small groups.'
       ),
       findings: [
         l('Un ritmo veloce aumenta il coinvolgimento.', 'A fast pace increases engagement.'),
         l('Scelte più semplici riducono il carico cognitivo.', 'Simpler choices reduce cognitive load.'),
         l('Le dinamiche di gruppo cambiano la velocità con cui si decide.', 'Group dynamics change how fast people decide.'),
         l('Un feedback chiaro fa sentire sicuri delle proprie scelte.', 'Clear feedback makes players feel confident in their choices.'),
-        l('“Collaborare con la squadra mi ha tolto la paura delle conseguenze” (Gina, 26). “Ho smesso di pensarci troppo e ho seguito l’istinto” (Luca, 29).', '“Collaborating with my team made me not have fear about my consequences” (Gina, 26). “I stopped overthinking and just went with it” (Luca, 29).'),
       ],
       photos: [
         { src: '/img/melting-pot/playtest1.jpg', kind: 'photo', w: 669, h: 396, alt: l('Un gruppo gioca a un prototipo di carta di Melting Pot intorno a un tavolo, con i volti sfocati', 'A group plays a paper prototype of Melting Pot around a table, faces blurred'), caption: l('Playtest con piccoli gruppi', 'Playtests with small groups') },
@@ -530,15 +529,8 @@ export const PROJECTS: Project[] = [
       {
         title: l('Leggibile da tutti', 'Readable by everyone'),
         body: l(
-          'Pixel art ad alto contrasto, sei maghi riconoscibili da colore e forma (Pyrocaster, Frostmancer, Mossbinder, Stonemaker, Stormcaller, Nightbringer) e animazioni vivaci, pensate per giocare in fretta e da più persone insieme.',
-          'High-contrast pixel art, six mages you recognise by colour and shape (Pyrocaster, Frostmancer, Mossbinder, Stonemaker, Stormcaller, Nightbringer) and lively animation, made for quick play by several people at once.'
-        ),
-      },
-      {
-        title: l('Diventa sempre più difficile', 'It only gets harder'),
-        body: l(
-          'Gli aggiornamenti previsti aggiungono più ingredienti per ricetta, etichette enigmatiche al posto dei nomi e ingredienti intrappolati negli incantesimi.',
-          'Planned updates add more ingredients per recipe, riddle labels instead of names and ingredients trapped in spells.'
+          'Pixel art ad alto contrasto su fondo scuro, un colore per ogni mago e ingredienti grandi dentro cornici uguali: si riconosce tutto con un’occhiata, anche sul telefono di un altro.',
+          'High-contrast pixel art on a dark ground, one colour per mage and large ingredients inside identical frames: everything reads at a glance, even on someone else’s phone.'
         ),
       },
     ],

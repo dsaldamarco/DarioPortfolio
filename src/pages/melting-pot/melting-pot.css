@@ -1,0 +1,284 @@
+/* Melting Pot case study: the game's own night-purple panels inside the site's layout */
+.mp-panel,
+.mp-play {
+  --mp-night: #1b0e39;
+  --mp-deep: #2a1a52;
+  --mp-ink: #f4effc;
+  --mp-soft: #d6cdef;
+  --mp-muted: #b3a5dc;
+  background: var(--mp-night);
+  color: var(--mp-ink);
+  border-radius: var(--radius);
+}
+
+/* Sprites are tiny: scale them up without blurring the pixels */
+.mp-pixel { image-rendering: pixelated; }
+
+.mp-kicker {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+.mp-panel .mp-kicker,
+.mp-play .mp-kicker { color: var(--mp-muted); }
+
+.mp-subtitle {
+  font-size: var(--step-lead);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 6px 0 14px;
+}
+
+/* ── Survey ──────────────────────────────────────────────── */
+.mp-survey {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+  padding: clamp(20px, 3vw, 48px);
+  margin-top: clamp(32px, 4vw, 56px);
+}
+.mp-survey-chart img { width: 100%; height: auto; }
+.mp-question {
+  font-size: var(--step-lead);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 8px 0 24px;
+}
+.mp-chips h3 {
+  font-size: var(--step-small);
+  font-weight: 500;
+  color: var(--mp-muted);
+  margin-bottom: 10px;
+}
+.mp-chips ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.mp-chips li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: var(--step-small);
+  background: rgb(87 224 122 / 0.14);
+  color: #84f2a1;
+}
+.mp-chips--no { margin-top: 20px; }
+.mp-chips--no li {
+  background: rgb(255 90 106 / 0.15);
+  color: #ff98a2;
+}
+
+/* ── Paper prototype ─────────────────────────────────────── */
+.mp-paper {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+  margin-top: clamp(40px, 5vw, 72px);
+}
+.mp-paper-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+.mp-paper p { max-width: 54ch; }
+.mp-paper p + p { margin-top: 1em; }
+
+.mp-findings { margin-top: clamp(32px, 4vw, 48px); }
+
+/* ── Player quotes ───────────────────────────────────────── */
+.mp-quotes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+  margin-top: clamp(40px, 5vw, 64px);
+}
+.mp-quotes blockquote {
+  font-size: var(--step-lead);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-style: italic;
+}
+.mp-quotes figcaption { margin-top: 10px; }
+
+/* ── How it plays ────────────────────────────────────────── */
+.mp-play {
+  margin-top: clamp(72px, 9vw, 144px);
+  padding: clamp(28px, 5vw, 80px);
+}
+.mp-play-head { max-width: 48ch; }
+.mp-play-title {
+  font-size: var(--step-head);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-top: 8px;
+}
+.mp-play-lead {
+  font-size: var(--step-lead);
+  line-height: 1.35;
+  color: var(--mp-soft);
+  margin-top: 20px;
+}
+
+.mp-steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(32px, 3vw, 48px) clamp(20px, 3vw, 48px);
+  margin-top: clamp(40px, 5vw, 72px);
+}
+.mp-step {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mp-step h3 {
+  font-size: var(--step-lead);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.mp-step p { color: var(--mp-soft); }
+.mp-step-n {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f0d545;
+  color: var(--mp-night);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* Step 1 spans the row: text on the left, the six mages on the right */
+.mp-step--mages {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+}
+.mp-mages {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.mp-mage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--mp-deep);
+  border-radius: 18px;
+  padding: clamp(16px, 1.6vw, 22px);
+}
+.mp-mage img {
+  width: clamp(44px, 4.4vw, 64px);
+  height: auto;
+  margin-bottom: 8px;
+}
+.mp-mage-name { font-weight: 600; color: var(--c); }
+.mp-mage-bio {
+  font-size: var(--step-small);
+  line-height: 1.4;
+  color: var(--mp-soft);
+}
+.mp-mage--red { --c: #ff6f6f; }
+.mp-mage--blue { --c: #63b2f0; }
+.mp-mage--green { --c: #86da55; }
+.mp-mage--gray { --c: #cfcfd6; }
+.mp-mage--yellow { --c: #f2d84c; }
+.mp-mage--purple { --c: #be82f2; }
+
+/* Steps 2–4: one picture in a deep-purple tile above the text */
+.mp-visual {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  background: var(--mp-deep);
+  border-radius: 18px;
+  padding: 20px;
+  overflow: hidden;
+}
+.mp-visual > img { grid-area: 1 / 1; height: auto; }
+.mp-phone { border-radius: 9% / 4.2%; }
+
+.mp-visual--recipe .mp-phone { width: 54%; }
+.mp-visual--recipe .mp-recipe {
+  align-self: end;
+  width: 84%;
+}
+
+.mp-visual--portals .mp-phone--tilt { width: 66%; }
+.mp-portal { width: 15%; }
+.mp-portal--left { justify-self: start; }
+.mp-portal--right { justify-self: end; }
+
+.mp-visual--potions .mp-potions { width: 74%; }
+
+/* ── Business model ──────────────────────────────────────── */
+.mp-cards {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 24px);
+  margin-top: clamp(32px, 4vw, 48px);
+}
+.mp-cards li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mp-cards img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+.mp-card-name { font-weight: 500; }
+
+/* ── What comes next ─────────────────────────────────────── */
+.mp-next {
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  padding: clamp(24px, 4vw, 56px);
+}
+.mp-items {
+  width: min(100%, 560px);
+  height: auto;
+}
+.mp-riddle {
+  display: grid;
+  gap: 4px;
+  text-align: center;
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 2px solid #c2334a;
+  background: #3a1030;
+  font-size: var(--step-lead);
+  line-height: 1.25;
+}
+.mp-riddle span {
+  font-size: var(--step-small);
+  font-weight: 600;
+  color: #ff5a6a;
+}
+.mp-next-list { margin-top: clamp(32px, 4vw, 48px); }
+
+@media (max-width: 900px) {
+  .mp-survey,
+  .mp-paper,
+  .mp-step--mages { grid-template-columns: 1fr; }
+  .mp-quotes,
+  .mp-steps { grid-template-columns: 1fr; }
+  .mp-mages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mp-paper-photo { max-width: 360px; }
+  .mp-visual { aspect-ratio: 1 / 1; }
+}
+@media (max-width: 560px) {
+  .mp-mages { grid-template-columns: 1fr; }
+}

@@ -1,33 +1,14 @@
 import React, { useEffect } from 'react';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
-import { PROJECTS, getProject, type Shot } from '../data/projects';
+import { PROJECTS, getProject } from '../data/projects';
 import { useLanguage } from '../i18n/LanguageContext';
 import { onLinkClick } from '../lib/router';
 import { useReveal } from '../lib/useReveal';
 import { AppIcon } from '../components/ui/AppIcon';
 import { Contact } from '../components/layout/Contact';
+import { Picture, Row, reveal } from './cs-parts';
+import { CASE_EXTRAS } from './extras';
 import './case-study.css';
-
-const reveal = (i = 0) => ({ 'data-reveal': '', style: { '--i': i } as React.CSSProperties });
-
-const Row: React.FC<{ title: string; id: string; children: React.ReactNode; wide?: boolean }> = ({ title, id, children, wide }) => (
-  <section className={`cs-row ${wide ? 'cs-row--wide' : ''}`} aria-labelledby={id}>
-    <h2 id={id} className="cs-row-title" {...reveal(0)}>{title}</h2>
-    <div className="cs-row-body" {...reveal(1)}>{children}</div>
-  </section>
-);
-
-const Picture: React.FC<{ shot: Shot; lang: 'it' | 'en'; eager?: boolean }> = ({ shot, lang, eager }) => (
-  <img
-    src={shot.src}
-    alt={shot.alt[lang]}
-    width={shot.w}
-    height={shot.h}
-    loading={eager ? 'eager' : 'lazy'}
-    decoding="async"
-    className={`shot shot--${shot.kind}`}
-  />
-);
 
 export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
   const { t, language } = useLanguage();
@@ -52,6 +33,7 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
     );
   }
 
+  const extras = CASE_EXTRAS[p.id];
   const next = PROJECTS[(PROJECTS.findIndex((x) => x.id === p.id) + 1) % PROJECTS.length];
   const isTablet = p.gallery[0].kind === 'tablet';
   const cover = isTablet ? p.gallery[0] : null;
@@ -178,7 +160,10 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
             </Row>
           )}
 
-          {p.research && (
+          {extras?.research ? (
+            <extras.research />
+          ) : (
+            p.research && (
             <Row title={t.cs.research} id="cs-research" wide>
               <p className="lead cs-note">{p.research.intro[language]}</p>
               {p.research.findings && (
@@ -200,7 +185,10 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
                 ))}
               </div>
             </Row>
+            )
           )}
+
+          {extras?.afterResearch && <extras.afterResearch />}
 
           <Row title={t.cs.decisions} id="cs-decisions">
             <div className="cs-decisions">
@@ -217,6 +205,8 @@ export const CaseStudyPage: React.FC<{ id: string }> = ({ id }) => {
               ))}
             </div>
           </Row>
+
+          {extras?.afterDecisions && <extras.afterDecisions />}
 
           {p.beforeAfter && (
             <Row title={t.cs.beforeAfter} id="cs-before-after" wide>
