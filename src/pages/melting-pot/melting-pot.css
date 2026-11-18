@@ -239,41 +239,49 @@
 }
 .mp-card-name { font-weight: 500; }
 
-/* ── What comes next ─────────────────────────────────────── */
+/* ── What comes next: three tiles, each with its own picture ─ */
 .mp-next {
+  list-style: none;
   display: grid;
-  justify-items: center;
-  gap: 24px;
-  padding: clamp(24px, 4vw, 56px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  padding: clamp(20px, 3vw, 40px);
 }
-.mp-items {
-  width: min(100%, 560px);
-  height: auto;
-}
-.mp-riddle {
-  display: grid;
-  gap: 4px;
-  text-align: center;
-  padding: 14px 24px;
-  border-radius: 14px;
-  border: 2px solid #c2334a;
-  background: #3a1030;
+.mp-next-item h3 {
   font-size: var(--step-lead);
-  line-height: 1.25;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 20px 0 8px;
 }
-.mp-riddle span {
+.mp-next-item p { color: var(--mp-soft); }
+.mp-next-visual {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  background: var(--mp-deep);
+  border-radius: 18px;
+  padding: clamp(14px, 1.6vw, 24px);
+}
+.mp-next-visual img { width: 100%; height: auto; }
+
+/* The six phones in a circle, with the players' hands */
+.mp-table { margin-top: clamp(32px, 4vw, 56px); }
+.mp-table img { width: 100%; height: auto; }
+.mp-table figcaption {
+  max-width: 60ch;
+  margin: 16px auto 0;
+  text-align: center;
   font-size: var(--step-small);
-  font-weight: 600;
-  color: #ff5a6a;
+  color: var(--mp-muted);
 }
-.mp-next-list { margin-top: clamp(32px, 4vw, 48px); }
 
 @media (max-width: 900px) {
   .mp-survey,
   .mp-paper,
   .mp-step--mages { grid-template-columns: 1fr; }
   .mp-quotes,
-  .mp-steps { grid-template-columns: 1fr; }
+  .mp-steps,
+  .mp-next { grid-template-columns: 1fr; }
   .mp-mages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mp-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mp-paper-photo { max-width: 360px; }

@@ -153,6 +153,26 @@ export const MPPlay: React.FC = () => {
         </p>
       </header>
 
+      <figure className="mp-table" {...reveal(1)}>
+        <img
+          src={`${IMG}/multiplayer.png`}
+          alt={l(
+            'Sei iPhone disposti in cerchio sul tavolo, ognuno con la mano di un giocatore del colore del suo mago che trascina un ingrediente verso il portale del vicino',
+            'Six iPhones arranged in a circle on the table, each with a player’s hand in their mage’s colour dragging an ingredient towards the neighbour’s portal'
+          )[language]}
+          width="1309"
+          height="737"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>
+          {l(
+            'Ogni telefono ha un portale verso il vicino di sinistra e uno verso quello di destra: il cerchio dei giocatori diventa il percorso degli ingredienti.',
+            'Each phone has a portal to the neighbour on the left and one to the neighbour on the right: the circle of players becomes the ingredients’ path.'
+          )[language]}
+        </figcaption>
+      </figure>
+
       <ol className="mp-steps">
         <li className="mp-step mp-step--mages" {...reveal(0)}>
           <div className="mp-step-text">
@@ -267,7 +287,7 @@ const NEXT = [
   },
   {
     title: l('Ingredienti intrappolati negli incantesimi', 'Ingredients trapped in spells'),
-    body: l('Prima di passarli bisogna liberarli dall’incantesimo che li tiene chiusi.', 'You have to free them from the spell that holds them before passing them on.'),
+    body: l('Prima di passarli bisogna liberarli dalla bolla che li tiene chiusi, una per ogni elemento dei maghi: fuoco, natura, fulmine, oscurità, ghiaccio e pietra.', 'You have to free them from the bubble that holds them before passing them on, one for each of the mages’ elements: fire, nature, lightning, darkness, ice and stone.'),
   },
 ];
 
@@ -296,21 +316,28 @@ export const MPBusiness: React.FC = () => {
       </Row>
 
       <Row title={l('Cosa arriva dopo', 'What comes next')[language]} id="mp-next" wide>
-        <div className="mp-panel mp-next">
-          <img src={`${IMG}/items.png`} alt="" width="777" height="139" loading="lazy" decoding="async" className="mp-items mp-pixel" />
-          <p className="mp-riddle">
-            <span>{l('Butta nel calderone', 'Throw in the pot')[language]}</span>
-            {l('la cosa che ha reso famoso Newton', 'the one thing that made Newton famous')[language]}
-          </p>
-        </div>
-        <div className="cs-decisions mp-next-list">
-          {NEXT.map((n) => (
-            <div key={n.title.en}>
+        <ul className="mp-panel mp-next">
+          {NEXT.map((n, i) => (
+            <li key={n.title.en} className="mp-next-item">
+              <div className="mp-next-visual">
+                {i === 0 && <img src={`${IMG}/items.png`} alt="" width="777" height="139" loading="lazy" decoding="async" className="mp-pixel" />}
+                {i === 1 && (
+                  <img
+                    src={`${IMG}/riddle.png`}
+                    alt={l('Etichetta del gioco: “Throw in the pot. The one thing that made Newton famous” (butta nel calderone la cosa che ha reso famoso Newton)', 'Game label: “Throw in the pot. The one thing that made Newton famous”')[language]}
+                    width="920"
+                    height="224"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                {i === 2 && <img src={`${IMG}/items-trapped.png`} alt="" width="912" height="216" loading="lazy" decoding="async" className="mp-pixel" />}
+              </div>
               <h3>{n.title[language]}</h3>
               <p>{n.body[language]}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </Row>
     </>
   );
